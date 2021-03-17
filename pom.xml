@@ -13,7 +13,7 @@
         <version>2.2.4.RELEASE</version>
     </parent>
     <name>petclinic</name>
-
+    
     <properties>
 
         <!-- Generic properties -->
@@ -31,7 +31,24 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
-
+	<developers>
+		<developer>
+			<id>pedalopon</id>
+			<name>Pedro Alonso</name>
+			<email>pedropontiga@gmail.com</email>
+			<url>https://github.com/pedalopon</url>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>PSG2</organization>
+			<timezone>Europe/Madrid</timezone>
+			<properties>
+				<picUrl>
+					
+				</picUrl>
+			</properties>
+		</developer>
+	</developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
