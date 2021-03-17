@@ -13,6 +13,20 @@
         <version>2.2.4.RELEASE</version>
     </parent>
     <name>petclinic</name>
+    
+    <developers>
+	    <developer>
+	      <id>mrb</id>
+	      <name>María Isabel Ramos Blanco</name>
+	      <email>marrambla2@alum.us.es</email>
+	      <organization>PSG2-2021-G1-11</organization>
+	      <organizationUrl>http://www.PSG2-2021-G1-11.com</organizationUrl>
+	      <roles>
+	        <role>developer</role>
+	      </roles>
+	      <timezone>Europe</timezone>
+	    </developer>
+	</developers>
 
     <properties>
 
