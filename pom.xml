@@ -23,6 +23,22 @@
             <picUrl>http://www.example.com/albsalcab/pic</picUrl>
             </properties>
         </developer>
+ 		<developer>
+            <id>canjorbus</id>
+            <name> Candelaria Jordano Bustos </name>
+            <email> candelajordano@gmail.com </email>
+            <url>http://www.example.com/canjorbus</url>
+            <organization>PSG2</organization>
+            <organizationUrl>http://www.example.com</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europa/Madrid</timezone>
+            <properties>
+            <picUrl>http://www.example.com/canjorbus/pic</picUrl>
+            </properties>
+        </developer>
     </developers>
     <parent>
         <groupId>org.springframework.boot</groupId>
