@@ -9,15 +9,15 @@ project:
     member1:
       name: 'Adrián'
       surname: 'de las Heras' 
-      githubUsername: 'adrdecoz'
+      githubUsername: 'adriheras'
     member2:
       name: 'Gullermo'
       surname: 'Diz'
-      githubUsername: 'guidizgil'
+      githubUsername: 'GuilleX7'
     member3:
       name: 'María Isabel'
       surname: 'Ramos'
-      githubUsername: 'marrambla2'
+      githubUsername: 'maribelrb22'
     member4:
       name: 'Pedro'
       surname: 'Alonso'
@@ -25,7 +25,7 @@ project:
     member5:
       name: 'Alberto'
       surname: 'Salazar'
-      githubUsername: 'albsalcab'
+      githubUsername: 'albertsalazar'
     member6:
       name: 'Candelaria'
       surname: 'Jordano'
