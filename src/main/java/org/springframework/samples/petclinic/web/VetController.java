@@ -46,7 +46,7 @@ import javax.validation.Valid;
 public class VetController {
 
 	private final VetService vetService;
-	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vet/createOrUpdateVetForm";
+	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createOrUpdateVetForm";
 
 	@Autowired
 	public VetController(VetService clinicService) {
@@ -75,7 +75,7 @@ public class VetController {
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
 	}
-	@GetMapping(value = "/pets/new")
+	@GetMapping(value = "/vets/new")
 	public String initCreationForm(Owner owner, ModelMap model) {
 		Vet vet= new Vet();
 		model.put("vet", vet);
