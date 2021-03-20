@@ -75,6 +75,12 @@ public class VetController {
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
 	}
+	@GetMapping(value = "/pets/new")
+	public String initCreationForm(Owner owner, ModelMap model) {
+		Vet vet= new Vet();
+		model.put("vet", vet);
+		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+	}
 
 	@PostMapping(value = "/vets/new")
 	public String processCreationForm(@Valid Vet vet, BindingResult result, ModelMap model) {
