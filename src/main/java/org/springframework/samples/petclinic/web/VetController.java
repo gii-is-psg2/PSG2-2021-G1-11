@@ -75,9 +75,10 @@ public class VetController {
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
 	}
+
 	@GetMapping(value = "/vets/new")
 	public String initCreationForm(Owner owner, ModelMap model) {
-		Vet vet= new Vet();
+		Vet vet = new Vet();
 		model.put("vet", vet);
 		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 	}
@@ -89,7 +90,9 @@ public class VetController {
 			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
+
 				this.vetService.saveVet(vet);
+
 			} catch (DataAccessException ex) {
 				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 			}
@@ -112,9 +115,9 @@ public class VetController {
 			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		} else {
 			Vet vetToUpdate = this.vetService.findVetById(vetId);
-			BeanUtils.copyProperties(vet, vetToUpdate, "id");
+			BeanUtils.copyProperties(vet, vetToUpdate, "id", "firstname", "lastname", "specialties");
 			try {
-				this.vetService.findVetById(vetId);
+				this.vetService.saveVet(vetToUpdate);
 			} catch (DataAccessException ex) {
 				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 			}

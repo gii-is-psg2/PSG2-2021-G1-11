@@ -45,22 +45,21 @@ public class VetService {
 
 	private VetRepository vetRepository;
 
-
 	@Autowired
 	public VetService(VetRepository vetRepository) {
 		this.vetRepository = vetRepository;
-	}		
+	}
 
-	@Transactional(readOnly = true)	
+	@Transactional(readOnly = true)
 	public Collection<Vet> findVets() throws DataAccessException {
 		return vetRepository.findAll();
 	}
-	
-	@Transactional(readOnly = true)	
+
+	@Transactional(readOnly = true)
 	public Vet findVetById(Integer vetId) throws DataAccessException {
 		return vetRepository.findById(vetId);
 	}
-	
+
 	public void saveVet(Vet vet) {
 		this.vetRepository.save(vet);
 	}
