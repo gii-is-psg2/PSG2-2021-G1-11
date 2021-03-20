@@ -46,7 +46,7 @@ import javax.validation.Valid;
 public class VetController {
 
 	private final VetService vetService;
-	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM="vet/createOrUpdateVetForm";
+	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vet/createOrUpdateVetForm";
 
 	@Autowired
 	public VetController(VetService clinicService) {
@@ -74,6 +74,21 @@ public class VetController {
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
+	}
+
+	@PostMapping(value = "/vets/new")
+	public String processCreationForm(@Valid Vet vet, BindingResult result, ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("vet", vet);
+			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+		} else {
+			try {
+				this.vetService.saveVet(vet);
+			} catch (DataAccessException ex) {
+				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+			}
+			return "redirect:/vets";
+		}
 	}
 
 	@GetMapping(value = "/vets/{vetId}/edit")
