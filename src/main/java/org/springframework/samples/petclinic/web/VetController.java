@@ -15,14 +15,26 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
+
+import javax.validation.Valid;
 
 /**
  * @author Juergen Hoeller
@@ -34,6 +46,7 @@ import java.util.Map;
 public class VetController {
 
 	private final VetService vetService;
+	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM="vet/createOrUpdateVetForm";
 
 	@Autowired
 	public VetController(VetService clinicService) {
@@ -42,7 +55,8 @@ public class VetController {
 
 	@GetMapping(value = { "/vets" })
 	public String showVetList(Map<String, Object> model) {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// Here we are returning an object of type 'Vets' rather than a collection of
+		// Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
@@ -51,14 +65,40 @@ public class VetController {
 		return "vets/vetList";
 	}
 
-	@GetMapping(value = { "/vets.xml"})
+	@GetMapping(value = { "/vets.xml" })
 	public @ResponseBody Vets showResourcesVetList() {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// Here we are returning an object of type 'Vets' rather than a collection of
+		// Vet
 		// objects
 		// so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetService.findVets());
 		return vets;
+	}
+
+	@GetMapping(value = "/vets/{vetId}/edit")
+	public String initUpdateForm(@PathVariable("vetId") int vetId, ModelMap model) {
+		Vet vet = this.vetService.findVetById(vetId);
+		model.put("vet", vet);
+		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/vets/{vetId}/edit")
+	public String processUpdateForm(@Valid Vet vet, BindingResult result, @PathVariable("vetId") int vetId,
+			ModelMap model) {
+		if (result.hasErrors()) {
+			model.put("vet", vet);
+			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+		} else {
+			Vet vetToUpdate = this.vetService.findVetById(vetId);
+			BeanUtils.copyProperties(vet, vetToUpdate, "id");
+			try {
+				this.vetService.findVetById(vetId);
+			} catch (DataAccessException ex) {
+				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+			}
+			return "redirect:/vets";
+		}
 	}
 
 }
