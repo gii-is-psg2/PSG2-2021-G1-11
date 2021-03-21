@@ -16,6 +16,24 @@
     </jsp:attribute>
     <jsp:body>
         <h2>New Booking</h2>
+        
+        <b>Pet</b>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Birth Date</th>
+                <th>Type</th>
+                <th>Owner</th>
+            </tr>
+            </thead>
+            <tr>
+                <td><c:out value="${booking.pet.name}"/></td>
+                <td><petclinic:localDate date="${booking.pet.birthDate}" pattern="yyyy/MM/dd"/></td>
+                <td><c:out value="${booking.pet.type.name}"/></td>
+                <td><c:out value="${booking.pet.owner.firstName} ${booking.pet.owner.lastName}"/></td>
+            </tr>
+        </table>
 
         <form:form modelAttribute="booking" class="form-horizontal">
             <div class="form-group has-feedback">
