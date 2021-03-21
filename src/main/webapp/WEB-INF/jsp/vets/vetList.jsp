@@ -1,5 +1,6 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
@@ -28,10 +29,9 @@
                     <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
                 </td>
                 <td>
-                	<form method="POST" action="vets/${vet.id}/remove">
+                	<form:form method="POST" action="vets/${vet.id}/remove">
                 		<button type="submit">Remove</button>
-                		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                	</form>
+                	</form:form>
                 </td>
             </tr>
         </c:forEach>
