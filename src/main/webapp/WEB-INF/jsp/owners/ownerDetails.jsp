@@ -33,14 +33,14 @@
 		<spring:url value="{ownerId}/edit" var="editUrl">
 			<spring:param name="ownerId" value="${owner.id}" />
 		</spring:url>
-		<a href="${fn:escapeXml(editUrl)}" class="btn btn-default" style="margin-right: 10px;">Edit
-			Owner</a>
+		<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"
+			style="margin-right: 10px;">Edit Owner</a>
 
 		<spring:url value="{ownerId}/pets/new" var="addUrl">
 			<spring:param name="ownerId" value="${owner.id}" />
 		</spring:url>
-		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default" style="margin-right: 10px;">Add New
-			Pet</a>
+		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default"
+			style="margin-right: 10px;">Add New Pet</a>
 
 		<form:form method="POST" action="${owner.id}/remove">
 			<button type="submit" class="btn btn-default">Remove Owner</button>
@@ -92,13 +92,18 @@
 									var="petUrl">
 									<spring:param name="ownerId" value="${owner.id}" />
 									<spring:param name="petId" value="${pet.id}" />
-								</spring:url> <a href="${fn:escapeXml(petUrl)}">Edit Pet</a></td>
+								</spring:url> <a class="btn btn-default" href="${fn:escapeXml(petUrl)}">Edit Pet</a></td>
+							<td>
+								<form:form method="POST" action="/owners/${owner.id}/pets/${pet.id}/remove">
+									<button type="submit" class="btn btn-default">Remove Pet</button>
+								</form:form>
+							</td>
 							<td><spring:url
 									value="/owners/{ownerId}/pets/{petId}/visits/new"
 									var="visitUrl">
 									<spring:param name="ownerId" value="${owner.id}" />
 									<spring:param name="petId" value="${pet.id}" />
-								</spring:url> <a href="${fn:escapeXml(visitUrl)}">Add Visit</a></td>
+								</spring:url> <a class="btn btn-default" href="${fn:escapeXml(visitUrl)}">Add Visit</a></td>
 						</tr>
 					</table>
 				</td>
