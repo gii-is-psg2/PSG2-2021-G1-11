@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
+
 @Entity
 @Table(name = "bookings")
 public class Booking extends BaseEntity{

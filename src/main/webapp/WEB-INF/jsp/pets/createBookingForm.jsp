@@ -19,17 +19,31 @@
 
         <form:form modelAttribute="booking" class="form-horizontal">
             <div class="form-group has-feedback">
-                <petclinic:inputField label="Start Date" name="startDate"/>
-                <petclinic:inputField label="Finish Date" name="finishDate"/>
+                <petclinic:inputField label="Check-in" name="startDate"/>
+                <petclinic:inputField label="Check-out" name="finishDate"/>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
+                	<input type="hidden" name="petId" value="${booking.pet.id}"/>
                     <button class="btn btn-default" type="submit">Add Booking</button>
                 </div>
             </div>
         </form:form>
 
+		<b>Previous Bookings</b>
+        <table class="table table-striped">
+            <tr>
+                <th>Check-in</th>
+                <th>Check-out</th>
+            </tr>
+            <c:forEach var="booking" items="${booking.pet.bookings}">
+				<tr>
+				    <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy/MM/dd"/></td>
+				    <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy/MM/dd"/></td>
+				</tr>                
+			</c:forEach>
+        </table>
     </jsp:body>
 
 </petclinic:layout>
