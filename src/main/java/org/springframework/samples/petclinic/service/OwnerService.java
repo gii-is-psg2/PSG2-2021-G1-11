@@ -76,4 +76,8 @@ public class OwnerService {
 		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
 	}		
 
+	@Transactional
+	public void removeOwnerById(Integer id) {
+		ownerRepository.removeById(id);
+	}
 }

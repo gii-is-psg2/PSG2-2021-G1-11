@@ -1,5 +1,6 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -16,6 +17,7 @@
             <th>City</th>
             <th style="width: 120px">Telephone</th>
             <th>Pets</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -41,7 +43,11 @@
                         <c:out value="${pet.name} "/>
                     </c:forEach>
                 </td>
-                
+                <td>
+                	<form:form method="POST" action="/owners/${owner.id}/remove">
+                		<button type="submit">Remove</button>
+                	</form:form>
+                </td>
       
 <!--
                 <td> 
