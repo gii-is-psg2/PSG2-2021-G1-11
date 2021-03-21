@@ -20,6 +20,8 @@ import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
@@ -42,7 +44,8 @@ public class VetController {
 
 	@GetMapping(value = { "/vets" })
 	public String showVetList(Map<String, Object> model) {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// Here we are returning an object of type 'Vets' rather than a collection of
+		// Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
@@ -51,9 +54,16 @@ public class VetController {
 		return "vets/vetList";
 	}
 
-	@GetMapping(value = { "/vets.xml"})
+	@PostMapping(value = { "/vets/{vetId}/remove" })
+	public String removeVet(@PathVariable Integer vetId) {
+		vetService.removeVetById(vetId);
+		return "redirect:/vets";
+	}
+
+	@GetMapping(value = { "/vets.xml" })
 	public @ResponseBody Vets showResourcesVetList() {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// Here we are returning an object of type 'Vets' rather than a collection of
+		// Vet
 		// objects
 		// so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();

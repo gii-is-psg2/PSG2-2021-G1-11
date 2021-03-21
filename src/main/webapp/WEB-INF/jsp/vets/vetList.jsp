@@ -12,6 +12,7 @@
         <tr>
             <th>Name</th>
             <th>Specialties</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -25,6 +26,12 @@
                         <c:out value="${specialty.name} "/>
                     </c:forEach>
                     <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
+                </td>
+                <td>
+                	<form method="POST" action="vets/${vet.id}/remove">
+                		<button type="submit">Remove</button>
+                		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                	</form>
                 </td>
             </tr>
         </c:forEach>
