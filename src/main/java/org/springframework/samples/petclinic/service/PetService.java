@@ -76,9 +76,18 @@ public class PetService {
 	public Collection<Visit> findVisitsByPetId(int petId) {
 		return visitRepository.findByPetId(petId);
 	}
+	
+	public Visit findVisitByVisitId(Integer visitId) {
+		return visitRepository.findById(visitId);
+	}
 
 	@Transactional
-	public void removePetById(Integer id) {
-		petRepository.removeById(id);
+	public void removePetById(Integer petId) {
+		petRepository.removeById(petId);
+	}
+	
+	@Transactional
+	public void removeVisitById(Integer visitId) {
+		visitRepository.removeById(visitId);
 	}
 }

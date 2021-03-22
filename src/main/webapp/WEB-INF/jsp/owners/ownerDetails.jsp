@@ -78,6 +78,7 @@
 							<tr>
 								<th>Visit Date</th>
 								<th>Description</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<c:forEach var="visit" items="${pet.visits}">
@@ -85,6 +86,11 @@
 								<td><petclinic:localDate date="${visit.date}"
 										pattern="yyyy-MM-dd" /></td>
 								<td><c:out value="${visit.description}" /></td>
+								<td>
+									<form:form method="POST" action="/owners/${owner.id}/pets/${pet.id}/visits/${visit.id}/remove">
+										<button type="submit">Remove Visit</button>
+									</form:form>
+								</td>
 							</tr>
 						</c:forEach>
 						<tr>
