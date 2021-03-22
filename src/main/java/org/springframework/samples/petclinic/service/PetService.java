@@ -77,7 +77,7 @@ public class PetService {
 		return visitRepository.findByPetId(petId);
 	}
 	
-	public Visit findVisitByVisitId(Integer visitId) {
+	public Visit findVisitById(Integer visitId) {
 		return visitRepository.findById(visitId);
 	}
 
