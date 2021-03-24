@@ -19,11 +19,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
+import org.springframework.samples.petclinic.service.SpecialtyService;
 import org.springframework.samples.petclinic.service.VetService;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -32,7 +32,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -46,11 +50,13 @@ import javax.validation.Valid;
 public class VetController {
 
 	private final VetService vetService;
+	private final SpecialtyService specialtyService;
 	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createOrUpdateVetForm";
 
 	@Autowired
-	public VetController(VetService clinicService) {
+	public VetController(VetService clinicService, SpecialtyService specialtyService) {
 		this.vetService = clinicService;
+		this.specialtyService = specialtyService;
 	}
 
 	@GetMapping(value = { "/vets" })
@@ -89,6 +95,8 @@ public class VetController {
 			model.put("vet", vet);
 			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		} else {
+			Set<Specialty> specialtySet = saveSpecialties(vet.getSpecialtiesLS());
+			vet.setSpecialties(specialtySet);
 			try {
 
 				this.vetService.saveVet(vet);
@@ -103,6 +111,7 @@ public class VetController {
 	@GetMapping(value = "/vets/{vetId}/edit")
 	public String initUpdateForm(@PathVariable("vetId") int vetId, ModelMap model) {
 		Vet vet = this.vetService.findVetById(vetId);
+		vet.setSpecialtiesLS(vet.getSpecialties().stream().map(x -> x.getName()).collect(Collectors.toList()));
 		model.put("vet", vet);
 		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 	}
@@ -115,7 +124,9 @@ public class VetController {
 			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		} else {
 			Vet vetToUpdate = this.vetService.findVetById(vetId);
-			BeanUtils.copyProperties(vet, vetToUpdate, "id", "firstname", "lastname", "specialties");
+			BeanUtils.copyProperties(vet, vetToUpdate, "id", "firstname", "lastname");
+			Set<Specialty> specialtySet = saveSpecialties(vet.getSpecialtiesLS());
+			vetToUpdate.setSpecialties(specialtySet);
 			try {
 				this.vetService.saveVet(vetToUpdate);
 			} catch (DataAccessException ex) {
@@ -123,6 +134,20 @@ public class VetController {
 			}
 			return "redirect:/vets";
 		}
+	}
+
+	private Set<Specialty> saveSpecialties(List<String> specialtyNameList) {
+		Set<Specialty> specialtySet = new HashSet<>();
+		for (String specialtyName : specialtyNameList) {
+			Specialty specialty = specialtyService.findSpecialtyByName(specialtyName);
+			if (specialty == null) {
+				specialty = new Specialty();
+				specialty.setName(specialtyName);
+				specialtyService.saveSpecialty(specialty);
+			}
+			specialtySet.add(specialty);
+		}
+		return specialtySet;
 	}
 
 }
