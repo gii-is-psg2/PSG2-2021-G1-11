@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Specialty;
@@ -28,6 +30,10 @@ public class SpecialtyService {
 
 	public void saveSpecialty(Specialty specialty) throws DataAccessException {
 		specialtyRepository.save(specialty);
+	}
+
+	public List<Specialty> findAllSpecialties() {
+		return specialtyRepository.findAll();
 	}
 
 }

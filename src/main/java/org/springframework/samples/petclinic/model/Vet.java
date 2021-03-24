@@ -84,7 +84,7 @@ public class Vet extends Person {
 	}
 
 	@Transient
-	private List<String> specialtiesLS;
+	private List<String> specialtiesLS=new ArrayList<>();
 
 	public List<String> getSpecialtiesLS() {
 		return specialtiesLS;
