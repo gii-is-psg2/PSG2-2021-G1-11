@@ -45,7 +45,7 @@
                 </td>
                 <td>
                 	<form:form method="POST" action="/owners/${owner.id}/remove">
-                		<button class="btn btn-default" type="submit">Remove</button>
+                		<button class="btn btn-default" type="submit"><fmt:message key="remove"/></button>
                 	</form:form>
                 </td>
       

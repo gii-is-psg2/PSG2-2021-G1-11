@@ -27,16 +27,16 @@
                     <c:forEach var="specialty" items="${vet.specialties}">
                         <c:out value="${specialty.name} "/>
                     </c:forEach>
-                    <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
+                    <c:if test="${vet.nrOfSpecialties == 0}">ninguna</c:if>
                 </td>
                 <td>
 	                <div style="display: flex;">
 	                	<spring:url value="/vets/{vetId}/edit" var="vetUrl">
 	        				<spring:param name="vetId" value="${vet.id}"/>
 	    				</spring:url>
-	    				<a href="${fn:escapeXml(vetUrl)}" class="btn btn-default">Editar veterinario</a>
+	    				<a href="${fn:escapeXml(vetUrl)}" class="btn btn-default"><fmt:message key="editVet"/></a>
 	                	<form:form method="POST" action="vets/${vet.id}/remove">
-	                		<button class="btn btn-default" type="submit" style="margin-left: 20px;">Eliminar veterinario</button>
+	                		<button class="btn btn-default" type="submit" style="margin-left: 20px;"><fmt:message key="remVet"/></button>
 	                	</form:form>
                 	</div>
                 </td>
