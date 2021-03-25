@@ -63,4 +63,14 @@
         </c:forEach>
         </tbody>
     </table>
+    <style>
+    #ownersTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color:#CD853F;;
+  color: black;
+}
+#ownersTable tr:hover {background-color: #D2B48C;;}
+    </style>
 </petclinic:layout>

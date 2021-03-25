@@ -9,7 +9,7 @@
 <petclinic:layout pageName="owners">
     <h2><fmt:message key="ownerInf" /></h2>
 
-    <table class="table table-striped">
+    <table id ="ownersDetails" class="table table-striped">
         <tr>
             <th><fmt:message key="name" /></th>
             <td>
@@ -78,7 +78,7 @@
                                 <td><c:out value="${visit.description}" /></td>
                                 <td>
                                     <form:form method="POST" action="/owners/${owner.id}/pets/${pet.id}/visits/${visit.id}/remove">
-                                        <button type="submit"><fmt:message key="remVisit" /></button>
+                                        <button class="btn btn-default" type="submit"><fmt:message key="remVisit" /></button>
                                     </form:form>
                                 </td>
                             </tr>
@@ -134,4 +134,5 @@
             </tr>
         </c:forEach>
     </table>
+
 </petclinic:layout>
