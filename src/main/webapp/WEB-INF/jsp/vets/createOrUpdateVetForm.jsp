@@ -78,7 +78,7 @@
 </script>
 <petclinic:layout pageName="vets">
 	<jsp:body>
-        <h2>Veterinarians</h2>
+        <h2><fmt:message key="vet"/></h2>
         <c:choose>
             <c:when test="${vet['new']}">
                 <c:set var="action" value="/vets/new" />
@@ -96,7 +96,7 @@
                 <div class="form-group">
                 	<div class="col-sm-2"></div>
                 	<div class="col-sm-10">
-                		<label>Especialidades</label>
+                		<label><fmt:message key="specialties"/></label>
 	                	<table id="specialtyList" class="table table-striped"></table>
 	                	<div class="col-sm-6">
 	                	<input id="specialtyInput" class="form-control" type="text"
@@ -108,8 +108,8 @@
 		                </datalist>
 		                </div>
 		                <div class="col-sm-6">
-		                <button type="button" class="btn btn-default" id="specialtyAddBtn">Añadir especialidad</button>
-		                <button type="button" class="btn btn-default" id="specialtiesClearBtn">Borrar todas las especialidades</button>
+		                <button type="button" class="btn btn-default" id="specialtyAddBtn"><fmt:message key="addSpecialty"/></button>
+		                <button type="button" class="btn btn-default" id="specialtiesClearBtn"><fmt:message key="remSpecialty"/></button>
 		                </div>
 		                <div id="specialtiesMap"></div>
 					</div>
@@ -122,17 +122,17 @@
                     <c:choose>
                         <c:when test="${vet['new']}">
                             <button class="btn btn-default"
-								type="submit">Añadir veterinario</button>
+								type="submit"><fmt:message key="addVet"/></button>
                         </c:when>
                         <c:otherwise>
                             <button class="btn btn-default"
-								type="submit">Actualizar veterinario</button>
+								type="submit"><fmt:message key="updVet"/></button>
                         </c:otherwise>
                     </c:choose>
 
                     <spring:url value="/vets" var="vetUrl"> </spring:url>
                     <a class="btn btn-default"
-						href="${fn:escapeXml(vetUrl)}">Volver atrás</a>
+						href="${fn:escapeXml(vetUrl)}"><fmt:message key="goBack"/></a>
                 </div>
             </div>
         </form:form>

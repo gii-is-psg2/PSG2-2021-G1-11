@@ -7,17 +7,18 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="owners">
-    <h2>Owners</h2>
+    <h2><fmt:message key="owners"/></h2>
 
     <table id="ownersTable" class="table table-striped">
         <thead>
         <tr>
-            <th style="width: 150px;">Name</th>
-            <th style="width: 200px;">Address</th>
-            <th>City</th>
-            <th style="width: 120px">Telephone</th>
-            <th>Pets</th>
-            <th>Actions</th>
+
+            <th style="width: 150px;"><fmt:message key="name"/></th>
+            <th style="width: 200px;"><fmt:message key="address"/></th>
+            <th><fmt:message key="city"/></th>
+            <th style="width: 120px"><fmt:message key="phone"/></th>
+            <th><fmt:message key="pets"/></th>
+            <th><fmt:message key="actions"/></th>
         </tr>
         </thead>
         <tbody>
@@ -45,7 +46,7 @@
                 </td>
                 <td>
                 	<form:form method="POST" action="/owners/${owner.id}/remove">
-                		<button type="submit">Remove</button>
+                		<button class="btn btn-default" type="submit"><fmt:message key="remove"/></button>
                 	</form:form>
                 </td>
       
