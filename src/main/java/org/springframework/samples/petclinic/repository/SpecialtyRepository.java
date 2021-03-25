@@ -15,3 +15,4 @@ public interface SpecialtyRepository extends Repository<Specialty, Integer> {
 
 	List<Specialty> findAll() throws DataAccessException;
 }
+

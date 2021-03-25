@@ -46,6 +46,7 @@
 
         <form:form modelAttribute="booking" class="form-horizontal">
             <div class="form-group has-feedback">
+
             <fmt:message key="checkIn" var="checkIn" />
 			
                 <petclinic:inputField label="${checkIn}"
@@ -54,7 +55,6 @@
                 <petclinic:inputField label="${checkOut}"
 					name="finishDate" />
             </div>
-
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                 	<input type="hidden" name="petId"
@@ -65,7 +65,6 @@
                 </div>
             </div>
         </form:form>
-
 		<b><fmt:message key="prBookings" /></b>
         <table class="table table-striped">
             <tr>
