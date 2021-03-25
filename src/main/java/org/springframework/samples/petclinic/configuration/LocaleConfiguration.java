@@ -46,7 +46,7 @@ public class LocaleConfiguration implements WebMvcConfigurer {
 	@Bean
 	public LocaleContextResolver localeResolver() {
 		final SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-		localeResolver.setDefaultLocale(Locale.ENGLISH);
+		localeResolver.setDefaultLocale(new Locale("es", "ES"));
 		return localeResolver;
 	}
 
