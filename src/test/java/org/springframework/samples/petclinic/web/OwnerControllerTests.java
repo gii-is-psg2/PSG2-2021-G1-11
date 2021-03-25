@@ -14,6 +14,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -191,5 +194,14 @@ class OwnerControllerTests {
 				.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
 				.andExpect(view().name("owners/ownerDetails"));
 	}
-
+        
+	@WithMockUser(value = "spring")
+	@Test
+	void testRemoveOwner() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/owners"));
+		
+		verify(clinicService, only()).removeOwnerById(TEST_OWNER_ID);;
+	}
 }

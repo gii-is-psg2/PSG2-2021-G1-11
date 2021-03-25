@@ -54,4 +54,5 @@ public interface PetRepository extends Repository<Pet, Integer> {
 	 */
 	void save(Pet pet) throws DataAccessException;
 
+	void removeById(Integer id);
 }
