@@ -128,6 +128,12 @@ public class OwnerController {
 			return "redirect:/owners/{ownerId}";
 		}
 	}
+	
+	@PostMapping("/owners/{ownerId}/remove")
+	public String removeOwner(@PathVariable Integer ownerId) {
+		ownerService.removeOwnerById(ownerId);
+		return "redirect:/owners";
+	}
 
 	/**
 	 * Custom handler for displaying an owner.

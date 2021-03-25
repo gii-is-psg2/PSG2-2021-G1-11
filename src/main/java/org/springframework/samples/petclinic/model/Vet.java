@@ -27,6 +27,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.beans.support.MutableSortDefinition;
@@ -66,13 +67,30 @@ public class Vet extends Person {
 		PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
 		return Collections.unmodifiableList(sortedSpecs);
 	}
+	
 
 	public int getNrOfSpecialties() {
 		return getSpecialtiesInternal().size();
 	}
 
+	
+
 	public void addSpecialty(Specialty specialty) {
 		getSpecialtiesInternal().add(specialty);
 	}
+	
+	public void setSpecialties(Set<Specialty> specialties) {
+		this.specialties = specialties;
+	}
 
+	@Transient
+	private List<String> specialtiesLS=new ArrayList<>();
+
+	public List<String> getSpecialtiesLS() {
+		return specialtiesLS;
+	}
+
+	public void setSpecialtiesLS(List<String> specialtiesLS) {
+		this.specialtiesLS = specialtiesLS;
+	}
 }

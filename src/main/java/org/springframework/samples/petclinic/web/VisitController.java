@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 public class VisitController {
-
 	private final PetService petService;
 
 	@Autowired
@@ -52,7 +51,7 @@ public class VisitController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-
+	
 	/**
 	 * Called before each and every @GetMapping or @PostMapping annotated method. 2 goals:
 	 * - Make sure we always have fresh data - Since we do not use the session scope, make
@@ -65,26 +64,34 @@ public class VisitController {
 	public Visit loadPetWithVisit(@PathVariable("petId") int petId) {
 		Pet pet = this.petService.findPetById(petId);
 		Visit visit = new Visit();
-		pet.addVisit(visit);
+		visit.setPet(pet);
 		return visit;
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
 	@GetMapping(value = "/owners/*/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
+	public String initNewVisitForm(Visit visit, @PathVariable("petId") int petId, Map<String, Object> model) {
 		return "pets/createOrUpdateVisitForm";
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/visits/new")
-	public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
+	public String processNewVisitForm(@PathVariable Integer petId, @Valid Visit visit, BindingResult result) {
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVisitForm";
-		}
-		else {
+		} else {
 			this.petService.saveVisit(visit);
 			return "redirect:/owners/{ownerId}";
 		}
+	}
+	
+	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/{visitId}/remove")
+	public String removeVisit(@PathVariable Integer visitId, @PathVariable Integer petId) {
+		Pet pet = petService.findPetById(petId);
+		Visit visit = petService.findVisitById(visitId);
+		pet.removeVisit(visit);
+		petService.removeVisitById(visitId);
+		return "redirect:/owners/{ownerId}";
 	}
 
 	@GetMapping(value = "/owners/*/pets/{petId}/visits")
@@ -92,5 +99,4 @@ public class VisitController {
 		model.put("visits", this.petService.findPetById(petId).getVisits());
 		return "visitList";
 	}
-
 }
