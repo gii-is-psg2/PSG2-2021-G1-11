@@ -20,6 +20,7 @@
 @spring-light-grey: #f1f1f1;
 @spring-dark-brown: #CD853F;
 @spring-light-brown:#D2B48C;
+@spring-lighter-brown: #EDE1D1;
 
 @body-bg:                           @spring-light-grey;
 @text-color:                        @spring-brown;
@@ -52,8 +53,12 @@
 @table-border-color:                      @spring-brown;
 
 .table > thead > tr > th {
-  background-color: lighten(@spring-light-grey, 3%);
+  background-color: @spring-light-brown;
   color: @spring-brown;
+}
+
+.table > tbody > tr:hover {
+  background-color: @spring-lighter-brown !important;
 }
 
 .table-filter {
