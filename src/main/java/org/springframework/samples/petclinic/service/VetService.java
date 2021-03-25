@@ -37,9 +37,9 @@ public class VetService {
 	@Autowired
 	public VetService(VetRepository vetRepository) {
 		this.vetRepository = vetRepository;
-	}		
+	}
 
-	@Transactional(readOnly = true)	
+	@Transactional(readOnly = true)
 	public Collection<Vet> findVets() throws DataAccessException {
 		return vetRepository.findAll();
 	}
@@ -47,5 +47,14 @@ public class VetService {
 	@Transactional
 	public void removeVetById(Integer id) {
 		vetRepository.removeById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Vet findVetById(Integer vetId) throws DataAccessException {
+		return vetRepository.findById(vetId);
+	}
+
+	public void saveVet(Vet vet) {
+		this.vetRepository.save(vet);
 	}
 }

@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <petclinic:layout pageName="vets">
     <h2>Veterinarians</h2>
@@ -29,9 +30,15 @@
                     <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
                 </td>
                 <td>
-                	<form:form method="POST" action="vets/${vet.id}/remove">
-                		<button type="submit">Remove</button>
-                	</form:form>
+	                <div style="display: flex;">
+	                	<spring:url value="/vets/{vetId}/edit" var="vetUrl">
+	        				<spring:param name="vetId" value="${vet.id}"/>
+	    				</spring:url>
+	    				<a href="${fn:escapeXml(vetUrl)}" class="btn btn-default">Editar veterinario</a>
+	                	<form:form method="POST" action="vets/${vet.id}/remove">
+	                		<button class="btn btn-default" type="submit" style="margin-left: 20px;">Eliminar veterinario</button>
+	                	</form:form>
+                	</div>
                 </td>
             </tr>
         </c:forEach>
