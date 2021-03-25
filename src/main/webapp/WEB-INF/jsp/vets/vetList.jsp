@@ -38,4 +38,14 @@
             </td>            
         </tr>
     </table>
+    <style>
+         #vetsTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color:#CD853F;;
+  color: black;
+}
+        #vetsTable tr:hover {background-color: #D2B48C;;}
+    </style>
 </petclinic:layout>

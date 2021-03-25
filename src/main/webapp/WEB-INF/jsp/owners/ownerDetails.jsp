@@ -9,7 +9,7 @@
     <h2>Owner Information</h2>
 
 
-    <table class="table table-striped">
+    <table id ="ownersDetails" class="table table-striped">
         <tr>
             <th>Name</th>
             <td><b><c:out value="${owner.firstName} ${owner.lastName}"/></b></td>
@@ -93,5 +93,10 @@
 
         </c:forEach>
     </table>
+    <style>
+  
+        #ownersDetails tr:hover {background-color: #D2B48C;;}
+        #ownersDetails th:hover {background-color: #D2B48C;;}
+    </style>
 
 </petclinic:layout>
