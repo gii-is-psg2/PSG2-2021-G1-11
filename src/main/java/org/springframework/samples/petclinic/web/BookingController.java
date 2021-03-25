@@ -51,7 +51,7 @@ public class BookingController {
 	
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/booking/new")
 	public String processNewBookingForm(@Valid Booking booking, BindingResult result) {
-		if (result.hasErrors() ) {
+		if (result.hasErrors()) {
 			return VIEW_CREATE_BOOKING_FORM;
 		}else {
 			this.bookingService.saveBooking(booking);
