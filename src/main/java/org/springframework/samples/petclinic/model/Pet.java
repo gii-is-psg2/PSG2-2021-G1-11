@@ -108,5 +108,9 @@ public class Pet extends NamedEntity {
 		getVisitsInternal().add(visit);
 		visit.setPet(this);
 	}
+	
+	public void removeVisit(Visit visit) {
+		getVisitsInternal().remove(visit);
+	}
 
 }
