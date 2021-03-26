@@ -1,13 +1,9 @@
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 
 
@@ -19,12 +15,10 @@ public class Booking extends BaseEntity{
 	private Pet pet;
 	
 	@Column(name = "start_date")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate startDate;
+	private String startDate;
 	
 	@Column(name = "finish_date")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate finishDate;
+	private String finishDate;
 
 	public Pet getPet() {
 		return pet;
@@ -34,21 +28,23 @@ public class Booking extends BaseEntity{
 		this.pet = pet;
 	}
 
-	public LocalDate getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDate getFinishDate() {
+	public String getFinishDate() {
 		return finishDate;
 	}
 
-	public void setFinishDate(LocalDate finishDate) {
+	public void setFinishDate(String finishDate) {
 		this.finishDate = finishDate;
 	}
+
+	
 
 	
 }

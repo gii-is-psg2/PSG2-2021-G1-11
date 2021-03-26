@@ -54,8 +54,16 @@ public class BookingController {
 		if (result.hasErrors()) {
 			return VIEW_CREATE_BOOKING_FORM;
 		}else {
-			this.bookingService.saveBooking(booking);
-			return "redirect:/owners/{ownerId}";
+			Boolean existBooking = this.bookingService.saveBooking(booking);
+			// booking created
+			if(existBooking) {
+				return "redirect:/owners/{ownerId}";
+				
+			// booking not created because of errors
+			}else {
+				result.rejectValue("finishDate", "There is another booking with these dates. Try again", "There is another booking with these dates. Try again");
+				return VIEW_CREATE_BOOKING_FORM;
+			}
 		}
 	}
 
