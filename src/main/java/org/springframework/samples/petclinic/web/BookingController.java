@@ -54,7 +54,7 @@ public class BookingController {
 		if (result.hasErrors()) {
 			return VIEW_CREATE_BOOKING_FORM;
 		}else {
-			Boolean existBooking = this.bookingService.saveBooking(booking);
+			Boolean existBooking = bookingService.saveBooking(booking);
 			// booking created
 			if(existBooking) {
 				return "redirect:/owners/{ownerId}";
