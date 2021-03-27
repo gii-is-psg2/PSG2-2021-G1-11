@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,7 +35,6 @@ public class BookingControllerTests {
 	private static final int PET_ID = 1;
 	private static final int OWNER_ID = 1;
 
-
 	@Autowired
 	private BookingController bookingController;
 	
@@ -58,13 +58,11 @@ public class BookingControllerTests {
 		mockMvc.perform(get("/owners/*/pets/{petId}/booking/new", PET_ID)).andExpect(status().isOk())
 			.andExpect(view().name(VIEW_CREATE_BOOKING_FORM));
 	}
-
-	//Review
 	
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSucess() throws Exception {
-		given(bookingService.saveBooking(new Booking())).willReturn(true);
+		given(bookingService.saveBooking(any(Booking.class))).willReturn(true);
 		
 		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/new", OWNER_ID, PET_ID)
 				.with(csrf())
@@ -72,6 +70,18 @@ public class BookingControllerTests {
 				.param("finishDate", "3080/02/02"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessCreationFormFailure() throws Exception {
+		given(bookingService.saveBooking(any(Booking.class))).willReturn(false);
+		
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/new", OWNER_ID, PET_ID)
+				.with(csrf())
+				.param("startDate", "3080/01/01")
+				.param("finishDate", "3080/02/02"))
+			.andExpect(view().name(VIEW_CREATE_BOOKING_FORM));
 	}
 	
 	@WithMockUser(value = "spring")
