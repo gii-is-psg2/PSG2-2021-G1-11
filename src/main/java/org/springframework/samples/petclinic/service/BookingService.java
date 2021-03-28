@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookingService {
-	
+
 	private BookingRepository bookingRepository;
 
 	@Autowired
@@ -21,48 +21,45 @@ public class BookingService {
 		super();
 		this.bookingRepository = bookingRepository;
 	}
-	
+
+	private Boolean isBeforeOrEqual(LocalDate date1, LocalDate date2) {
+		return date1.isBefore(date2) || date1.isEqual(date2);
+	}
+
+	private Boolean isAfterOrEqual(LocalDate date1, LocalDate date2) {
+		return date1.isAfter(date2) || date1.isEqual(date2);
+	}
+
 	@Transactional(readOnly = true)
 	public Boolean saveBooking(Booking booking) throws DataAccessException {
-		
+
 		LocalDate startDate = LocalDate.parse(booking.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 		LocalDate finishDate = LocalDate.parse(booking.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		
+
 		List<Booking> bookings = bookingRepository.findAll();
-		Integer ac  = 0;
-		
-		for(Booking b : bookings) {
+		boolean isOverlapping = false;
+
+		for (Booking b : bookings) {
 			LocalDate bstartDate = LocalDate.parse(b.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 			LocalDate bfinishDate = LocalDate.parse(b.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
-			//Overlapping cases
-			
-			if(((bfinishDate.isBefore(finishDate) || bfinishDate.equals(finishDate)) 
-					&& (startDate.isBefore(bfinishDate)) || startDate.equals(bfinishDate)) || 
-					
-					((bstartDate.isBefore(finishDate) || bstartDate.equals(finishDate)) 
-	                && (bstartDate.isAfter(startDate) || bstartDate.equals(startDate)))|| 
-					
-					((bstartDate.isBefore(startDate) || bstartDate.equals(startDate))
-	                && (bfinishDate.isAfter(finishDate) || bfinishDate.equals(finishDate))) || 
-					
-					((bstartDate.isAfter(startDate) || bstartDate.equals(startDate))
-					&& (bfinishDate.isBefore(finishDate) || bfinishDate.equals(finishDate)))){
-				
-				ac += 1;
+			// Overlapping cases
+
+			if (isBeforeOrEqual(startDate, bfinishDate) && isAfterOrEqual(finishDate, bstartDate)) {
+				isOverlapping = true;
+				break;
 			}
 		}
-		
-		//Booking can be created
-		if(ac == 0) {
+
+		// Booking can be created
+		if (!isOverlapping) {
 			bookingRepository.save(booking);
 			return true;
-		
-		//Booking can not be created
-		}else {
+
+			// Booking can not be created
+		} else {
 			return false;
 		}
 	}
-	
-	
+
 }

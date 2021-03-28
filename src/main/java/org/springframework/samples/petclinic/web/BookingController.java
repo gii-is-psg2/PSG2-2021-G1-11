@@ -22,7 +22,7 @@ public class BookingController {
 
 	private BookingService bookingService;
 	private PetService petService;
-	
+
 	private static final String VIEW_CREATE_BOOKING_FORM = "pets/createBookingForm";
 
 	@Autowired
@@ -30,12 +30,13 @@ public class BookingController {
 		super();
 		this.bookingService = bookingService;
 		this.petService = petService;
-	}	
-	
-	@InitBinder("booking") public void initBookingBinder(WebDataBinder dataBinder) { 
-		dataBinder.setValidator(new BookingDateValidator()); 
 	}
-	
+
+	@InitBinder("booking")
+	public void initBookingBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(new BookingDateValidator());
+	}
+
 	@ModelAttribute("booking")
 	public Booking loadPetWithBooking(@PathVariable("petId") int petId) {
 		Pet pet = petService.findPetById(petId);
@@ -48,28 +49,24 @@ public class BookingController {
 	public String initNewBookingForm(@PathVariable("petId") int petId, ModelMap model) {
 		return VIEW_CREATE_BOOKING_FORM;
 	}
-	
+
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/booking/new")
 	public String processNewBookingForm(@Valid Booking booking, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEW_CREATE_BOOKING_FORM;
-		}else {
-			Boolean existBooking = bookingService.saveBooking(booking);
+		} else {
+			boolean existBooking = bookingService.saveBooking(booking);
 			// booking created
-			if(existBooking) {
+			if (existBooking) {
 				return "redirect:/owners/{ownerId}";
-				
-			// booking not created because of errors
-			}else {
-				result.rejectValue("finishDate", "There is another booking with these dates. Try again", "There is another booking with these dates. Try again");
+
+				// booking not created because of errors
+			} else {
+				result.rejectValue("finishDate", "There is another booking with these dates. Try again",
+						"There is another booking with these dates. Try again");
 				return VIEW_CREATE_BOOKING_FORM;
 			}
 		}
 	}
 
-	
-	
-	
-	
-	
 }
