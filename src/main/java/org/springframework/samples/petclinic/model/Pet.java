@@ -31,6 +31,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -122,4 +124,7 @@ public class Pet extends NamedEntity {
 		getVisitsInternal().remove(visit);
 	}
 
+	public void removeBooking(Booking booking) {
+		getBookings().remove(booking);
+	}
 }
