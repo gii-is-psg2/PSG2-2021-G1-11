@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookingService {
-	
 	private BookingRepository bookingRepository;
 
 	@Autowired
@@ -17,13 +16,19 @@ public class BookingService {
 		super();
 		this.bookingRepository = bookingRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
+	public Booking findBookingById(Integer bookingId) throws DataAccessException {
+		return bookingRepository.findById(bookingId);
+	}
+	
+	@Transactional
 	public void saveBooking(Booking booking) throws DataAccessException {
 		bookingRepository.save(booking);
 	}
 
-	
-	
-	
+	@Transactional
+	public void removeBookingById(Integer bookingId) throws DataAccessException {
+		bookingRepository.removeById(bookingId);
+	}
 }
