@@ -112,12 +112,18 @@
                             <tr>
                                 <th><fmt:message key="checkIn" /></th>
                                 <th><fmt:message key="checkOut" /></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <c:forEach var="booking" items="${pet.bookings}">
                             <tr>
                                 <td><c:out value="${booking.startDate}" /></td>
                                 <td><c:out value="${booking.finishDate}" /></td>
+                                <td>
+                                	<form:form method="POST" action="/owners/${owner.id}/pets/${pet.id}/booking/${booking.id}/remove">
+                                    	<button type="submit" class="btn-link">X</button>
+                                	</form:form>
+                                </td>
                             </tr>
                         </c:forEach>
                         <tr>

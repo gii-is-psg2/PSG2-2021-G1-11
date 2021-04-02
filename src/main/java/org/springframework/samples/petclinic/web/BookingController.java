@@ -70,7 +70,7 @@ public class BookingController {
 
 	
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/remove")
-	public String removeVisit(@PathVariable Integer bookingId, @PathVariable Integer petId) {
+	public String removeBooking(@PathVariable Integer bookingId, @PathVariable Integer petId) {
 		Pet pet = petService.findPetById(petId);
 		Booking booking = bookingService.findBookingById(bookingId);
 		pet.removeBooking(booking);
