@@ -22,7 +22,6 @@
 		</div>
 		<div class="navbar-collapse collapse" id="main-navbar">
 			<ul class="nav navbar-nav">
-
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
@@ -46,11 +45,7 @@
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
 				</petclinic:menuItem>
-
 			</ul>
-
-
-
 
 			<ul class="nav navbar-nav navbar-right">
 				<sec:authorize access="!isAuthenticated()">
@@ -58,11 +53,12 @@
 					<li><a href="<c:url value="/users/new" />"><fmt:message key="register"/></a></li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
-							<strong><sec:authentication property="name" /></strong> <span
-							class="glyphicon glyphicon-chevron-down"></span>
-					</a>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-user"></span> 
+							<strong><sec:authentication property="name" /></strong>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
 						<ul class="dropdown-menu">
 							<li>
 								<div class="navbar-login">
@@ -85,27 +81,19 @@
 								</div>
 							</li>
 							<li class="divider"></li>
-<!-- 							
-                            <li> 
-								<div class="navbar-login navbar-login-session">
-									<div class="row">
-										<div class="col-lg-12">
-											<p>
-												<a href="#" class="btn btn-primary btn-block">My Profile</a>
-												<a href="#" class="btn btn-danger btn-block">Change
-													Password</a>
-											</p>
-										</div>
-									</div>
-								</div>
-							</li>
--->
-						</ul></li>
+						</ul>
+					</li>
 				</sec:authorize>
+				<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-globe"></span> 
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href='<spring:url value="?lang=es"/>'><fmt:message key="spanish" /></a></li>
+                            <li><a href='<spring:url value="?lang=en"/>'><fmt:message key="english" /></a></li>
+						</ul>
+					</li>
 			</ul>
 		</div>
-
-
-
 	</div>
 </nav>
