@@ -8,7 +8,10 @@
 
 <petclinic:layout pageName="vets">
     <h2><fmt:message key="vet"/></h2>
-
+	<spring:url value="/vets/new" var="vetUrl"></spring:url>
+    <a class="btn btn-default" href="${fn:escapeXml(vetUrl)}"><fmt:message key="addVet"/></a>
+    <br>
+    <br>
     <table id="vetsTable" class="table table-striped">
         <thead>
         <tr>
