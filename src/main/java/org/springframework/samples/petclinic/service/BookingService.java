@@ -22,6 +22,7 @@ public class BookingService {
 		this.bookingRepository = bookingRepository;
 	}
 
+
 	private Boolean isBeforeOrEqual(LocalDate date1, LocalDate date2) {
 		return date1.isBefore(date2) || date1.isEqual(date2);
 	}
@@ -60,6 +61,18 @@ public class BookingService {
 		} else {
 			return false;
 		}
+	}
+
+
+	@Transactional(readOnly = true)
+	public Booking findBookingById(Integer bookingId) throws DataAccessException {
+		return bookingRepository.findById(bookingId);
+	}
+	
+
+	@Transactional
+	public void removeBookingById(Integer bookingId) throws DataAccessException {
+		bookingRepository.removeById(bookingId);
 	}
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class BookingController {
-
 	private BookingService bookingService;
 	private PetService petService;
 
@@ -67,6 +66,16 @@ public class BookingController {
 				return VIEW_CREATE_BOOKING_FORM;
 			}
 		}
+	}
+
+	
+	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/remove")
+	public String removeVisit(@PathVariable Integer bookingId, @PathVariable Integer petId) {
+		Pet pet = petService.findPetById(petId);
+		Booking booking = bookingService.findBookingById(bookingId);
+		pet.removeBooking(booking);
+		bookingService.removeBookingById(bookingId);
+		return "redirect:/owners/{ownerId}";
 	}
 
 }

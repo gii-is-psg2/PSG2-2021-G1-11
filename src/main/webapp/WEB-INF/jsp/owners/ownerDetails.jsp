@@ -78,7 +78,7 @@
                                 <td><c:out value="${visit.description}" /></td>
                                 <td>
                                     <form:form method="POST" action="/owners/${owner.id}/pets/${pet.id}/visits/${visit.id}/remove">
-                                        <button class="btn btn-default" type="submit"><fmt:message key="remVisit" /></button>
+                                        <button class="btn-link" type="submit"><fmt:message key="remVisit" /></button>
                                     </form:form>
                                 </td>
                             </tr>
