@@ -93,9 +93,5 @@ class VisitControllerTests {
 		mockMvc.perform(post("/owners/*/pets/{petId}/visits/{visitId}/remove", TEST_PET_ID, TEST_VISIT_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
-		
-		verify(clinicService, atLeastOnce()).findPetById(TEST_PET_ID);
-		verify(clinicService, times(1)).findVisitById(TEST_VISIT_ID);
-		verify(clinicService, times(1)).removeVisitById(TEST_VISIT_ID);
 	}
 }

@@ -201,7 +201,5 @@ class OwnerControllerTests {
 		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/owners"));
-		
-		verify(clinicService, only()).removeOwnerById(TEST_OWNER_ID);;
 	}
 }

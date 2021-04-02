@@ -34,6 +34,7 @@ public class BookingControllerTests {
 	private static final String VIEW_CREATE_BOOKING_FORM = "pets/createBookingForm";
 	private static final int PET_ID = 1;
 	private static final int OWNER_ID = 1;
+	private static final int BOOKING_ID = 1;
 
 	@Autowired
 	private BookingController bookingController;
@@ -128,5 +129,12 @@ public class BookingControllerTests {
 			.andExpect(view().name(VIEW_CREATE_BOOKING_FORM));
 	}
 
-	
+    @WithMockUser(value = "spring")
+    @Test
+    void testRemoveBooking() throws Exception {
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/remove", OWNER_ID, PET_ID, BOOKING_ID)
+							.with(csrf()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
 }
