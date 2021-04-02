@@ -9,11 +9,6 @@
 	var="jQueryUiCore" />
 <script src="${jQueryUiCore}"></script>
 
-<div class="btn-group">
-	<a class="btn btn-default" href='<spring:url value="?lang=es"/>'>Español</a>
-	<a class="btn btn-default" href='<spring:url value="?lang=en"/>'>English</a>
-</div>
-
 <%-- Bootstrap --%>
 <spring:url value="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"
 	var="bootstrapJs" />
