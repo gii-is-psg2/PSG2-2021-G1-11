@@ -18,9 +18,10 @@
 @spring-brown:      #34302D;
 @spring-grey:       #838789;
 @spring-light-grey: #f1f1f1;
-@spring-dark-brown: #CD853F;
-@spring-light-brown:#D2B48C;
-@spring-lighter-brown: #EDE1D1;
+@spring-dark-brown: #713112;
+@spring-light-brown:#874421;
+@spring-lighter-brown: #c1a28b;
+@spring-lightest-brown: #EDE1D1;
 
 @body-bg:                           @spring-light-grey;
 @text-color:                        @spring-brown;
@@ -41,7 +42,7 @@
 
 @btn-default-color:              @spring-light-grey;
 @btn-default-bg:                 @spring-brown;
-@btn-default-border:             @spring-dark-brown;
+@btn-default-border:             @spring-lighter-brown;
 
 @nav-tabs-active-link-hover-color:       @spring-dark-brown;
 @nav-tabs-active-link-hover-bg:           @spring-brown;
@@ -53,12 +54,12 @@
 @table-border-color:                      @spring-brown;
 
 .table > thead > tr > th {
-  background-color: @spring-light-brown;
+  background-color: @spring-lighter-brown;
   color: @spring-brown;
 }
 
 .table > tbody > tr:hover {
-  background-color: @spring-lighter-brown !important;
+  background-color: @spring-lightest-brown !important;
 }
 
 .table-filter {
@@ -88,6 +89,16 @@
   }
 }
 
+.btn-link {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #874421;
+  cursor: pointer;
+}
 
 .container .text-muted {
   margin: 20px 0;
