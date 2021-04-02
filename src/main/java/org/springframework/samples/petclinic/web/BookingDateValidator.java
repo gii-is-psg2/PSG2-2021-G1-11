@@ -16,7 +16,7 @@ public class BookingDateValidator implements Validator {
 		String finishDate = booking.getFinishDate();
 		LocalDate today = LocalDate.now();
 
-		if (startDate.isBlank()) {
+		if (startDate.isEmpty() && startDate.trim().length() == 0) {
 			errors.rejectValue("startDate", "required");
 		} else {
 			LocalDate date;
@@ -30,7 +30,7 @@ public class BookingDateValidator implements Validator {
 			}
 		}
 
-		if (finishDate.isBlank()) {
+		if (finishDate.isEmpty() && finishDate.trim().length() == 0) {
 			errors.rejectValue("finishDate", "required");
 		} else {
 			try {
