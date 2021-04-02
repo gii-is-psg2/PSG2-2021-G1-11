@@ -9,15 +9,15 @@
 <petclinic:layout pageName="owners">
 	<jsp:attribute name="customScript">
         <script>
-									$(function() {
-										$("#startDate").datepicker({
-											dateFormat : 'yy/mm/dd'
-										});
-										$("#finishDate").datepicker({
-											dateFormat : 'yy/mm/dd'
-										});
-									});
-								</script>
+			$(function() {
+				$("#startDate").datepicker({
+					dateFormat : 'yy/mm/dd'
+				});
+				$("#finishDate").datepicker({
+					dateFormat : 'yy/mm/dd'
+				});
+			});
+		</script>
     </jsp:attribute>
 	<jsp:body>
         <h2>
@@ -73,10 +73,8 @@
             </tr>
             <c:forEach var="booking" items="${booking.pet.bookings}">
 				<tr>
-				    <td><petclinic:localDate date="${booking.startDate}"
-							pattern="yyyy/MM/dd" /></td>
-				    <td><petclinic:localDate date="${booking.finishDate}"
-							pattern="yyyy/MM/dd" /></td>
+				    <td><c:out value="${booking.startDate}" /></td>
+				    <td><c:out value="${booking.finishDate}" /></td>
 				</tr>                
 			</c:forEach>
         </table>

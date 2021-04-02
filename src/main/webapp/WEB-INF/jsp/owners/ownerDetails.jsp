@@ -116,8 +116,8 @@
                         </thead>
                         <c:forEach var="booking" items="${pet.bookings}">
                             <tr>
-                                <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy-MM-dd" /></td>
-                                <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy-MM-dd" /></td>
+                                <td><c:out value="${booking.startDate}" /></td>
+                                <td><c:out value="${booking.finishDate}" /></td>
                             </tr>
                         </c:forEach>
                         <tr>
