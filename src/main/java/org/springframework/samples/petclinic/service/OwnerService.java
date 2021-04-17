@@ -70,4 +70,9 @@ public class OwnerService {
 	public void removeOwnerById(Integer ownerId) {
 		ownerRepository.removeById(ownerId);
 	}
+
+	@Transactional(readOnly = true)
+	public Owner getOwnerByUserName(String name) {
+		return ownerRepository.findOwnerByUserName(name);
+	}
 }
