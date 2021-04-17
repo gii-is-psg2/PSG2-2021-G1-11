@@ -2,27 +2,20 @@ package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "adoption_application")
 public class AdoptionApplication extends BaseEntity {
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	private Pet requestedPet;
 	
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	private Owner applicant;
 	
 	@Column(name = "description")
 	private String description;
-	
-	public AdoptionApplication(Pet requestedPet, Owner applicant, String description) {
-		super();
-		this.requestedPet = requestedPet;
-		this.applicant = applicant;
-		this.description = description;
-	}
 
 	public Pet getRequestedPet() {
 		return requestedPet;

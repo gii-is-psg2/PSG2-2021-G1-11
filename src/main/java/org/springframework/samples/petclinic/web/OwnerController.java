@@ -17,12 +17,15 @@ package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.service.AdoptionApplicationService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -48,10 +51,12 @@ public class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerService ownerService;
+	private final AdoptionApplicationService adoptionApplicationService;
 
 	@Autowired
-	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService) {
+	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService, AdoptionApplicationService adoptionApplicationService) {
 		this.ownerService = ownerService;
+		this.adoptionApplicationService = adoptionApplicationService;
 	}
 
 	@InitBinder
@@ -154,8 +159,10 @@ public class OwnerController {
     public ModelAndView getMyProfile(Principal principal) {
 		//con principal obtienes el nombre con el que inicias sesion
         Owner owner = ownerService.getOwnerByUserName(principal.getName());
+        List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingRequest(owner);
         ModelAndView mav = new ModelAndView("owners/ownerDetails");
-        mav.addObject(owner);
+        mav.addObject(owner); 
+        mav.addObject("requests", adopApp.size());
         return mav;
     }
 }

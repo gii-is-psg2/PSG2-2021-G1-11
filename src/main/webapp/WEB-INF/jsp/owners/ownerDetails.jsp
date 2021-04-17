@@ -5,6 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="owners">
     <h2><fmt:message key="ownerInf" /></h2>
@@ -40,9 +41,15 @@
             <spring:param name="ownerId" value="${owner.id}" />
         </spring:url>
         <a href="${fn:escapeXml(addUrl)}" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="addPet" /></a>
+        
         <form:form method="POST" action="${owner.id}/remove">
-            <button type="submit" class="btn btn-default"><fmt:message key="remOwner" /></button>
+            <button type="submit" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="remOwner" /></button>
         </form:form>
+        
+        <sec:authorize access="hasAuthority('owner')">
+	        <a href="/adoptions/request" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="requestPet" />(<c:out value="${requests}"></c:out>)</a>
+        </sec:authorize>
+        
     </div>
 
     <br />

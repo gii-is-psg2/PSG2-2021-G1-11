@@ -80,3 +80,8 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'castrado');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'esterilizado');
 
+INSERT INTO adoption_application(id,requested_pet_id, applicant_id, description) VALUES (1, 1, 2, 'se me dan muy bien los animales');
+INSERT INTO adoption_application(id,requested_pet_id, applicant_id, description) VALUES (2, 1, 3, 'siempre he querido tener mascota');
+INSERT INTO adoption_application(id,requested_pet_id, applicant_id, description) VALUES (3, 1, 4, 'tengo 7 gatos mas');
+INSERT INTO adoption_application(id,requested_pet_id, applicant_id, description) VALUES (4, 1, 5, 'tengo mucho espacio libre en casa');
+
