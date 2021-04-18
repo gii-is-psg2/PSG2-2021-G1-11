@@ -53,6 +53,11 @@ public class PetValidator implements Validator {
 		if (pet.getBirthDate() == null) {
 			errors.rejectValue("birthDate", PetValidator.REQUIRED, PetValidator.REQUIRED);
 		}
+		
+		//adopted validation
+		if(pet.getinAdoption() == null) {
+			errors.rejectValue("inAdoption", PetValidator.REQUIRED);
+		}
 	}
 
 	/**

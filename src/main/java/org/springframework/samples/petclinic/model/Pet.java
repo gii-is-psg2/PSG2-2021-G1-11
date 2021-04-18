@@ -31,8 +31,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -52,6 +50,8 @@ public class Pet extends NamedEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate birthDate;
 
+	private Boolean inAdoption;
+	
 	@ManyToOne
 	@JoinColumn(name = "type_id")
 	private PetType type;
@@ -66,6 +66,7 @@ public class Pet extends NamedEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Booking> bookings = new HashSet<Booking>();
 
+	
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -74,6 +75,14 @@ public class Pet extends NamedEntity {
 		return this.birthDate;
 	}
 
+	public Boolean getinAdoption() {
+		return inAdoption;
+	}
+
+	public void setinAdoption(Boolean inAdoption) {
+		this.inAdoption = inAdoption;
+	}
+	
 	public PetType getType() {
 		return this.type;
 	}
