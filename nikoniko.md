@@ -41,14 +41,14 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 4         | 	    -		|       -        |       -        |       -        |       -        |       -        |       |
 | Day 5         |       -		|       -        |       -        |       -        |       -        |       -        |       |
 | Day 6         | 	:smiley:	|   :smiley:     |    :smiley:    |    :smiley:    |    :smiley:    |    :smiley:    | 11/04 |
-| Day 7         | 				|       -        |                |                |                |                |       |
-| Day 8         | 				|       -        |                |                |                |                |       |
-| Day 9         | 				|       -        |                |                |                |                |       |
-| Day 10        | 				| :neutral_face: |                |                |                |      :smiley:  |       |
+| Day 7         | 				|       -        |     -           |                |                |                |       |
+| Day 8         | 				|       -        |     -           |                |                |                |       |
+| Day 9         | 				|       -        |     -          |                |                |                |       |
+| Day 10        | 				| :neutral_face: |     -          |                |                |      :smiley:  |       |
 | Day 11        | :smiley:	    |   :smiley:     |  :smiley:      |    :worried:   |    :smiley:    |   :smiley:     | 16/04 |
 | Day 12        | 				|                |  :neutral_face: |                |                |                |       |
-| Day 13        | 				|                |                |                |                |                |       |
-| Day 14        | 				|                |                |                |        :smiley:|                |       |
+| Day 13        | 				|                |  :smiley:       |                |                |                |       |
+| Day 14        | 				|                |                 |                |        :smiley:|                |       |
 | Day 15        | 				|                |                |                |                |                |       |
 | Day 16        | 				|                |                |                |                |                | 21/04 |
 | Day 17        | 				|                |                |                |                |                |       |
