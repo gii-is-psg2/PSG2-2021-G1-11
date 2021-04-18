@@ -140,7 +140,7 @@ public class OwnerController {
 	@PostMapping("/owners/{ownerId}/remove")
 	public String removeOwner(@PathVariable Integer ownerId) {
 		ownerService.removeOwnerById(ownerId);
-		return "redirect:/owners";
+		return "redirect:/";
 	}
 
 	/**

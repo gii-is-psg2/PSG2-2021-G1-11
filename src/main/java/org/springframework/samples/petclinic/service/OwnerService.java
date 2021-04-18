@@ -16,9 +16,11 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
@@ -40,10 +42,14 @@ public class OwnerService {
 	
 	@Autowired
 	private AuthoritiesService authoritiesService;
+	
+	@Autowired
+	private AdoptionApplicationService adoptionApplicationService;
 
 	@Autowired
-	public OwnerService(OwnerRepository ownerRepository) {
+	public OwnerService(OwnerRepository ownerRepository, AdoptionApplicationService adoptionApplicationService) {
 		this.ownerRepository = ownerRepository;
+		this.adoptionApplicationService = adoptionApplicationService;
 	}	
 
 	@Transactional(readOnly = true)
@@ -68,6 +74,12 @@ public class OwnerService {
 
 	@Transactional
 	public void removeOwnerById(Integer ownerId) {
+		Owner owner = findOwnerById(ownerId);
+		//remove pending request
+		List<AdoptionApplication> pendingRequest =  adoptionApplicationService.getPendingRequest(owner);
+		for(AdoptionApplication request : pendingRequest) {
+			adoptionApplicationService.declineRequest(request.getId());
+		}
 		ownerRepository.removeById(ownerId);
 	}
 
