@@ -88,7 +88,6 @@ public class PetService {
 	@Transactional
 	public void removePetById(Integer petId) {
 		// remove request
-		Pet pet = findPetById(petId);
 		List<AdoptionApplication> requestsByPet = adoptionApplicationRepository.findRequestByPet(petId);
 		for(AdoptionApplication request : requestsByPet) {
 			adoptionApplicationRepository.delete(request);
