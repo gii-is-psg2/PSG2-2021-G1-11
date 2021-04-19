@@ -76,9 +76,9 @@ public class OwnerService {
 	public void removeOwnerById(Integer ownerId) {
 		Owner owner = findOwnerById(ownerId);
 		// remove pending adoption application
-		List<AdoptionApplication> pendingRequest = adoptionApplicationService.getPendingAdoptionApplication(owner);
-		for (AdoptionApplication request : pendingRequest) {
-			adoptionApplicationService.declineAdoptionApplication(request.getId());
+		List<AdoptionApplication> pendingAdoptionApplications = adoptionApplicationService.getPendingAdoptionApplication(owner);
+		for (AdoptionApplication pendingAdoptionApplication : pendingAdoptionApplications) {
+			adoptionApplicationService.declineAdoptionApplication(pendingAdoptionApplication.getId());
 		}
 		ownerRepository.removeById(ownerId);
 	}
