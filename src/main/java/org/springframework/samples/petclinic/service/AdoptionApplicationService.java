@@ -53,4 +53,8 @@ public class AdoptionApplicationService {
 		adoptionApplicationRepository.deleteById(applicationId);
 	}
 
+	public List<AdoptionApplication> getRequestsByApplicant(int ownerId) {
+		return adoptionApplicationRepository.getRequestByApplicant(ownerId);
+	}
+
 }

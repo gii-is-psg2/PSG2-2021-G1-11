@@ -43,6 +43,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class OwnerControllerTests {
 
 	private static final int TEST_OWNER_ID = 1;
+	private static final String TEST_OWNER_NAME = "George";
 
 	@Autowired
 	private OwnerController ownerController;
@@ -69,7 +70,7 @@ class OwnerControllerTests {
 
 		george = new Owner();
 		george.setId(TEST_OWNER_ID);
-		george.setFirstName("George");
+		george.setFirstName(TEST_OWNER_NAME);
 		george.setLastName("Franklin");
 		george.setAddress("110 W. Liberty St.");
 		george.setCity("Madison");
@@ -181,9 +182,18 @@ class OwnerControllerTests {
 				.andExpect(view().name("owners/ownerDetails"));
 	}
 
-	@WithMockUser(value = "spring")
+	@WithMockUser(username="owner1")
 	@Test
 	void testRemoveOwner() throws Exception {
+		given(ownerService.getOwnerByUserName("owner1")).willReturn(george);
+		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
+				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
+	}
+	
+	@WithMockUser(username="owner1")
+	@Test
+	void testNotRemoveOwner() throws Exception {
+		given(ownerService.getOwnerByUserName(TEST_OWNER_NAME)).willReturn(george);
 		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
 	}

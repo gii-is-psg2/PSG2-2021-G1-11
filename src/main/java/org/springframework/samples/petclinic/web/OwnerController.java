@@ -29,6 +29,7 @@ import org.springframework.samples.petclinic.service.AdoptionApplicationService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -135,8 +136,13 @@ public class OwnerController {
 	}
 
 	@PostMapping("/owners/{ownerId}/remove")
-	public String removeOwner(@PathVariable Integer ownerId) {
+	public String removeOwner(@PathVariable Integer ownerId, Principal principal) {
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
 		ownerService.removeOwnerById(ownerId);
+		// To close the session if you delete your profile as owner
+		if (ownerId.equals(owner.getId())) {
+			SecurityContextHolder.clearContext();
+		}
 		return "redirect:/";
 	}
 

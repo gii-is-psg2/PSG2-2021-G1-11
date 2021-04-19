@@ -32,7 +32,7 @@ public class AdoptionApplicationController {
 	}
 
 	@GetMapping(value = "/applications")
-	public ModelAndView getPendingRequest(Principal principal) {
+	public ModelAndView getPendingApplications(Principal principal) {
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
 		List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingAdoptionApplication(owner);
 		ModelAndView mav = new ModelAndView("owners/ownerAdoptionApplication");

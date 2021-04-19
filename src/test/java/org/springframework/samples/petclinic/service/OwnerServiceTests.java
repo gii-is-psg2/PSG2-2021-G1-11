@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Collection;
 
@@ -62,6 +63,9 @@ import org.springframework.transaction.annotation.Transactional;
 class OwnerServiceTests {                
     @Autowired
 	protected OwnerService ownerService;
+    
+    @Autowired
+    protected AdoptionApplicationService adoptionApplicationService;
 
 	@Test
 	void shouldFindOwnersByLastName() {
@@ -119,6 +123,15 @@ class OwnerServiceTests {
 		// retrieving new name from database
 		owner = this.ownerService.findOwnerById(1);
 		assertThat(owner.getLastName()).isEqualTo(newLastName);
+	}
+	
+	@Test
+	@Transactional
+	void shouldRemoveOwnerById() {
+		Owner owner = this.ownerService.findOwnerById(1);
+		this.ownerService.removeOwnerById(owner.getId());
+		Owner ownerDelete = this.ownerService.findOwnerById(1);
+		assertNull(ownerDelete);
 	}
 
 }

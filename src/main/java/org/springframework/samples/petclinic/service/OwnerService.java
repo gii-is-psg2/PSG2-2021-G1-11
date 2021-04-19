@@ -75,10 +75,12 @@ public class OwnerService {
 	@Transactional
 	public void removeOwnerById(Integer ownerId) {
 		Owner owner = findOwnerById(ownerId);
-		// remove pending adoption application
-		List<AdoptionApplication> pendingAdoptionApplications = adoptionApplicationService.getPendingAdoptionApplication(owner);
-		for (AdoptionApplication pendingAdoptionApplication : pendingAdoptionApplications) {
-			adoptionApplicationService.declineAdoptionApplication(pendingAdoptionApplication.getId());
+		// remove request made by the owner
+		List<AdoptionApplication> adoptionApplications = adoptionApplicationService.getRequestsByApplicant(ownerId);
+		// remove adoption applicants
+		adoptionApplications.addAll(adoptionApplicationService.getPendingAdoptionApplication(owner));
+		for (AdoptionApplication adoptionApplication : adoptionApplications) {
+			adoptionApplicationService.declineAdoptionApplication(adoptionApplication.getId());
 		}
 		ownerRepository.removeById(ownerId);
 	}
