@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.model;
 
 import java.util.Date;
@@ -14,37 +15,53 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "donations")
 public class Donation extends BaseEntity {
+
 	@CreationTimestamp
-	private Date donationDate;
+	private Date	donationDate;
+
 	@Min(value = 1)
 	@NotEmpty
-	private Double amount;
+	private Double	amount;
+
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
-	private Owner owner;
+	private Owner	owner;
 
+	@ManyToOne
+	@JoinColumn(name = "cause_id")
+	private Cause	cause;
+
+	
 	public Date getDonationDate() {
-		return donationDate;
+		return this.donationDate;
 	}
 
-	public void setDonationDate(Date donationDate) {
+	public void setDonationDate(final Date donationDate) {
 		this.donationDate = donationDate;
 	}
 
 	public Double getAmount() {
-		return amount;
+		return this.amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(final Double amount) {
 		this.amount = amount;
 	}
 
 	public Owner getOwner() {
-		return owner;
+		return this.owner;
 	}
 
-	public void setOwner(Owner owner) {
+	public void setOwner(final Owner owner) {
 		this.owner = owner;
+	}
+
+	public Cause getCause() {
+		return this.cause;
+	}
+
+	public void setCause(final Cause cause) {
+		this.cause = cause;
 	}
 
 }
