@@ -10,9 +10,9 @@ import org.springframework.samples.petclinic.model.AdoptionApplication;
 public interface AdoptionApplicationRepository extends CrudRepository<AdoptionApplication, Integer> {
 
 	@Query("select r from AdoptionApplication r where r.requestedPet.owner.id =:ownerId")
-	public List<AdoptionApplication> getPendingRequest(@Param("ownerId") Integer ownerId);
+	public List<AdoptionApplication> getPendingAdoptionApplication(@Param("ownerId") Integer ownerId);
 
 	@Query("select a from AdoptionApplication a where a.requestedPet.id =:petId")
-	public List<AdoptionApplication> findRequestByPet(@Param("petId") Integer petId);
-	
+	public List<AdoptionApplication> findAdoptionApplicationByPet(@Param("petId") Integer petId);
+
 }

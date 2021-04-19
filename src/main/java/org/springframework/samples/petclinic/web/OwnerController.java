@@ -54,7 +54,8 @@ public class OwnerController {
 	private final AdoptionApplicationService adoptionApplicationService;
 
 	@Autowired
-	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService, AdoptionApplicationService adoptionApplicationService) {
+	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService,
+			AdoptionApplicationService adoptionApplicationService) {
 		this.ownerService = ownerService;
 		this.adoptionApplicationService = adoptionApplicationService;
 	}
@@ -75,11 +76,10 @@ public class OwnerController {
 	public String processCreationForm(@Valid Owner owner, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-			//creating owner, user and authorities
+		} else {
+			// creating owner, user and authorities
 			this.ownerService.saveOwner(owner);
-			
+
 			return "redirect:/owners/" + owner.getId();
 		}
 	}
@@ -104,13 +104,11 @@ public class OwnerController {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
 			return "owners/findOwners";
-		}
-		else if (results.size() == 1) {
+		} else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
 			return "redirect:/owners/" + owner.getId();
-		}
-		else {
+		} else {
 			// multiple owners found
 			model.put("selections", results);
 			return "owners/ownersList";
@@ -129,14 +127,13 @@ public class OwnerController {
 			@PathVariable("ownerId") int ownerId) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			owner.setId(ownerId);
 			this.ownerService.saveOwner(owner);
 			return "redirect:/owners/{ownerId}";
 		}
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/remove")
 	public String removeOwner(@PathVariable Integer ownerId) {
 		ownerService.removeOwnerById(ownerId);
@@ -145,6 +142,7 @@ public class OwnerController {
 
 	/**
 	 * Custom handler for displaying an owner.
+	 * 
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
@@ -155,14 +153,15 @@ public class OwnerController {
 		return mav;
 	}
 
-	@GetMapping(value="/owners/myProfile")
-    public ModelAndView getMyProfile(Principal principal) {
-		//con principal obtienes el nombre con el que inicias sesion
-        Owner owner = ownerService.getOwnerByUserName(principal.getName());
-        List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingRequest(owner);
-        ModelAndView mav = new ModelAndView("owners/ownerDetails");
-        mav.addObject(owner); 
-        mav.addObject("requests", adopApp.size());
-        return mav;
-    }
+	@GetMapping(value = "/owners/myProfile")
+	public ModelAndView getMyProfile(Principal principal) {
+		// principal is used to get the name of the person who is logged in.
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		// to show the number of pending adoption application in the view ownerDetails
+		List<AdoptionApplication> adopApps = adoptionApplicationService.getPendingAdoptionApplication(owner);
+		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
+		return mav;
+	}
 }

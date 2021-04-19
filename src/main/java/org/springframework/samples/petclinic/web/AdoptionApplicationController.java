@@ -19,43 +19,45 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/adoptions")
 public class AdoptionApplicationController {
-	
+
 	private AdoptionApplicationService adoptionApplicationService;
 	private OwnerService ownerService;
 
 	@Autowired
-	public AdoptionApplicationController(AdoptionApplicationService adoptionApplicationService, OwnerService ownerService) {
+	public AdoptionApplicationController(AdoptionApplicationService adoptionApplicationService,
+			OwnerService ownerService) {
 		super();
 		this.adoptionApplicationService = adoptionApplicationService;
 		this.ownerService = ownerService;
 	}
-	
-	@GetMapping(value="/request")
+
+	@GetMapping(value = "/applications")
 	public ModelAndView getPendingRequest(Principal principal) {
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingRequest(owner);
-		ModelAndView mav = new ModelAndView("owners/ownerRequests");
-		mav.addObject("requests", adopApp);
-		mav.addObject("requestsNumber", adopApp.size());
+		List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingAdoptionApplication(owner);
+		ModelAndView mav = new ModelAndView("owners/ownerAdoptionApplication");
+		mav.addObject("adoptionApplications", adopApp);
+		mav.addObject("adoptionApplicationsNumber", adopApp.size());
 		return mav;
 	}
-	
-	@GetMapping(value="{request_id}/accept")
-	public String acceptRequest(@PathVariable("request_id") int requestId, Principal principal) throws DataAccessException, DuplicatedPetNameException {
-		//	Comprobar antes que el owner logueado es el que quiera aceptar la solicitud
-		AdoptionApplication adopApp = adoptionApplicationService.findById(requestId);
+
+	@GetMapping(value = "{applications_id}/accept")
+	public String acceptAdoptionApplication(@PathVariable("applications_id") int applicationsId, Principal principal)
+			throws DataAccessException, DuplicatedPetNameException {
+		// Comprobar antes que el owner logueado es el que quiera aceptar la solicitud
+		AdoptionApplication adopApp = adoptionApplicationService.findById(applicationsId);
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		if(adopApp.getRequestedPet().getOwner().getId().equals(owner.getId()))
-			adoptionApplicationService.acceptRequest(requestId, adopApp);
-		return "redirect:/adoptions/request";
+		if (adopApp.getRequestedPet().getOwner().getId().equals(owner.getId()))
+			adoptionApplicationService.acceptAdoptionApplication(adopApp);
+		return "redirect:/adoptions/applications";
 	}
-	
-	@GetMapping(value="{request_id}/decline")
-	public String declineRequest(@PathVariable("request_id") int requestId, Principal principal) {
-		AdoptionApplication adopApp = adoptionApplicationService.findById(requestId);
+
+	@GetMapping(value = "{applications_id}/decline")
+	public String declineAdoptionApplication(@PathVariable("applications_id") int applicationsId, Principal principal) {
+		AdoptionApplication adopApp = adoptionApplicationService.findById(applicationsId);
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		if(adopApp.getRequestedPet().getOwner().getId().equals(owner.getId()))
-			adoptionApplicationService.declineRequest(requestId);
-		return "redirect:/adoptions/request";
+		if (adopApp.getRequestedPet().getOwner().getId().equals(owner.getId()))
+			adoptionApplicationService.declineAdoptionApplication(applicationsId);
+		return "redirect:/adoptions/applications";
 	}
 }

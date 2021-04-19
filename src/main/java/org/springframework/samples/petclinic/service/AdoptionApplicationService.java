@@ -16,39 +16,41 @@ public class AdoptionApplicationService {
 
 	private AdoptionApplicationRepository adoptionApplicationRepository;
 	private PetService petService;
-	
+
 	@Autowired
-	public AdoptionApplicationService(AdoptionApplicationRepository adoptionApplicationRepository, PetService petService) {
+	public AdoptionApplicationService(AdoptionApplicationRepository adoptionApplicationRepository,
+			PetService petService) {
 		super();
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
-		this.petService = petService; 
+		this.petService = petService;
 	}
 
-	public List<AdoptionApplication> getPendingRequest(Owner owner) {
-		return adoptionApplicationRepository.getPendingRequest(owner.getId());
+	public List<AdoptionApplication> getPendingAdoptionApplication(Owner owner) {
+		return adoptionApplicationRepository.getPendingAdoptionApplication(owner.getId());
 	}
 
-	public AdoptionApplication findById(int requestId) {
-		return adoptionApplicationRepository.findById(requestId).orElse(null);
+	public AdoptionApplication findById(int applicationId) {
+		return adoptionApplicationRepository.findById(applicationId).orElse(null);
 	}
-	
-	public void acceptRequest(int requestId, AdoptionApplication adopApp) throws DataAccessException, DuplicatedPetNameException {
+
+	public void acceptAdoptionApplication(AdoptionApplication adopApp)
+			throws DataAccessException, DuplicatedPetNameException {
 		Pet pet = adopApp.getRequestedPet();
 		Owner newOwner = adopApp.getApplicant();
 		pet.setinAdoption(false);
 		pet.setOwner(newOwner);
 		petService.savePet(pet);
-		
-		//Borrar todas las request que había de esa mascota
-		
-		List<AdoptionApplication> requestsByPet = adoptionApplicationRepository.findRequestByPet(pet.getId());
-		for(AdoptionApplication adoption: requestsByPet) {
-			adoptionApplicationRepository.delete(adoption);
+
+		// Borrar todas las solicitudes de adopcion que tenia esa mascota
+
+		List<AdoptionApplication> adoptionApplicationByPet = adoptionApplicationRepository.findAdoptionApplicationByPet(pet.getId());
+		for (AdoptionApplication adoptionApplication : adoptionApplicationByPet) {
+			adoptionApplicationRepository.delete(adoptionApplication);
 		}
 	}
 
-	public void declineRequest(int requestId) {
-		adoptionApplicationRepository.deleteById(requestId);
+	public void declineAdoptionApplication(int applicationId) {
+		adoptionApplicationRepository.deleteById(applicationId);
 	}
 
 }

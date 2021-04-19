@@ -35,14 +35,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OwnerService {
 
-	private OwnerRepository ownerRepository;	
-	
+	private OwnerRepository ownerRepository;
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthoritiesService authoritiesService;
-	
+
 	@Autowired
 	private AdoptionApplicationService adoptionApplicationService;
 
@@ -50,7 +50,7 @@ public class OwnerService {
 	public OwnerService(OwnerRepository ownerRepository, AdoptionApplicationService adoptionApplicationService) {
 		this.ownerRepository = ownerRepository;
 		this.adoptionApplicationService = adoptionApplicationService;
-	}	
+	}
 
 	@Transactional(readOnly = true)
 	public Owner findOwnerById(int id) throws DataAccessException {
@@ -64,21 +64,21 @@ public class OwnerService {
 
 	@Transactional
 	public void saveOwner(Owner owner) throws DataAccessException {
-		//creating owner
-		ownerRepository.save(owner);		
-		//creating user
+		// creating owner
+		ownerRepository.save(owner);
+		// creating user
 		userService.saveUser(owner.getUser());
-		//creating authorities
+		// creating authorities
 		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
-	}		
+	}
 
 	@Transactional
 	public void removeOwnerById(Integer ownerId) {
 		Owner owner = findOwnerById(ownerId);
-		//remove pending request
-		List<AdoptionApplication> pendingRequest =  adoptionApplicationService.getPendingRequest(owner);
-		for(AdoptionApplication request : pendingRequest) {
-			adoptionApplicationService.declineRequest(request.getId());
+		// remove pending adoption application
+		List<AdoptionApplication> pendingRequest = adoptionApplicationService.getPendingAdoptionApplication(owner);
+		for (AdoptionApplication request : pendingRequest) {
+			adoptionApplicationService.declineAdoptionApplication(request.getId());
 		}
 		ownerRepository.removeById(ownerId);
 	}
