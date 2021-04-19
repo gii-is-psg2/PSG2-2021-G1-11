@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,52 +17,50 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "donations")
 public class Donation extends BaseEntity {
 
-	@CreationTimestamp
-	private Date	donationDate;
+    @CreationTimestamp
+    private Date donationDate;
 
-	@Min(value = 1)
-	@NotEmpty
-	private Double	amount;
+    @Min(value = 1)
+    @NotNull
+    private Double amount;
 
-	@ManyToOne
-	@JoinColumn(name = "owner_id")
-	private Owner	owner;
+    private String ownerName;
 
-	@ManyToOne
-	@JoinColumn(name = "cause_id")
-	private Cause	cause;
+    @ManyToOne
+    @JoinColumn(name = "cause_id")
+    private Cause cause;
 
-	
-	public Date getDonationDate() {
-		return this.donationDate;
-	}
 
-	public void setDonationDate(final Date donationDate) {
-		this.donationDate = donationDate;
-	}
+    public Date getDonationDate() {
+        return this.donationDate;
+    }
 
-	public Double getAmount() {
-		return this.amount;
-	}
+    public void setDonationDate(final Date donationDate) {
+        this.donationDate = donationDate;
+    }
 
-	public void setAmount(final Double amount) {
-		this.amount = amount;
-	}
+    public Double getAmount() {
+        return this.amount;
+    }
 
-	public Owner getOwner() {
-		return this.owner;
-	}
+    public void setAmount(final Double amount) {
+        this.amount = amount;
+    }
 
-	public void setOwner(final Owner owner) {
-		this.owner = owner;
-	}
+    public String getOwnerName() {
+        return ownerName;
+    }
 
-	public Cause getCause() {
-		return this.cause;
-	}
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
 
-	public void setCause(final Cause cause) {
-		this.cause = cause;
-	}
+    public Cause getCause() {
+        return this.cause;
+    }
+
+    public void setCause(final Cause cause) {
+        this.cause = cause;
+    }
 
 }
