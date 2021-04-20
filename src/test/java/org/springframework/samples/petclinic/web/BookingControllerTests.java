@@ -2,6 +2,12 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -136,5 +142,58 @@ public class BookingControllerTests {
 							.with(csrf()))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
+	}
+    
+    @WithMockUser(value = "spring")
+    @Test
+    void testCancelBooking() throws Exception {
+    	Booking spiedBooking = spy(new Booking());
+    	
+    	given(bookingService.findBookingById(BOOKING_ID)).willReturn(spiedBooking);
+    	
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/cancel", OWNER_ID, PET_ID, BOOKING_ID)
+							.with(csrf()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+		
+		verify(bookingService, times(1)).findBookingById(BOOKING_ID);
+		verify(spiedBooking, only()).setCancelled(true);
+		verify(bookingService, times(1)).saveBooking(spiedBooking);
+	}
+    
+    @WithMockUser(value = "spring")
+    @Test
+    void testRenewBooking() throws Exception {
+    	Booking newBooking = new Booking();
+    	
+    	given(bookingService.findBookingById(BOOKING_ID)).willReturn(newBooking);
+    	given(bookingService.renewBooking(newBooking)).willReturn(true);
+    	
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/renew", OWNER_ID, PET_ID, BOOKING_ID)
+							.with(csrf()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/owners/{ownerId}"));
+		
+		verify(bookingService, times(1)).findBookingById(BOOKING_ID);
+		verify(bookingService, times(1)).renewBooking(newBooking);
+	}
+    
+    @WithMockUser(value = "spring")
+    @Test
+    void testRenewInvalidBooking() throws Exception {
+    	Booking newBooking = new Booking();
+    	
+    	given(bookingService.findBookingById(BOOKING_ID)).willReturn(newBooking);
+    	given(bookingService.renewBooking(newBooking)).willReturn(false);
+    	
+		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/renew", OWNER_ID, PET_ID, BOOKING_ID)
+							.with(csrf()))
+				.andExpect(status().isOk())
+				.andExpect(view().name("pets/renewBookingFailed"));
+		
+		verify(bookingService, times(1)).findBookingById(BOOKING_ID);
+		verify(bookingService, times(1)).renewBooking(newBooking);
+		verify(petService, atLeastOnce()).findPetById(PET_ID);
+		verify(bookingService, times(1)).removeBookingById(BOOKING_ID);
 	}
 }
