@@ -1,0 +1,143 @@
+package org.springframework.samples.petclinic.web;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.service.AdoptionApplicationService;
+import org.springframework.samples.petclinic.service.OwnerService;
+import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(value = AdoptionApplicationController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+public class AdoptionApplicationControllerTests {
+	private static final String VIEW_CREATE_ADOPTION_APPLICATION = "adoptions/createAdoptionApplication";
+	private static final int PET_ADOPTABLE_ID = 1;
+	private static final int PET_NOT_ADOPTABLE_ID = 2;
+
+	@MockBean
+	private AdoptionApplicationService adoptionApplicationService;
+
+	@MockBean
+	private OwnerService ownerService;
+
+	@MockBean
+	private PetService petService;
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@BeforeEach
+	void setup() {
+		Pet adoptablePet = new Pet();
+		adoptablePet.setinAdoption(true);
+		given(petService.findPetById(PET_ADOPTABLE_ID)).willReturn(adoptablePet);
+		given(petService.findPetById(PET_NOT_ADOPTABLE_ID)).willReturn(new Pet());
+		given(ownerService.getOwnerByUserName("spring")).willReturn(new Owner());
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitAdoptionApplicationForm() throws Exception {
+		mockMvc.perform(get("/adoptions/pets/{petId}/apply", PET_ADOPTABLE_ID)).andExpect(status().isOk())
+				.andExpect(view().name(VIEW_CREATE_ADOPTION_APPLICATION));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitNotAdoptableApplicationForm() throws Exception {
+		mockMvc.perform(get("/adoptions/pets/{petId}/apply", PET_NOT_ADOPTABLE_ID)).andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplication() throws Exception {
+		Owner mockOwner = new Owner();
+		mockOwner.setId(1);
+		Pet mockPet = new Pet();
+		mockPet.setinAdoption(true);
+		mockPet.setOwner(mockOwner);
+		
+		given(petService.findPetById(1)).willReturn(mockPet);
+		given(ownerService.getOwnerByUserName(anyString())).willReturn(new Owner());
+		
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", 1).with(csrf())
+				.param("description", "Hey! I want to take care of your pet!"))
+		.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplicationNoDescription() throws Exception {
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", PET_ADOPTABLE_ID).with(csrf())
+				.param("description", "         "))
+		.andExpect(status().isOk()).andExpect(view().name("adoptions/createAdoptionApplication")).andExpect(model().hasErrors());
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplicationInvalidPet() throws Exception {
+		final int INVALID_PET_ID = 666;
+		given(petService.findPetById(INVALID_PET_ID)).willReturn(null);
+		
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", INVALID_PET_ID).with(csrf())
+				.param("description", "Hey! I want to take care of your pet!"))
+		.andExpect(status().isOk()).andExpect(view().name("adoptions/createAdoptionApplication")).andExpect(model().hasErrors());
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplicationNotAdoptablePet() throws Exception {
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", PET_NOT_ADOPTABLE_ID).with(csrf())
+				.param("description", "Hey! I want to take care of your pet!"))
+		.andExpect(status().isOk()).andExpect(view().name("adoptions/createAdoptionApplication")).andExpect(model().hasErrors());
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplicationAlreadySent() throws Exception {
+		given(adoptionApplicationService
+				.findByApplicantAndRequestedPet(any(Owner.class), any(Pet.class))).willReturn(new AdoptionApplication());
+		
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", PET_ADOPTABLE_ID).with(csrf())
+				.param("description", "Hey! I want to take care of your pet again!"))
+		.andExpect(status().isOk()).andExpect(view().name("adoptions/createAdoptionApplication")).andExpect(model().hasErrors());
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testCreateAdoptionApplicationAlreadyOwned() throws Exception {
+		Owner mockOwner = new Owner();
+		mockOwner.setId(1);
+		Pet mockPet = new Pet();
+		mockPet.setinAdoption(true);
+		mockPet.setOwner(mockOwner);
+		
+		given(petService.findPetById(1)).willReturn(mockPet);
+		given(ownerService.getOwnerByUserName(anyString())).willReturn(mockOwner);
+		
+		mockMvc.perform(post("/adoptions/pets/{petId}/apply", PET_ADOPTABLE_ID).with(csrf())
+				.param("description", "Hey! I want to take care of your pet again!"))
+		.andExpect(status().isOk()).andExpect(view().name("adoptions/createAdoptionApplication")).andExpect(model().hasErrors());
+	}
+}
