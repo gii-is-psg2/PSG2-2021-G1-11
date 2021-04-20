@@ -40,6 +40,12 @@
 					<span><fmt:message key="vet"/></span>
 				</petclinic:menuItem>
 
+                <petclinic:menuItem active="${name eq 'causes'}" url="/causes"
+                                    title="Causes">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    <span><fmt:message key="causes"/></span>
+                </petclinic:menuItem>
+
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
@@ -55,7 +61,7 @@
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span class="glyphicon glyphicon-user"></span> 
+							<span class="glyphicon glyphicon-user"></span>ï¿½
 							<strong><sec:authentication property="name" /></strong>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</a>
@@ -86,7 +92,7 @@
 				</sec:authorize>
 				<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span class="glyphicon glyphicon-globe"></span> 
+							<span class="glyphicon glyphicon-globe"></span>ï¿½
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href='<spring:url value="?lang=es"/>'><fmt:message key="spanish" /></a></li>

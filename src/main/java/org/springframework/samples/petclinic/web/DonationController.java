@@ -52,15 +52,27 @@ public class DonationController {
 
     @PostMapping(value = "/causes/{causeId}/donations/new")
     public String processCreationForm(@PathVariable("causeId") int causeId, Principal principal, @Valid Donation donation, BindingResult result) {
+
         if (result.hasErrors()) {
             return VIEWS_DONATIONS_CREATE_FORM;
-        } else {
+        }
+        Cause cause = causeService.findCauseById(causeId);
+        if(cause.getIsClosed()==true){
+            result.rejectValue("amount","causeClosed");
+            return VIEWS_DONATIONS_CREATE_FORM;
+        }
+        else {
             donation.setOwnerName(principal.getName());
-            Cause cause = causeService.findCauseById(causeId);
             donation.setCause(cause);
             this.donationService.saveDonation(donation);
+            Double total=causeService.totalBudgetById(causeId);
+            if(cause.getBudgetTarget()<=total){
+                cause.setIsClosed(true);
+                this.causeService.saveCause(cause);
+            }
             return "redirect:/causes/{causeId}";
         }
+
     }
 
 

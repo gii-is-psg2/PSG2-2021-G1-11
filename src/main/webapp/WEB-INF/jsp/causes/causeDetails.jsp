@@ -64,4 +64,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
+    <spring:url value="/causes" var="causesUrl"> </spring:url>
+    <a class="btn btn-default"
+       href="${fn:escapeXml(causesUrl)}"><fmt:message key="goBack"/></a>
 </petclinic:layout>
