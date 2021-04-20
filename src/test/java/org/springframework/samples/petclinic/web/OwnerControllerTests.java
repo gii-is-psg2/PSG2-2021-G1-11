@@ -21,8 +21,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.samples.petclinic.service.AdoptionApplicationService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
+import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -37,7 +39,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
  * @author Colin But
  */
 
-@WebMvcTest(controllers=OwnerController.class,
+@WebMvcTest(value=OwnerController.class,
+		includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE),
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
 class OwnerControllerTests {
@@ -50,11 +53,17 @@ class OwnerControllerTests {
 	@MockBean
 	private OwnerService clinicService;
         
-        @MockBean
+    @MockBean
 	private UserService userService;
         
-        @MockBean
-        private AuthoritiesService authoritiesService; 
+	@MockBean
+	private AuthoritiesService authoritiesService;
+	
+	@MockBean
+	private AdoptionApplicationService adoptionApplicationService;
+	
+	@MockBean
+	private PetService petService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -200,6 +209,6 @@ class OwnerControllerTests {
 	void testRemoveOwner() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/owners"));
+				.andExpect(redirectedUrl("/"));
 	}
 }

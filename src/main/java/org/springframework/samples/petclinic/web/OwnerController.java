@@ -26,9 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.service.AdoptionApplicationService;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,7 +52,7 @@ public class OwnerController {
 	private final AdoptionApplicationService adoptionApplicationService;
 
 	@Autowired
-	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService, AdoptionApplicationService adoptionApplicationService) {
+	public OwnerController(OwnerService ownerService, AdoptionApplicationService adoptionApplicationService) {
 		this.ownerService = ownerService;
 		this.adoptionApplicationService = adoptionApplicationService;
 	}
