@@ -10,7 +10,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "bookings")
 public class Booking extends BaseEntity{
-
 	@ManyToOne(optional = false)
 	private Pet pet;
 	
@@ -19,7 +18,15 @@ public class Booking extends BaseEntity{
 	
 	@Column(name = "finish_date")
 	private String finishDate;
+	
+	@Column(name = "cancelled")
+	private Boolean cancelled;
 
+	public Booking() {
+		super();
+		setCancelled(false);
+	}
+	
 	public Pet getPet() {
 		return pet;
 	}
@@ -44,7 +51,11 @@ public class Booking extends BaseEntity{
 		this.finishDate = finishDate;
 	}
 
-	
+	public Boolean isCancelled() {
+		return cancelled;
+	}
 
-	
+	public void setCancelled(Boolean cancelled) {
+		this.cancelled = cancelled;
+	}
 }
