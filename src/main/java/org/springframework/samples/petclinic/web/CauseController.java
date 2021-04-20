@@ -39,58 +39,56 @@ import org.springframework.web.servlet.ModelAndView;
 public class CauseController {
 
 	private static final String VIEWS_CAUSE_CREATE_OR_UPDATE_FORM = "causes/createOrUpdateCauseForm";
-    private final CauseService causeService;
-    private final DonationService donationService;
+	private final CauseService causeService;
+	private final DonationService donationService;
 
+	@Autowired
+	public CauseController(final CauseService causeService, final DonationService donationService) {
+		this.causeService = causeService;
+		this.donationService = donationService;
+	}
 
-    @Autowired
-    public CauseController(final CauseService causeService, final DonationService donationService) {
-        this.causeService = causeService;
-        this.donationService = donationService;
-    }
+	@GetMapping(value = { "/causes" })
+	public String showCauseList(final Map<String, Object> model) {
+		final List<Cause> causes = new ArrayList<>();
+		causes.addAll(this.causeService.findCauses());
 
-    @GetMapping(value = { "/causes"} )
-    public String showCauseList(final Map<String, Object> model) {
-        final List<Cause> causes = new ArrayList<>();
-        causes.addAll(this.causeService.findCauses());
-     
-        final List<Double> donations=new ArrayList<>(this.donationService.findDonationsByCauses(causes));
-        
-        final Map<Cause,Double> res=new HashMap<>();
-        for(int i=0;i<causes.size();i++) {
-        	res.put(causes.get(i), donations.get(i));
-        }
-        model.put("map", res);
-        return "causes/causeList";
-    }
+		final List<Double> donations = new ArrayList<>(this.donationService.findDonationsByCauses(causes));
 
-    @GetMapping(value = "/causes/new")
-    public String initCreationForm(final Map<String, Object> model) {
-        final Cause cause = new Cause();
-        cause.setIsClosed(false);
-        model.put("cause", cause);
-        return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-    }
+		final Map<Cause, Double> res = new HashMap<>();
+		for (int i = 0; i < causes.size(); i++) {
+			res.put(causes.get(i), donations.get(i));
+		}
+		model.put("map", res);
+		return "causes/causeList";
+	}
 
-    @PostMapping(value = "/causes/new")
-    public String processCreationForm(@Valid final Cause cause, final BindingResult result) {
-        if (result.hasErrors()) {
-            return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-        } else {
-            this.causeService.saveCause(cause);
-            return "redirect:/causes";    
-        }
-    }
-    
-    @GetMapping("/causes/{causeId}")
-    public ModelAndView showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model) {
-    	Collection<Donation> donations;
-    	donations = this.causeService.findDonations(causeId);
-        model.put("donations", donations);
-        final ModelAndView mav = new ModelAndView("causes/causeDetails");
-        mav.addObject("cause",this.causeService.findCauseById(causeId));
-        return mav;
-    }
+	@GetMapping(value = "/causes/new")
+	public String initCreationForm(final Map<String, Object> model) {
+		final Cause cause = new Cause();
+		cause.setIsClosed(false);
+		model.put("cause", cause);
+		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/causes/new")
+	public String processCreationForm(@Valid final Cause cause, final BindingResult result) {
+		if (result.hasErrors()) {
+			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+		} else {
+			this.causeService.saveCause(cause);
+			return "redirect:/causes";
+		}
+	}
+
+	@GetMapping("/causes/{causeId}")
+	public ModelAndView showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model) {
+		Collection<Donation> donations;
+		donations = this.donationService.findDonationsByCauseId(causeId);
+		model.put("donations", donations);
+		final ModelAndView mav = new ModelAndView("causes/causeDetails");
+		mav.addObject("cause", this.causeService.findCauseById(causeId));
+		return mav;
+	}
 
 }
-

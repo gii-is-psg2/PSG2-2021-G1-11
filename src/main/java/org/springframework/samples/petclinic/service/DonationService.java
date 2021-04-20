@@ -14,37 +14,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DonationService {
-    private final DonationRepository donationRepository;
+	private final DonationRepository donationRepository;
 
-    @Autowired
-    public DonationService(final DonationRepository donationRepository) {
-        this.donationRepository = donationRepository;
-    }
+	@Autowired
+	public DonationService(final DonationRepository donationRepository) {
+		this.donationRepository = donationRepository;
+	}
 
-    @Transactional(readOnly = true)
-    public Donation findDonationById(final int id) throws DataAccessException {
-        return this.donationRepository.findByDonationId(id);
-    }
+	@Transactional(readOnly = true)
+	public Donation findDonationById(final int id) throws DataAccessException {
+		return this.donationRepository.findById(id);
+	}
 
-    public void saveDonation(final Donation donation) {
-        this.donationRepository.save(donation);
-    }
+	public void saveDonation(final Donation donation) {
+		this.donationRepository.save(donation);
+	}
 
-    public Collection<Donation> findDonationsByCauseId(final int causeId) {
-        return this.donationRepository.findByCauseId(causeId);
-    }
+	public Collection<Donation> findDonationsByCauseId(final int causeId) {
+		return this.donationRepository.findByCauseId(causeId);
+	}
 
-    public List<Double> findDonationsByCauses(final List<Cause> causes) {
-        final List<Double> res = new ArrayList<>();
-        for (final Cause c : causes) {
-            Double res1 = 0.;
-            for (final Donation d : this.findDonationsByCauseId(c.getId())) {
-                res1 += d.getAmount();
+	public List<Double> findDonationsByCauses(final List<Cause> causes) {
+		final List<Double> res = new ArrayList<>();
+		for (final Cause c : causes) {
+			Double res1 = 0.;
+			for (final Donation d : this.findDonationsByCauseId(c.getId())) {
+				res1 += d.getAmount();
 
-            }
-            res.add(res1);
-        }
-        return res;
-    }
+			}
+			res.add(res1);
+		}
+		return res;
+	}
 
 }

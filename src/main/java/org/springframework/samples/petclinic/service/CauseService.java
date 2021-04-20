@@ -19,17 +19,17 @@ public class CauseService {
 	public CauseService(final CauseRepository causeRepository) {
 		this.causeRepository = causeRepository;
 	}
-	
+
 	@Transactional
 	public void saveCause(final Cause cause) {
 		this.causeRepository.save(cause);
 	}
-	
+
 	@Transactional
 	public Cause findCauseById(final int causeId) {
 		return this.causeRepository.findByCauseId(causeId);
 	}
-	
+
 	@Transactional
 	public Double totalBudgetById(final int causeId) {
 		return this.causeRepository.totalBudget(causeId);
@@ -39,9 +39,9 @@ public class CauseService {
 	public Collection<Cause> findCauses() {
 		return this.causeRepository.findAll();
 	}
-	
+
 	@Transactional
-	public Collection<Donation> findDonations(final int causeId)  {
+	public Collection<Donation> findDonations(final int causeId) {
 		return this.causeRepository.findDonations(causeId);
 	}
 
