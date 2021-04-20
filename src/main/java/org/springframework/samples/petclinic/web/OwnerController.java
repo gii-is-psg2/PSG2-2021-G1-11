@@ -154,8 +154,11 @@ public class OwnerController {
 	 */
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+		Owner owner = this.ownerService.findOwnerById(ownerId);
+		List<AdoptionApplication> adopApps = adoptionApplicationService.getPendingAdoptionApplication(owner);
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
 		return mav;
 	}
 
