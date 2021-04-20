@@ -32,7 +32,15 @@ public class AdoptionApplicationService {
 		return adoptionApplicationRepository.findById(requestId).orElse(null);
 	}
 	
-	public void acceptRequest(int requestId, AdoptionApplication adopApp) throws DataAccessException, DuplicatedPetNameException {
+	public void save(AdoptionApplication adoptionApplication) {
+		adoptionApplicationRepository.save(adoptionApplication);
+	}
+	
+	public AdoptionApplication findByApplicantAndRequestedPet(Owner applicant, Pet pet) {
+		return adoptionApplicationRepository.findByApplicantAndRequestedPet(applicant, pet);
+	}
+	
+	public void acceptRequest(int a, AdoptionApplication adopApp) throws DataAccessException, DuplicatedPetNameException {
 		Pet pet = adopApp.getRequestedPet();
 		Owner newOwner = adopApp.getApplicant();
 		pet.setinAdoption(false);
