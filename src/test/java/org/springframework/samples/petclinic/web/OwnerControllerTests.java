@@ -182,18 +182,18 @@ class OwnerControllerTests {
 				.andExpect(view().name("owners/ownerDetails"));
 	}
 
-	@WithMockUser(username="owner1")
+	@WithMockUser(username = "owner1")
 	@Test
 	void testRemoveOwner() throws Exception {
 		given(ownerService.getOwnerByUserName("owner1")).willReturn(george);
 		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
 	}
-	
-	@WithMockUser(username="owner1")
+
+	@WithMockUser(username = "owner1")
 	@Test
 	void testNotRemoveOwner() throws Exception {
-		given(ownerService.getOwnerByUserName(TEST_OWNER_NAME)).willReturn(george);
+		given(ownerService.getOwnerByUserName("owner1")).willReturn(new Owner());
 		mockMvc.perform(post("/owners/{ownerId}/remove", TEST_OWNER_ID).with(csrf()))
 				.andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
 	}
