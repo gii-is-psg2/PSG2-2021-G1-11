@@ -28,17 +28,27 @@
 					<span><fmt:message key="home"/></span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span><fmt:message key="find"/></span>
-				</petclinic:menuItem>
-
+				<sec:authorize access="hasAuthority('admin')">
+					<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+						title="find owners">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<span><fmt:message key="find"/></span>
+					</petclinic:menuItem>
+				</sec:authorize>
+			
 				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
 					title="veterinarians">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span><fmt:message key="vet"/></span>
 				</petclinic:menuItem>
+				
+				<sec:authorize access="hasAuthority('owner')">
+                    <petclinic:menuItem active="${name eq 'owners'}" url="/owners/myProfile"
+                        title="my profile">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        <span><fmt:message key="profile"/></span>
+                    </petclinic:menuItem>
+                </sec:authorize>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
