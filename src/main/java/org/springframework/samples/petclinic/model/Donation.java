@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,7 +19,7 @@ public class Donation extends BaseEntity {
 	private Date	donationDate;
 
 	@Min(value = 1)
-	@NotEmpty
+	
 	private Double	amount;
 
 	@ManyToOne

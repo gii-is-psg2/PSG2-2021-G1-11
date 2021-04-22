@@ -15,7 +15,7 @@
 			<tr>
 				<th><fmt:message key="name" /></th>
 				<th><fmt:message key="budgetAchieved"/></th>
-				<th><fmt:message key="budgetTarget"/></th>
+				<th><fmt:message key="target"/></th>
 				<c:if test="${!cause.isClosed}">
 					<th></th>
 					<th></th>
@@ -32,7 +32,7 @@
 					</td>
 					<td><c:out value="${entry.value}"/></td>
 						
-					<td><c:out value="${entry.key.budgetTarget}"/></td>
+					<td><c:out value="${entry.key.target}"/></td>
 					<c:if test="${!entry.key.isClosed}">
 						<td><spring:url value="causes/{causeId}/donations/new" var="createUrl">
        							<spring:param name="causeId" value="${entry.key.id}"/>
