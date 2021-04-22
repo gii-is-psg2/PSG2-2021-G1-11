@@ -14,47 +14,55 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdoptionApplicationService {
 
-	private AdoptionApplicationRepository adoptionApplicationRepository;
-	private PetService petService;
+	private final AdoptionApplicationRepository adoptionApplicationRepository;
+	private final PetService petService;
 
 	@Autowired
-	public AdoptionApplicationService(AdoptionApplicationRepository adoptionApplicationRepository,
-			PetService petService) {
+	public AdoptionApplicationService(final AdoptionApplicationRepository adoptionApplicationRepository,
+			final PetService petService) {
 		super();
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
 		this.petService = petService;
 	}
 
-	public List<AdoptionApplication> getPendingAdoptionApplication(Owner owner) {
-		return adoptionApplicationRepository.getPendingAdoptionApplication(owner.getId());
+	public List<AdoptionApplication> getPendingAdoptionApplication(final Owner owner) {
+		return this.adoptionApplicationRepository.getPendingAdoptionApplication(owner.getId());
 	}
 
-	public AdoptionApplication findById(int applicationId) {
-		return adoptionApplicationRepository.findById(applicationId).orElse(null);
+	public AdoptionApplication findById(final int applicationId) {
+		return this.adoptionApplicationRepository.findById(applicationId).orElse(null);
 	}
-
-	public void acceptAdoptionApplication(AdoptionApplication adopApp)
-			throws DataAccessException, DuplicatedPetNameException {
-		Pet pet = adopApp.getRequestedPet();
-		Owner newOwner = adopApp.getApplicant();
+	
+	public void save(final AdoptionApplication adoptionApplication) {
+		this.adoptionApplicationRepository.save(adoptionApplication);
+	}
+	
+	public AdoptionApplication findByApplicantAndRequestedPet(final Owner applicant, final Pet pet) {
+		return this.adoptionApplicationRepository.findByApplicantAndRequestedPet(applicant, pet);
+	}
+	
+	public void acceptAdoptionApplication(final AdoptionApplication adopApp)
+		throws DataAccessException, DuplicatedPetNameException {
+		final Pet pet = adopApp.getRequestedPet();
+		final Owner newOwner = adopApp.getApplicant();
 		pet.setinAdoption(false);
 		pet.setOwner(newOwner);
-		petService.savePet(pet);
+		this.petService.savePet(pet);
 
 		// Borrar todas las solicitudes de adopcion que tenia esa mascota
 
-		List<AdoptionApplication> adoptionApplicationByPet = adoptionApplicationRepository.findAdoptionApplicationByPet(pet.getId());
-		for (AdoptionApplication adoptionApplication : adoptionApplicationByPet) {
-			adoptionApplicationRepository.delete(adoptionApplication);
+		final List<AdoptionApplication> adoptionApplicationByPet = this.adoptionApplicationRepository.findAdoptionApplicationByPet(pet.getId());
+		for (final AdoptionApplication adoptionApplication : adoptionApplicationByPet) {
+			this.adoptionApplicationRepository.delete(adoptionApplication);
 		}
 	}
 
-	public void declineAdoptionApplication(int applicationId) {
-		adoptionApplicationRepository.deleteById(applicationId);
+	public void declineAdoptionApplication(final int applicationId) {
+		this.adoptionApplicationRepository.deleteById(applicationId);
 	}
 
-	public List<AdoptionApplication> getRequestsByApplicant(int ownerId) {
-		return adoptionApplicationRepository.getRequestByApplicant(ownerId);
+	public List<AdoptionApplication> getRequestsByApplicant(final int ownerId) {
+		return this.adoptionApplicationRepository.getRequestByApplicant(ownerId);
 	}
 
 }
