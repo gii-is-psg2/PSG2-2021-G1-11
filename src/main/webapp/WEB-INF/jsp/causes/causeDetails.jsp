@@ -57,11 +57,14 @@
 		<tbody>
 			<c:forEach items="${donations}" var="donation">
 				<tr>
-					<td><c:out value="${donation.client}" /></td>
-					<td><c:out value="${donation.date}" /></td>
+					<td><c:out value="${donation.ownerName}" /></td>
+					<td><c:out value="${donation.donationDate}" /></td>
 					<td><c:out value="${donation.amount}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+    <spring:url value="/causes" var="causesUrl"> </spring:url>
+    <a class="btn btn-default"
+       href="${fn:escapeXml(causesUrl)}"><fmt:message key="goBack"/></a>
 </petclinic:layout>

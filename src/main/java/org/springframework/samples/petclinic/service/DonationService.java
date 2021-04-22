@@ -23,7 +23,7 @@ public class DonationService {
 
 	@Transactional(readOnly = true)
 	public Donation findDonationById(final int id) throws DataAccessException {
-		return this.donationRepository.findByDonationId(id);
+		return this.donationRepository.findById(id);
 	}
 
 	public void saveDonation(final Donation donation) {
@@ -33,15 +33,15 @@ public class DonationService {
 	public Collection<Donation> findDonationsByCauseId(final int causeId) {
 		return this.donationRepository.findByCauseId(causeId);
 	}
-	
+
 	public List<Double> findDonationsByCauses(final List<Cause> causes) {
-		final List<Double> res=new ArrayList<>();
-		for(final Cause c:causes) {
-			Double res1=0.;
-				for(final Donation d:this.findDonationsByCauseId(c.getId())) {
-					res1+=d.getAmount();
-			
-					}
+		final List<Double> res = new ArrayList<>();
+		for (final Cause c : causes) {
+			Double res1 = 0.;
+			for (final Donation d : this.findDonationsByCauseId(c.getId())) {
+				res1 += d.getAmount();
+
+			}
 			res.add(res1);
 		}
 		return res;

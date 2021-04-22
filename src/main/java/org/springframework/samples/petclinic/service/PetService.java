@@ -16,12 +16,15 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.AdoptionApplicationRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
@@ -39,13 +42,14 @@ import org.springframework.util.StringUtils;
 public class PetService {
 
 	private PetRepository petRepository;
-
 	private VisitRepository visitRepository;
+	private AdoptionApplicationRepository adoptionApplicationRepository;
 
 	@Autowired
-	public PetService(PetRepository petRepository, VisitRepository visitRepository) {
+	public PetService(PetRepository petRepository, VisitRepository visitRepository, AdoptionApplicationRepository adoptionApplicationRepository) {
 		this.petRepository = petRepository;
 		this.visitRepository = visitRepository;
+		this.adoptionApplicationRepository = adoptionApplicationRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -83,6 +87,11 @@ public class PetService {
 
 	@Transactional
 	public void removePetById(Integer petId) {
+		// remove adoption applications before remove the pet
+		List<AdoptionApplication> adoptionApplicationsByPet = adoptionApplicationRepository.findAdoptionApplicationByPet(petId);
+		for(AdoptionApplication adoptionApplication : adoptionApplicationsByPet) {
+			adoptionApplicationRepository.delete(adoptionApplication);
+		}
 		petRepository.removeById(petId);
 	}
 	

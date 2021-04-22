@@ -15,22 +15,27 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.AdoptionApplicationService;
 import org.springframework.samples.petclinic.service.OwnerService;
-import org.springframework.samples.petclinic.service.VetService;
-import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -45,45 +50,47 @@ public class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerService ownerService;
+	private final AdoptionApplicationService adoptionApplicationService;
 
 	@Autowired
-	public OwnerController(OwnerService ownerService, UserService userService, AuthoritiesService authoritiesService) {
+
+	public OwnerController(final OwnerService ownerService, final AdoptionApplicationService adoptionApplicationService) {
 		this.ownerService = ownerService;
+		this.adoptionApplicationService = adoptionApplicationService;
 	}
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
 	@GetMapping(value = "/owners/new")
-	public String initCreationForm(Map<String, Object> model) {
-		Owner owner = new Owner();
+	public String initCreationForm(final Map<String, Object> model) {
+		final Owner owner = new Owner();
 		model.put("owner", owner);
-		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		return OwnerController.VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/owners/new")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
+	public String processCreationForm(@Valid final Owner owner, final BindingResult result) {
 		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-			//creating owner, user and authorities
+			return OwnerController.VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		} else {
+			// creating owner, user and authorities
 			this.ownerService.saveOwner(owner);
-			
+
 			return "redirect:/owners/" + owner.getId();
 		}
 	}
 
 	@GetMapping(value = "/owners/find")
-	public String initFindForm(Map<String, Object> model) {
+	public String initFindForm(final Map<String, Object> model) {
 		model.put("owner", new Owner());
 		return "owners/findOwners";
 	}
 
 	@GetMapping(value = "/owners")
-	public String processFindForm(Owner owner, BindingResult result, Map<String, Object> model) {
+	public String processFindForm(Owner owner, final BindingResult result, final Map<String, Object> model) {
 
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
@@ -91,18 +98,16 @@ public class OwnerController {
 		}
 
 		// find owners by last name
-		Collection<Owner> results = this.ownerService.findOwnerByLastName(owner.getLastName());
+		final Collection<Owner> results = this.ownerService.findOwnerByLastName(owner.getLastName());
 		if (results.isEmpty()) {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
 			return "owners/findOwners";
-		}
-		else if (results.size() == 1) {
+		} else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
 			return "redirect:/owners/" + owner.getId();
-		}
-		else {
+		} else {
 			// multiple owners found
 			model.put("selections", results);
 			return "owners/ownersList";
@@ -110,41 +115,60 @@ public class OwnerController {
 	}
 
 	@GetMapping(value = "/owners/{ownerId}/edit")
-	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
-		Owner owner = this.ownerService.findOwnerById(ownerId);
+	public String initUpdateOwnerForm(@PathVariable("ownerId") final int ownerId, final Model model) {
+		final Owner owner = this.ownerService.findOwnerById(ownerId);
 		model.addAttribute(owner);
-		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		return OwnerController.VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/owners/{ownerId}/edit")
-	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result,
-			@PathVariable("ownerId") int ownerId) {
+	public String processUpdateOwnerForm(@Valid final Owner owner, final BindingResult result,
+			@PathVariable("ownerId") final int ownerId) {
 		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+			return OwnerController.VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		} else {
 			owner.setId(ownerId);
 			this.ownerService.saveOwner(owner);
 			return "redirect:/owners/{ownerId}";
 		}
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/remove")
-	public String removeOwner(@PathVariable Integer ownerId) {
-		ownerService.removeOwnerById(ownerId);
-		return "redirect:/owners";
+	public String removeOwner(@PathVariable final Integer ownerId, final Principal principal) {
+		final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
+		this.ownerService.removeOwnerById(ownerId);
+		// To close the session if you delete your profile as owner
+		if (ownerId.equals(owner.getId())) {
+			SecurityContextHolder.clearContext();
+		}
+		return "redirect:/";
 	}
 
 	/**
 	 * Custom handler for displaying an owner.
+	 * 
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
-	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
-		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
+	public ModelAndView showOwner(@PathVariable("ownerId") final int ownerId) {
+		final Owner owner = this.ownerService.findOwnerById(ownerId);
+		final List<AdoptionApplication> adopApps = this.adoptionApplicationService.getPendingAdoptionApplication(owner);
+		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
 		return mav;
 	}
 
+	@GetMapping(value = "/owners/myProfile")
+	public ModelAndView getMyProfile(final Principal principal) {
+		// principal is used to get the name of the person who is logged in.
+		final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
+		// to show the number of pending adoption application in the view ownerDetails
+		final List<AdoptionApplication> adopApps = this.adoptionApplicationService.getPendingAdoptionApplication(owner);
+		final ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
+		return mav;
+	}
 }
