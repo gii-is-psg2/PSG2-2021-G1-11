@@ -58,8 +58,8 @@ public class DonationController {
 			donation.setOwnerName(principal.getName());
 			donation.setCause(cause);
 			this.donationService.saveDonation(donation);
-			Double total = causeService.totalBudgetById(causeId);
-			if (cause.getBudgetTarget() <= total) {
+			Double total = causeService.actualAmountById(causeId);
+			if (cause.getTarget() <= total) {
 				cause.setIsClosed(true);
 				this.causeService.saveCause(cause);
 			}

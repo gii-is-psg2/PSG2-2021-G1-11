@@ -15,11 +15,11 @@
         	<form:hidden path="isClosed"/>
       		<fmt:message var="name" key="name"/>
       		<fmt:message var="description" key="description"/>
-      		<fmt:message var="budgetTarget" key="budgetTarget"/>
+      		<fmt:message var="target" key="target"/>
       		<fmt:message var="organization" key="organization"/>
             <petclinic:inputField label="${name}" name="name"/>
             <petclinic:inputField label="${description}" name="description"/>
-            <petclinic:inputField label="${budgetTarget}" name="budgetTarget"/>
+            <petclinic:inputField label="${target}" name="target"/>
             <petclinic:inputField label="${organization}" name="organization"/>            
         </div>
         <div class="form-group">

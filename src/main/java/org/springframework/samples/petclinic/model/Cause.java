@@ -45,7 +45,7 @@ public class Cause extends BaseEntity {
 	
 	@NotNull
 	@Min(0)
-	private Double budgetTarget;
+	private Double target;
 	
 	@NotBlank
 	private String organization;
@@ -69,12 +69,12 @@ public class Cause extends BaseEntity {
 		this.description = description;
 	}
 
-	public Double getBudgetTarget() {
-		return this.budgetTarget;
+	public Double getTarget() {
+		return this.target;
 	}
 
-	public void setBudgetTarget(final Double budgetTarget) {
-		this.budgetTarget = budgetTarget;
+	public void setTarget(final Double target) {
+		this.target = target;
 	}
 
 	public String getOrganization() {

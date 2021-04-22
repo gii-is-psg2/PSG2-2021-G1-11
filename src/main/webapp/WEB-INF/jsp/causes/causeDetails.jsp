@@ -21,8 +21,8 @@
 			<td><c:out value="${cause.description}" /></td>
 		</tr>
 		<tr>
-			<th><fmt:message key="budgetTarget" /></th>
-			<td><c:out value="${cause.budgetTarget}" /></td>
+			<th><fmt:message key="target" /></th>
+			<td><c:out value="${cause.target}" /></td>
 		</tr>
 		<tr>
 			<th><fmt:message key="organization" /></th>

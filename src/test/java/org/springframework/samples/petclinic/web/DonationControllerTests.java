@@ -46,10 +46,10 @@ public class DonationControllerTests {
 	@BeforeEach
 	void setup() {
 		causa = new Cause();
-		causa.setBudgetTarget(12.0);
+		causa.setTarget(12.0);
 		causa.setIsClosed(false);
 		given(causeService.findCauseById(CAUSE_ID)).willReturn(causa);
-		given(causeService.totalBudgetById(CAUSE_ID)).willReturn(0.0);
+		given(causeService.actualAmountById(CAUSE_ID)).willReturn(0.0);
 	}
 
 	@WithMockUser(value = "spring")
