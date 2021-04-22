@@ -49,6 +49,12 @@
                         <span><fmt:message key="profile"/></span>
                     </petclinic:menuItem>
                 </sec:authorize>
+                
+                <petclinic:menuItem active="${name eq 'causes'}" url="/causes"
+                                    title="Causes">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    <span><fmt:message key="causes"/></span>
+                </petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
