@@ -16,9 +16,11 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
@@ -33,18 +35,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OwnerService {
 
-	private OwnerRepository ownerRepository;	
-	
+	private OwnerRepository ownerRepository;
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	public OwnerService(OwnerRepository ownerRepository) {
+	private AdoptionApplicationService adoptionApplicationService;
+
+	@Autowired
+	public OwnerService(OwnerRepository ownerRepository, AdoptionApplicationService adoptionApplicationService) {
 		this.ownerRepository = ownerRepository;
-	}	
+		this.adoptionApplicationService = adoptionApplicationService;
+	}
 
 	@Transactional(readOnly = true)
 	public Owner findOwnerById(int id) throws DataAccessException {
@@ -58,16 +64,29 @@ public class OwnerService {
 
 	@Transactional
 	public void saveOwner(Owner owner) throws DataAccessException {
-		//creating owner
-		ownerRepository.save(owner);		
-		//creating user
+		// creating owner
+		ownerRepository.save(owner);
+		// creating user
 		userService.saveUser(owner.getUser());
-		//creating authorities
+		// creating authorities
 		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
-	}		
+	}
 
 	@Transactional
 	public void removeOwnerById(Integer ownerId) {
+		Owner owner = findOwnerById(ownerId);
+		// remove request made by the owner
+		List<AdoptionApplication> adoptionApplications = adoptionApplicationService.getRequestsByApplicant(ownerId);
+		// remove adoption applicants
+		adoptionApplications.addAll(adoptionApplicationService.getPendingAdoptionApplication(owner));
+		for (AdoptionApplication adoptionApplication : adoptionApplications) {
+			adoptionApplicationService.declineAdoptionApplication(adoptionApplication.getId());
+		}
 		ownerRepository.removeById(ownerId);
+	}
+
+	@Transactional(readOnly = true)
+	public Owner getOwnerByUserName(String name) {
+		return ownerRepository.findOwnerByUserName(name);
 	}
 }

@@ -1,10 +1,12 @@
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+
 
 <petclinic:layout pageName="owners">
 	<h2>
@@ -38,17 +40,20 @@
 		<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"
 			style="margin-right: 10px;"><fmt:message key="editOwner" /></a>
 
-		<spring:url value="{ownerId}/pets/new" var="addUrl">
-			<spring:param name="ownerId" value="${owner.id}" />
-		</spring:url>
-		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default"
-			style="margin-right: 10px;"><fmt:message key="addPet" /></a>
-		<form:form method="POST" action="${owner.id}/remove">
-			<button type="submit" class="btn btn-default">
-				<fmt:message key="remOwner" />
-			</button>
-		</form:form>
-	</div>
+        <spring:url value="{ownerId}/pets/new" var="addUrl">
+            <spring:param name="ownerId" value="${owner.id}" />
+        </spring:url>
+        <a href="${fn:escapeXml(addUrl)}" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="addPet" /></a>
+        
+        <form:form method="POST" action="${owner.id}/remove">
+            <button type="submit" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="remOwner" /></button>
+        </form:form>
+        
+        <sec:authorize access="hasAuthority('owner')">
+	        <a href="/adoptions/applications" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="pendingAdoptionApplication" />(<c:out value="${adoptionApplicationsNumber}"></c:out>)</a>
+        </sec:authorize>
+        
+    </div>
 
 	<br />
 	<br />
