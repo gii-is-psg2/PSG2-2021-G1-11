@@ -87,6 +87,12 @@ class PetServiceTests {
 		assertThat(pet7.getOwner().getFirstName()).isEqualTo("Jean");
 
 	}
+	
+	@Test
+	void shouldFindAllPetsInAdoption() {
+		Collection<Pet> pets = this.petService.findPetsInAdoption();
+		assertThat(pets.size()).isEqualTo(7);
+	}
 
 	@Test
 	void shouldFindAllPetTypes() {
