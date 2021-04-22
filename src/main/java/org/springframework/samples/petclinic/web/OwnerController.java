@@ -27,6 +27,8 @@ import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.service.AdoptionApplicationService;
 import org.springframework.samples.petclinic.service.OwnerService;
+import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,11 +75,10 @@ public class OwnerController {
 	public String processCreationForm(@Valid Owner owner, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
-			//creating owner, user and authorities
+		} else {
+			// creating owner, user and authorities
 			this.ownerService.saveOwner(owner);
-			
+
 			return "redirect:/owners/" + owner.getId();
 		}
 	}
@@ -102,13 +103,11 @@ public class OwnerController {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
 			return "owners/findOwners";
-		}
-		else if (results.size() == 1) {
+		} else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
 			return "redirect:/owners/" + owner.getId();
-		}
-		else {
+		} else {
 			// multiple owners found
 			model.put("selections", results);
 			return "owners/ownersList";
@@ -127,40 +126,49 @@ public class OwnerController {
 			@PathVariable("ownerId") int ownerId) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			owner.setId(ownerId);
 			this.ownerService.saveOwner(owner);
 			return "redirect:/owners/{ownerId}";
 		}
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/remove")
-	public String removeOwner(@PathVariable Integer ownerId) {
+	public String removeOwner(@PathVariable Integer ownerId, Principal principal) {
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
 		ownerService.removeOwnerById(ownerId);
+		// To close the session if you delete your profile as owner
+		if (ownerId.equals(owner.getId())) {
+			SecurityContextHolder.clearContext();
+		}
 		return "redirect:/";
 	}
 
 	/**
 	 * Custom handler for displaying an owner.
+	 * 
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+		Owner owner = this.ownerService.findOwnerById(ownerId);
+		List<AdoptionApplication> adopApps = adoptionApplicationService.getPendingAdoptionApplication(owner);
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
 		return mav;
 	}
 
-	@GetMapping(value="/owners/myProfile")
-    public ModelAndView getMyProfile(Principal principal) {
-		//con principal obtienes el nombre con el que inicias sesion
-        Owner owner = ownerService.getOwnerByUserName(principal.getName());
-        List<AdoptionApplication> adopApp = adoptionApplicationService.getPendingRequest(owner);
-        ModelAndView mav = new ModelAndView("owners/ownerDetails");
-        mav.addObject(owner); 
-        mav.addObject("requests", adopApp.size());
-        return mav;
-    }
+	@GetMapping(value = "/owners/myProfile")
+	public ModelAndView getMyProfile(Principal principal) {
+		// principal is used to get the name of the person who is logged in.
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		// to show the number of pending adoption application in the view ownerDetails
+		List<AdoptionApplication> adopApps = adoptionApplicationService.getPendingAdoptionApplication(owner);
+		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+		mav.addObject(owner);
+		mav.addObject("adoptionApplicationsNumber", adopApps.size());
+		return mav;
+	}
 }

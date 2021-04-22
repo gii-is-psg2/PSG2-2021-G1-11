@@ -87,10 +87,10 @@ public class PetService {
 
 	@Transactional
 	public void removePetById(Integer petId) {
-		// remove request
-		List<AdoptionApplication> requestsByPet = adoptionApplicationRepository.findRequestByPet(petId);
-		for(AdoptionApplication request : requestsByPet) {
-			adoptionApplicationRepository.delete(request);
+		// remove adoption applications before remove the pet
+		List<AdoptionApplication> adoptionApplicationsByPet = adoptionApplicationRepository.findAdoptionApplicationByPet(petId);
+		for(AdoptionApplication adoptionApplication : adoptionApplicationsByPet) {
+			adoptionApplicationRepository.delete(adoptionApplication);
 		}
 		petRepository.removeById(petId);
 	}
