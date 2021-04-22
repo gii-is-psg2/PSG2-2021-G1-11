@@ -22,7 +22,6 @@ public class BookingService {
 		this.bookingRepository = bookingRepository;
 	}
 
-
 	private Boolean isBeforeOrEqual(LocalDate date1, LocalDate date2) {
 		return date1.isBefore(date2) || date1.isEqual(date2);
 	}
@@ -31,44 +30,57 @@ public class BookingService {
 		return date1.isAfter(date2) || date1.isEqual(date2);
 	}
 
-	@Transactional(readOnly = true)
-	public Boolean saveBooking(Booking booking) throws DataAccessException {
+	private Boolean doesBookingOverlaps(Booking booking) throws DataAccessException {
+		boolean isOverlapping = false;
 
 		LocalDate startDate = LocalDate.parse(booking.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 		LocalDate finishDate = LocalDate.parse(booking.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
-		List<Booking> bookings = bookingRepository.findAll();
-		boolean isOverlapping = false;
+		List<Booking> bookings = bookingRepository.findAllByCancelledFalse();
 
 		for (Booking b : bookings) {
 			LocalDate bstartDate = LocalDate.parse(b.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 			LocalDate bfinishDate = LocalDate.parse(b.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
 			// Overlapping cases
-
 			if (isBeforeOrEqual(startDate, bfinishDate) && isAfterOrEqual(finishDate, bstartDate)) {
 				isOverlapping = true;
 				break;
 			}
 		}
 
+		return isOverlapping;
+	}
+
+	@Transactional
+	public Boolean saveBooking(Booking booking) throws DataAccessException {
+		Boolean isOverlapping = (booking.isCancelled()) ? false : doesBookingOverlaps(booking);
+
 		// Booking can be created
 		if (!isOverlapping) {
 			bookingRepository.save(booking);
-			return true;
-
-			// Booking can not be created
-		} else {
-			return false;
 		}
-	}
 
+		return !isOverlapping;
+	}
+	
+	@Transactional
+	public Boolean renewBooking(Booking booking) throws DataAccessException {
+		Boolean isOverlapping = doesBookingOverlaps(booking);
+
+		// Booking can be created
+		if (!isOverlapping) {
+			booking.setCancelled(false);
+			bookingRepository.save(booking);
+		}
+
+		return !isOverlapping;
+	}
 
 	@Transactional(readOnly = true)
 	public Booking findBookingById(Integer bookingId) throws DataAccessException {
 		return bookingRepository.findById(bookingId);
 	}
-	
 
 	@Transactional
 	public void removeBookingById(Integer bookingId) throws DataAccessException {
