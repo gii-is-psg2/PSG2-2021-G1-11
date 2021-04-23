@@ -18,13 +18,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.repository.AdoptionApplicationRepository;
+import org.springframework.samples.petclinic.repository.AdoptionRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class AdoptionApplicationServiceTests {
+public class AdoptionServiceTests {
 
 	private static Pet pet;
 	private static List<AdoptionApplication> adoptionApplications;
@@ -36,10 +36,10 @@ public class AdoptionApplicationServiceTests {
 	PetService petService;
 	
 	@Mock
-	AdoptionApplicationRepository adoptionApplicationRepository;
+	AdoptionRepository adoptionApplicationRepository;
 	
 	@InjectMocks
-	AdoptionApplicationService adoptionApplicationService;
+	AdoptionService adoptionApplicationService;
 	
 	@BeforeEach
 	void data() {

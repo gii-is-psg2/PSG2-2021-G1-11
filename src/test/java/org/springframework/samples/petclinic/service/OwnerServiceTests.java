@@ -65,7 +65,7 @@ class OwnerServiceTests {
 	protected OwnerService ownerService;
     
     @Autowired
-    protected AdoptionApplicationService adoptionApplicationService;
+    protected AdoptionService adoptionApplicationService;
 
 	@Test
 	void shouldFindOwnersByLastName() {

@@ -25,8 +25,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.AdoptionApplicationService;
+import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.service.AdoptionService;
 import org.springframework.samples.petclinic.service.OwnerService;
+import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,18 +53,36 @@ public class OwnerController {
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerService ownerService;
-	private final AdoptionApplicationService adoptionApplicationService;
+	private final AdoptionService adoptionApplicationService;
+	private final PetService petService;
 
 	@Autowired
 
-	public OwnerController(final OwnerService ownerService, final AdoptionApplicationService adoptionApplicationService) {
+	public OwnerController(final OwnerService ownerService, final AdoptionService adoptionApplicationService, final PetService petService) {
 		this.ownerService = ownerService;
 		this.adoptionApplicationService = adoptionApplicationService;
+		this.petService = petService;
 	}
 
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+	}
+	
+	@GetMapping(value = "/owners/{ownerId}/pets/{petId}/inAdoption")
+	public String putUpForAdoption(@PathVariable("ownerId") Integer ownerId,@PathVariable("petId") Integer petId ,final Model model, Principal principal) {
+		final Pet pet = petService.findPetById(petId);
+		Owner owner = ownerService.getOwnerByUserName(principal.getName());
+		if(owner == null || !(owner.getId().equals(pet.getOwner().getId()))) {
+			return "redirect:/owners/myProfile";
+		}
+		
+		pet.setinAdoption(true);
+		try{
+			petService.savePet(pet);
+		}catch(DuplicatedPetNameException e) {
+		}
+		return "redirect:/owners/myProfile";
 	}
 
 	@GetMapping(value = "/owners/new")

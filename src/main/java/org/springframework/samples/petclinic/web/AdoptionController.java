@@ -12,11 +12,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.service.AdoptionApplicationService;
+import org.springframework.samples.petclinic.service.AdoptionService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,15 +29,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("/adoptions")
 @Controller
-public class AdoptionApplicationController {
+public class AdoptionController {
 
-	private final AdoptionApplicationService	adoptionApplicationService;
+	private final AdoptionService	adoptionApplicationService;
 	private final OwnerService					ownerService;
 	private final PetService					petService;
 
 
 	@Autowired
-	public AdoptionApplicationController(final AdoptionApplicationService adoptionApplicationService, final OwnerService ownerService, final PetService petService) {
+	public AdoptionController(final AdoptionService adoptionApplicationService, final OwnerService ownerService, final PetService petService) {
 		super();
 		this.adoptionApplicationService = adoptionApplicationService;
 		this.ownerService = ownerService;
@@ -77,6 +78,12 @@ public class AdoptionApplicationController {
 		return "redirect:/adoptions/applications";
 	}
 
+	@GetMapping(value = "/pets")
+	public String inAdoptionList(ModelMap model) {
+		model.addAttribute("pets",petService.findPetsInAdoption());
+		return "adoptions/listPetsInAdoption";
+	}	
+	
 	@GetMapping(value = "/pets/{petId}/apply")
 	public String createNewAdoptionApplication(final Map<String, Object> model, @PathVariable("petId") final int petId) {
 		final AdoptionApplication adoptionApplication = new AdoptionApplication();
