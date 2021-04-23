@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
 import static org.mockito.ArgumentMatchers.any;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DonationControllerTests {
 	private static final String VIEWS_DONATIONS_CREATE_FORM = "donations/createDonationForm";
 	private static final int CAUSE_ID = 1;
-	private static Cause causa;
+	private static Cause causaSpy;
 	@Autowired
 	private DonationController donationController;
 
@@ -45,10 +44,10 @@ public class DonationControllerTests {
 
 	@BeforeEach
 	void setup() {
-		causa = new Cause();
-		causa.setTarget(12.0);
-		causa.setIsClosed(false);
-		given(causeService.findCauseById(CAUSE_ID)).willReturn(causa);
+		causaSpy = spy(new Cause());
+		causaSpy.setTarget(12.0);
+		causaSpy.setIsClosed(false);
+		given(causeService.findCauseById(CAUSE_ID)).willReturn(causaSpy);
 		given(causeService.actualAmountById(CAUSE_ID)).willReturn(0.0);
 	}
 
@@ -69,19 +68,29 @@ public class DonationControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void processCreationDonationFormError() throws Exception {
-		causa.setIsClosed(true);
-		given(causeService.findCauseById(CAUSE_ID)).willReturn(causa);
+		causaSpy.setIsClosed(true);
+		given(causeService.findCauseById(CAUSE_ID)).willReturn(causaSpy);
 		mockMvc.perform(post("/causes/{causeId}/donations/new", CAUSE_ID).with(csrf()).param("amount", "hola"))
-				.andExpect(model().hasErrors()).andExpect(view().name(VIEWS_DONATIONS_CREATE_FORM));
+				.andExpect(model().attributeHasFieldErrors("donation","amount")).andExpect(view().name(VIEWS_DONATIONS_CREATE_FORM));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void processCreationDonationFormCloseCauseError() throws Exception {
-		causa.setIsClosed(true);
-		given(causeService.findCauseById(CAUSE_ID)).willReturn(causa);
+		causaSpy.setIsClosed(true);
+		given(causeService.findCauseById(CAUSE_ID)).willReturn(causaSpy);
 		mockMvc.perform(post("/causes/{causeId}/donations/new", CAUSE_ID).with(csrf()).param("amount", "2.0"))
-				.andExpect(model().hasErrors()).andExpect(view().name(VIEWS_DONATIONS_CREATE_FORM));
+				.andExpect(model().attributeHasFieldErrorCode("donation","amount","causeClosed")).andExpect(view().name(VIEWS_DONATIONS_CREATE_FORM));
 	}
+
+    @WithMockUser(value = "spring")
+    @Test
+    void processCreationDonationShouldCloseCause() throws Exception {
+	    given(causeService.actualAmountById(CAUSE_ID)).willReturn(13.0);
+        mockMvc.perform(post("/causes/{causeId}/donations/new", CAUSE_ID).with(csrf()).param("amount", "13.0"))
+            .andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/causes/{causeId}"));
+        verify(causaSpy,times(1)).setIsClosed(true);
+        verify(causeService,times(1)).saveCause(causaSpy);
+    }
 
 }
