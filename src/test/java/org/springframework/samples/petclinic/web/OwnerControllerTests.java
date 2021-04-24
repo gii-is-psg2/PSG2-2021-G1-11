@@ -17,7 +17,8 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.AdoptionApplicationService;
+import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.service.AdoptionService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
@@ -28,6 +29,9 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 /**
  * Test class for {@link OwnerController}
@@ -41,6 +45,7 @@ class OwnerControllerTests {
 
 	private static final int	TEST_OWNER_ID	= 1;
 	private static final String	TEST_OWNER_NAME	= "George";
+	private static final int	TEST_PET_ID	= 2;
 
 	@Autowired
 	private OwnerController		ownerController;
@@ -55,7 +60,7 @@ class OwnerControllerTests {
 	private AuthoritiesService	authoritiesService;
 
 	@MockBean
-	AdoptionApplicationService	adoptionApplicationService;
+	AdoptionService	adoptionApplicationService;
 
 	@MockBean
 	private PetService			petService;
@@ -85,6 +90,37 @@ class OwnerControllerTests {
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
 			.andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutUpForAdoption() throws Exception{
+		Pet pet = new Pet();
+		Owner owner = new Owner();
+		owner.setId(TEST_OWNER_ID);
+		pet.setOwner(owner);
+		
+		BDDMockito.given(petService.findPetById(TEST_PET_ID)).willReturn(pet);
+		BDDMockito.given(ownerService.getOwnerByUserName(anyString())).willReturn(owner);
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/pets/{petId}/inAdoption",TEST_OWNER_ID,TEST_PET_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.view().name("redirect:/owners/myProfile"));
+		verify(petService,times(1)).savePet(pet);
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutUpForAdoptionWithoutPermission() throws Exception{
+		Pet pet = new Pet();
+		Owner owner = new Owner();
+		owner.setId(TEST_OWNER_ID);
+		pet.setOwner(owner);
+		
+		BDDMockito.given(petService.findPetById(TEST_PET_ID)).willReturn(pet);
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/pets/{petId}/inAdoption",TEST_OWNER_ID,TEST_PET_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		.andExpect(MockMvcResultMatchers.view().name("redirect:/owners/myProfile"));
+		verify(petService,times(0)).savePet(pet);
 	}
 
 	@WithMockUser(value = "spring")

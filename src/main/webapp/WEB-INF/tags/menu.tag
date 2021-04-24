@@ -43,10 +43,18 @@
 				</petclinic:menuItem>
 				
 				<sec:authorize access="hasAuthority('owner')">
-                    <petclinic:menuItem active="${name eq 'owners'}" url="/owners/myProfile"
+                    <petclinic:menuItem active="${name eq 'profile'}" url="/owners/myProfile"
                         title="my profile">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         <span><fmt:message key="profile"/></span>
+                    </petclinic:menuItem>
+                </sec:authorize>
+                
+                <sec:authorize access="hasAuthority('owner')">
+                    <petclinic:menuItem active="${name eq 'adoptions'}" url="/adoptions/pets"
+                        title="adoptions">
+                        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                        <span><fmt:message key="adoptions"/></span>
                     </petclinic:menuItem>
                 </sec:authorize>
                 

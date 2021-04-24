@@ -94,6 +94,7 @@
 								<th><fmt:message key="vDate" /></th>
 								<th><fmt:message key="description" /></th>
 								<th><fmt:message key="actions" /></th>
+								<c:if test="${pet.inAdoption.booleanValue() == false}"><th><fmt:message key="adoption" /></th></c:if>
 							</tr>
 						</thead>
 						<c:forEach var="visit" items="${pet.visits}">
@@ -129,6 +130,18 @@
 									<spring:param name="petId" value="${pet.id}" />
 								</spring:url> <a class="btn btn-default" href="${fn:escapeXml(visitUrl)}"><fmt:message
 										key="addVisit" /></a></td>
+							<c:if test="${pet.inAdoption.booleanValue() == false}">
+							<td>
+								<spring:url
+										value="/owners/{ownerId}/pets/{petId}/inAdoption"
+										var="adoptionUrl">
+										<spring:param name="ownerId" value="${owner.id}" />
+										<spring:param name="petId" value="${pet.id}" />
+									</spring:url> <a class="btn btn-default" href="${fn:escapeXml(adoptionUrl)}"><fmt:message
+											key="putUpForAdoption" /></a>
+							</td>				
+							</c:if>
+							
 						</tr>
 					</table>
 				</td>

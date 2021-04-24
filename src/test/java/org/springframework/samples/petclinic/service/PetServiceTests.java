@@ -32,7 +32,7 @@ import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.AdoptionApplicationRepository;
+import org.springframework.samples.petclinic.repository.AdoptionRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
@@ -78,7 +78,7 @@ class PetServiceTests {
 	protected OwnerService ownerService;
 
 	@Autowired
-	protected AdoptionApplicationRepository adoptionApplicationRepository;
+	protected AdoptionRepository adoptionApplicationRepository;
 
 	@Test
 	void shouldFindPetWithCorrectId() {
@@ -86,6 +86,12 @@ class PetServiceTests {
 		assertThat(pet7.getName()).startsWith("Samantha");
 		assertThat(pet7.getOwner().getFirstName()).isEqualTo("Jean");
 
+	}
+	
+	@Test
+	void shouldFindAllPetsInAdoption() {
+		Collection<Pet> pets = this.petService.findPetsInAdoption();
+		assertThat(pets.size()).isEqualTo(7);
 	}
 
 	@Test

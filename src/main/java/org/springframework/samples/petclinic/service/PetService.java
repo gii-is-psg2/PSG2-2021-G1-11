@@ -24,7 +24,7 @@ import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.AdoptionApplicationRepository;
+import org.springframework.samples.petclinic.repository.AdoptionRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
@@ -43,15 +43,20 @@ public class PetService {
 
 	private PetRepository petRepository;
 	private VisitRepository visitRepository;
-	private AdoptionApplicationRepository adoptionApplicationRepository;
+	private AdoptionRepository adoptionApplicationRepository;
 
 	@Autowired
-	public PetService(PetRepository petRepository, VisitRepository visitRepository, AdoptionApplicationRepository adoptionApplicationRepository) {
+	public PetService(PetRepository petRepository, VisitRepository visitRepository, AdoptionRepository adoptionApplicationRepository) {
 		this.petRepository = petRepository;
 		this.visitRepository = visitRepository;
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
 	}
 
+	@Transactional
+	public Collection<Pet>findPetsInAdoption() throws DataAccessException{
+		return petRepository.findPetsInAdoption();
+	}
+	
 	@Transactional(readOnly = true)
 	public Collection<PetType> findPetTypes() throws DataAccessException {
 		return petRepository.findPetTypes();

@@ -44,10 +44,10 @@ public class OwnerService {
 	private AuthoritiesService authoritiesService;
 
 	@Autowired
-	private AdoptionApplicationService adoptionApplicationService;
+	private AdoptionService adoptionApplicationService;
 
 	@Autowired
-	public OwnerService(OwnerRepository ownerRepository, AdoptionApplicationService adoptionApplicationService) {
+	public OwnerService(OwnerRepository ownerRepository, AdoptionService adoptionApplicationService) {
 		this.ownerRepository = ownerRepository;
 		this.adoptionApplicationService = adoptionApplicationService;
 	}

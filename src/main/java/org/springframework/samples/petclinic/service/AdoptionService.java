@@ -7,18 +7,18 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.AdoptionApplication;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.repository.AdoptionApplicationRepository;
+import org.springframework.samples.petclinic.repository.AdoptionRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdoptionApplicationService {
+public class AdoptionService {
 
-	private final AdoptionApplicationRepository adoptionApplicationRepository;
+	private final AdoptionRepository adoptionApplicationRepository;
 	private final PetService petService;
 
 	@Autowired
-	public AdoptionApplicationService(final AdoptionApplicationRepository adoptionApplicationRepository,
+	public AdoptionService(final AdoptionRepository adoptionApplicationRepository,
 			final PetService petService) {
 		super();
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
