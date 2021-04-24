@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Vet;
 
 /**
@@ -41,7 +40,7 @@ public interface VetRepository extends Repository<Vet, Integer> {
 	 * @return a <code>Collection</code> of <code>Vet</code>s
 	 */
 	Collection<Vet> findAll() throws DataAccessException;
-	
+
 	void removeById(Integer id);
 
 	Vet findById(Integer vetId) throws DataAccessException;

@@ -31,13 +31,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AdoptionController {
 
-	private final AdoptionService	adoptionApplicationService;
-	private final OwnerService					ownerService;
-	private final PetService					petService;
-
+	private final AdoptionService adoptionApplicationService;
+	private final OwnerService ownerService;
+	private final PetService petService;
 
 	@Autowired
-	public AdoptionController(final AdoptionService adoptionApplicationService, final OwnerService ownerService, final PetService petService) {
+	public AdoptionController(final AdoptionService adoptionApplicationService, final OwnerService ownerService,
+			final PetService petService) {
 		super();
 		this.adoptionApplicationService = adoptionApplicationService;
 		this.ownerService = ownerService;
@@ -60,7 +60,8 @@ public class AdoptionController {
 	}
 
 	@GetMapping(value = "{applications_id}/accept")
-	public String acceptAdoptionApplication(@PathVariable("applications_id") final int applicationsId, final Principal principal) throws DataAccessException, DuplicatedPetNameException {
+	public String acceptAdoptionApplication(@PathVariable("applications_id") final int applicationsId,
+			final Principal principal) throws DataAccessException, DuplicatedPetNameException {
 		// Comprobar antes que el owner logueado es el que quiera aceptar la solicitud
 		final AdoptionApplication adopApp = this.adoptionApplicationService.findById(applicationsId);
 		final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
@@ -70,7 +71,8 @@ public class AdoptionController {
 	}
 
 	@GetMapping(value = "{applications_id}/decline")
-	public String declineAdoptionApplication(@PathVariable("applications_id") final int applicationsId, final Principal principal) {
+	public String declineAdoptionApplication(@PathVariable("applications_id") final int applicationsId,
+			final Principal principal) {
 		final AdoptionApplication adopApp = this.adoptionApplicationService.findById(applicationsId);
 		final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
 		if (adopApp.getRequestedPet().getOwner().getId().equals(owner.getId()))
@@ -80,12 +82,13 @@ public class AdoptionController {
 
 	@GetMapping(value = "/pets")
 	public String inAdoptionList(ModelMap model) {
-		model.addAttribute("pets",petService.findPetsInAdoption());
+		model.addAttribute("pets", petService.findPetsInAdoption());
 		return "adoptions/listPetsInAdoption";
-	}	
-	
+	}
+
 	@GetMapping(value = "/pets/{petId}/apply")
-	public String createNewAdoptionApplication(final Map<String, Object> model, @PathVariable("petId") final int petId) {
+	public String createNewAdoptionApplication(final Map<String, Object> model,
+			@PathVariable("petId") final int petId) {
 		final AdoptionApplication adoptionApplication = new AdoptionApplication();
 		final Pet adoptedPet = this.petService.findPetById(petId);
 		if (adoptedPet == null || !adoptedPet.getinAdoption()) {
@@ -97,7 +100,8 @@ public class AdoptionController {
 	}
 
 	@PostMapping(value = "/pets/{petId}/apply")
-	public String postNewAdoptionApplication(@Valid final AdoptionApplication adoptionApplication, final BindingResult result, @PathVariable("petId") final int petId, final Principal principal) {
+	public String postNewAdoptionApplication(@Valid final AdoptionApplication adoptionApplication,
+			final BindingResult result, @PathVariable("petId") final int petId, final Principal principal) {
 		if (result.hasErrors()) {
 			return "adoptions/createAdoptionApplication";
 		}
@@ -111,7 +115,8 @@ public class AdoptionController {
 		} else if (!adoptedPet.getinAdoption().booleanValue()) {
 			result.rejectValue("description", "notAdoptablePet");
 			return "adoptions/createAdoptionApplication";
-		} else if (this.adoptionApplicationService.findByApplicantAndRequestedPet(adoptionApplication.getApplicant(), adoptedPet) != null) {
+		} else if (this.adoptionApplicationService.findByApplicantAndRequestedPet(adoptionApplication.getApplicant(),
+				adoptedPet) != null) {
 			result.rejectValue("description", "alreadyApplied");
 			return "adoptions/createAdoptionApplication";
 		} else if (adoptedPet.getOwner().equals(applicant)) {

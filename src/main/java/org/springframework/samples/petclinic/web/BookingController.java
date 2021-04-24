@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,29 +73,30 @@ public class BookingController {
 		if (booking == null) {
 			return "redirect:/owners/{ownerId}";
 		}
-		
+
 		booking.setCancelled(true);
 		bookingService.saveBooking(booking);
 		return "redirect:/owners/{ownerId}";
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/renew")
-	public String renewBooking(@PathVariable Integer ownerId, @PathVariable Integer petId, @PathVariable Integer bookingId) {
+	public String renewBooking(@PathVariable Integer ownerId, @PathVariable Integer petId,
+			@PathVariable Integer bookingId) {
 		Booking booking = bookingService.findBookingById(bookingId);
 		if (booking == null) {
 			return "redirect:/owners/{ownerId}";
 		}
-		
+
 		if (!bookingService.renewBooking(booking)) {
 			Pet pet = petService.findPetById(petId);
 			pet.removeBooking(booking);
 			bookingService.removeBookingById(bookingId);
 			return "pets/renewBookingFailed";
 		}
-		
+
 		return "redirect:/owners/{ownerId}";
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/remove")
 	public String removeBooking(@PathVariable Integer bookingId, @PathVariable Integer petId) {
 		Pet pet = petService.findPetById(petId);

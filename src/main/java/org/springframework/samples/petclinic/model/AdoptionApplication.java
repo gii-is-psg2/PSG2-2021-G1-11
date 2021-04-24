@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 public class AdoptionApplication extends BaseEntity {
 	@ManyToOne(optional = false)
 	private Pet requestedPet;
-	
+
 	@ManyToOne(optional = false)
 	private Owner applicant;
-	
+
 	@Column(name = "description")
 	@NotBlank
 	private String description;

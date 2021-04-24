@@ -8,27 +8,27 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "authorities")
-public class Authorities extends BaseEntity{
-	
+public class Authorities extends BaseEntity {
+
 	@ManyToOne
 	@JoinColumn(name = "username")
 	User user;
-	
+
 	@Size(min = 3, max = 50)
 	String authority;
-	
-	 public String getAuthority() {
+
+	public String getAuthority() {
 		return authority;
 	}
-	 
-	 public void setAuthority(String authority) {
+
+	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
-	 
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
 	}

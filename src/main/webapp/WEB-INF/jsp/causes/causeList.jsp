@@ -33,13 +33,16 @@
 					<td><c:out value="${entry.value}"/></td>
 						
 					<td><c:out value="${entry.key.target}"/></td>
-					<c:if test="${!entry.key.isClosed}">
-						<td><spring:url value="causes/{causeId}/donations/new" var="createUrl">
+					
+					<td>
+						<c:if test="${!entry.key.isClosed}">
+							<spring:url value="causes/{causeId}/donations/new" var="createUrl">
        							<spring:param name="causeId" value="${entry.key.id}"/>
     						</spring:url>
    							<a href="${fn:escapeXml(createUrl)}" class="btn btn-default"><fmt:message key="createDonation"/></a>
-						</td>
-					</c:if>
+						</c:if>
+					</td>
+					
 					<td><spring:url value="/causes/{causeId}" var="detailsUrl">
        						<spring:param name="causeId" value="${entry.key.id}"/>
     					</spring:url>

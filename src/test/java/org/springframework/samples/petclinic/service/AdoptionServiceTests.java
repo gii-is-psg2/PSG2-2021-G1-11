@@ -31,24 +31,24 @@ public class AdoptionServiceTests {
 	private static AdoptionApplication adoptionApplication1;
 	private static AdoptionApplication adoptionApplication2;
 	private static Owner owner;
-	
+
 	@Mock
 	PetService petService;
-	
+
 	@Mock
 	AdoptionRepository adoptionApplicationRepository;
-	
+
 	@InjectMocks
 	AdoptionService adoptionApplicationService;
-	
+
 	@BeforeEach
 	void data() {
 		pet = new Pet();
 		pet.setId(1);
-		
+
 		owner = new Owner();
 		owner.setId(1);
-		
+
 		adoptionApplication1 = new AdoptionApplication();
 		adoptionApplication1.setRequestedPet(pet);
 		adoptionApplication2 = new AdoptionApplication();
@@ -56,7 +56,7 @@ public class AdoptionServiceTests {
 		adoptionApplications.add(adoptionApplication1);
 		adoptionApplications.add(adoptionApplication2);
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void shouldAcceptAdoptionApplication() throws DataAccessException, DuplicatedPetNameException {
@@ -66,15 +66,15 @@ public class AdoptionServiceTests {
 		verify(petService, times(1)).savePet(pet);
 		verify(adoptionApplicationRepository, times(2)).delete(any(AdoptionApplication.class));
 	}
-	
-	@WithMockUser(value= "spring")
+
+	@WithMockUser(value = "spring")
 	@Test
 	void shouldGetPendingAdoptionApplication() {
 		adoptionApplicationService.getPendingAdoptionApplication(owner);
 		verify(adoptionApplicationRepository, times(1)).getPendingAdoptionApplication(any(Integer.class));
 	}
-	
-	@WithMockUser(value="spring")
+
+	@WithMockUser(value = "spring")
 	@Test
 	void shouldGetRequestByApplicant() {
 		adoptionApplicationService.getRequestsByApplicant(owner.getId());

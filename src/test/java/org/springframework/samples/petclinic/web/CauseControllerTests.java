@@ -19,21 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-@WebMvcTest(value = CauseController.class,
-		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-		excludeAutoConfiguration= SecurityConfiguration.class)
+@WebMvcTest(value = CauseController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class CauseControllerTests {
 	private static final int TEST_CAUSE_ID = 1;
 
-	@Autowired
-	private CauseController causeController;
-        
-    @MockBean
+	@MockBean
 	private CauseService causeService;
-    
-    @MockBean
-   	private DonationService donationService;
+
+	@MockBean
+	private DonationService donationService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -50,46 +44,42 @@ class CauseControllerTests {
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+	@Test
 	void testInitCreationForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes/new")).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm")).andExpect(MockMvcResultMatchers.model().attributeExists("cause"));
+				.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("cause"));
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/causes/new")
-							.with(SecurityMockMvcRequestPostProcessors.csrf())
-							.param("name", "Selva")
-							.param("description", "Salvar a los leones")
-							.param("target", "200")
-							.param("organization", "Save The Children")
-							.param("isClosed", "false"))
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/causes/new").with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("name", "Selva").param("description", "Salvar a los leones").param("target", "200")
+						.param("organization", "Save The Children").param("isClosed", "false"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/causes"));
 	}
 
 	@WithMockUser(value = "spring")
-    @Test
+	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/causes/new")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("name", "Selva")
-			.param("description", "Salvar a los leones")
-			.param("target", "A")
-			.param("organization", "Save The Children")
-			.param("isClosed", "false"))
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/causes/new").with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("name", "Selva").param("description", "Salvar a los leones").param("target", "A")
+						.param("organization", "Save The Children").param("isClosed", "false"))
 				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("cause"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm"));
 	}
 
-    @WithMockUser(value = "spring")
+	@WithMockUser(value = "spring")
 	@Test
 	void testInitUpdateForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes/{causeId}", CauseControllerTests.TEST_CAUSE_ID))
-				.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
 				.andExpect(MockMvcResultMatchers.view().name("causes/causeDetails"));
 	}
 }

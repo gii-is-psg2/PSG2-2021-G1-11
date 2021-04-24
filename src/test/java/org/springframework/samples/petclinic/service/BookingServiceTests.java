@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.service;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -57,7 +56,7 @@ public class BookingServiceTests {
 		verify(bookingRepository, times(1)).save(newBooking);
 		verifyNoMoreInteractions(bookingRepository);
 	}
-	
+
 	@ParameterizedTest
 	@CsvSource({ "3048/03/03, 3048/04/04" })
 	void shouldInsertCancelledBooking(String startDate, String finishDate) {

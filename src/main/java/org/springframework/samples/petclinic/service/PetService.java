@@ -46,17 +46,18 @@ public class PetService {
 	private AdoptionRepository adoptionApplicationRepository;
 
 	@Autowired
-	public PetService(PetRepository petRepository, VisitRepository visitRepository, AdoptionRepository adoptionApplicationRepository) {
+	public PetService(PetRepository petRepository, VisitRepository visitRepository,
+			AdoptionRepository adoptionApplicationRepository) {
 		this.petRepository = petRepository;
 		this.visitRepository = visitRepository;
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
 	}
 
 	@Transactional
-	public Collection<Pet>findPetsInAdoption() throws DataAccessException{
+	public Collection<Pet> findPetsInAdoption() throws DataAccessException {
 		return petRepository.findPetsInAdoption();
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<PetType> findPetTypes() throws DataAccessException {
 		return petRepository.findPetTypes();
@@ -85,7 +86,7 @@ public class PetService {
 	public Collection<Visit> findVisitsByPetId(int petId) {
 		return visitRepository.findByPetId(petId);
 	}
-	
+
 	public Visit findVisitById(Integer visitId) {
 		return visitRepository.findById(visitId);
 	}
@@ -93,13 +94,14 @@ public class PetService {
 	@Transactional
 	public void removePetById(Integer petId) {
 		// remove adoption applications before remove the pet
-		List<AdoptionApplication> adoptionApplicationsByPet = adoptionApplicationRepository.findAdoptionApplicationByPet(petId);
-		for(AdoptionApplication adoptionApplication : adoptionApplicationsByPet) {
+		List<AdoptionApplication> adoptionApplicationsByPet = adoptionApplicationRepository
+				.findAdoptionApplicationByPet(petId);
+		for (AdoptionApplication adoptionApplication : adoptionApplicationsByPet) {
 			adoptionApplicationRepository.delete(adoptionApplication);
 		}
 		petRepository.removeById(petId);
 	}
-	
+
 	@Transactional
 	public void removeVisitById(Integer visitId) {
 		visitRepository.removeById(visitId);

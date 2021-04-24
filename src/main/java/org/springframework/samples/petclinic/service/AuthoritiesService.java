@@ -15,7 +15,6 @@
  */
 package org.springframework.samples.petclinic.service;
 
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class AuthoritiesService {
 	private UserService userService;
 
 	@Autowired
-	public AuthoritiesService(AuthoritiesRepository authoritiesRepository,UserService userService) {
+	public AuthoritiesService(AuthoritiesRepository authoritiesRepository, UserService userService) {
 		this.authoritiesRepository = authoritiesRepository;
 		this.userService = userService;
 	}
@@ -48,19 +47,20 @@ public class AuthoritiesService {
 	public void saveAuthorities(Authorities authorities) throws DataAccessException {
 		authoritiesRepository.save(authorities);
 	}
-	
+
 	@Transactional
 	public void saveAuthorities(String username, String role) throws DataAccessException {
 		Authorities authority = new Authorities();
 		Optional<User> user = userService.findUser(username);
-		if(user.isPresent()) {
+		if (user.isPresent()) {
 			authority.setUser(user.get());
 			authority.setAuthority(role);
-			//user.get().getAuthorities().add(authority);
+			// user.get().getAuthorities().add(authority);
 			authoritiesRepository.save(authority);
-		}else
-			throw new DataAccessException("User '"+username+"' not found!") {};
+		} else
+			throw new DataAccessException("User '" + username + "' not found!") {
+				private static final long serialVersionUID = -4114934835272025567L;
+			};
 	}
-
 
 }

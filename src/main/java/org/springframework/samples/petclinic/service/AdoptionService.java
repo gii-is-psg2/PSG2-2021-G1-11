@@ -18,8 +18,7 @@ public class AdoptionService {
 	private final PetService petService;
 
 	@Autowired
-	public AdoptionService(final AdoptionRepository adoptionApplicationRepository,
-			final PetService petService) {
+	public AdoptionService(final AdoptionRepository adoptionApplicationRepository, final PetService petService) {
 		super();
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
 		this.petService = petService;
@@ -32,17 +31,17 @@ public class AdoptionService {
 	public AdoptionApplication findById(final int applicationId) {
 		return this.adoptionApplicationRepository.findById(applicationId).orElse(null);
 	}
-	
+
 	public void save(final AdoptionApplication adoptionApplication) {
 		this.adoptionApplicationRepository.save(adoptionApplication);
 	}
-	
+
 	public AdoptionApplication findByApplicantAndRequestedPet(final Owner applicant, final Pet pet) {
 		return this.adoptionApplicationRepository.findByApplicantAndRequestedPet(applicant, pet);
 	}
-	
+
 	public void acceptAdoptionApplication(final AdoptionApplication adopApp)
-		throws DataAccessException, DuplicatedPetNameException {
+			throws DataAccessException, DuplicatedPetNameException {
 		final Pet pet = adopApp.getRequestedPet();
 		final Owner newOwner = adopApp.getApplicant();
 		pet.setinAdoption(false);
@@ -51,7 +50,8 @@ public class AdoptionService {
 
 		// Borrar todas las solicitudes de adopcion que tenia esa mascota
 
-		final List<AdoptionApplication> adoptionApplicationByPet = this.adoptionApplicationRepository.findAdoptionApplicationByPet(pet.getId());
+		final List<AdoptionApplication> adoptionApplicationByPet = this.adoptionApplicationRepository
+				.findAdoptionApplicationByPet(pet.getId());
 		for (final AdoptionApplication adoptionApplication : adoptionApplicationByPet) {
 			this.adoptionApplicationRepository.delete(adoptionApplication);
 		}

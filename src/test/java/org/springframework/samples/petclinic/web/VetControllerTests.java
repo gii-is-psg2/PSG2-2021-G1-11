@@ -31,16 +31,12 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-
 /**
  * Test class for the {@link VetController}
  */
 @WebMvcTest(controllers = VetController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VetControllerTests {
 	private static Integer TEST_VET_ID = 1;
-	
-	@Autowired
-	private VetController vetController;
 
 	@MockBean
 	private VetService clinicService;
@@ -84,14 +80,13 @@ class VetControllerTests {
 				.andExpect(content().contentType(MediaType.APPLICATION_XML_VALUE))
 				.andExpect(content().node(hasXPath("/vets/vetList[id=1]/id")));
 	}
-	
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testRemoveVet() throws Exception {
-		mockMvc.perform(post("/vets/{vetId}/remove", TEST_VET_ID).with(csrf()))
-				.andExpect(status().isFound())
+		mockMvc.perform(post("/vets/{vetId}/remove", TEST_VET_ID).with(csrf())).andExpect(status().isFound())
 				.andExpect(redirectedUrl("/vets"));
-		
+
 		verify(clinicService, only()).removeVetById(TEST_VET_ID);
 	}
 

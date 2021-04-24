@@ -23,8 +23,8 @@ import org.springframework.validation.Validator;
 /**
  * <code>Validator</code> for <code>Pet</code> forms.
  * <p>
- * We're not using Bean Validation annotations here because it is easier to define such
- * validation rule in Java.
+ * We're not using Bean Validation annotations here because it is easier to
+ * define such validation rule in Java.
  * </p>
  *
  * @author Ken Krebs
@@ -40,7 +40,7 @@ public class PetValidator implements Validator {
 		final Pet pet = (Pet) obj;
 		final String name = pet.getName();
 		// name validation
-		if (!StringUtils.hasLength(name) || name.length()>50 || name.length()<3) {
+		if (!StringUtils.hasLength(name) || name.length() > 50 || name.length() < 3) {
 			errors.rejectValue("name", PetValidator.VALIDATOR);
 		}
 
@@ -53,9 +53,9 @@ public class PetValidator implements Validator {
 		if (pet.getBirthDate() == null) {
 			errors.rejectValue("birthDate", PetValidator.REQUIRED, PetValidator.REQUIRED);
 		}
-		
-		//adopted validation
-		if(pet.getinAdoption() == null) {
+
+		// adopted validation
+		if (pet.getinAdoption() == null) {
 			errors.rejectValue("inAdoption", PetValidator.REQUIRED);
 		}
 	}

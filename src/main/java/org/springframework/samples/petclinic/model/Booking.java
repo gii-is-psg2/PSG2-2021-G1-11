@@ -5,20 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "bookings")
-public class Booking extends BaseEntity{
+public class Booking extends BaseEntity {
 	@ManyToOne(optional = false)
 	private Pet pet;
-	
+
 	@Column(name = "start_date")
 	private String startDate;
-	
+
 	@Column(name = "finish_date")
 	private String finishDate;
-	
+
 	@Column(name = "cancelled")
 	private Boolean cancelled;
 
@@ -26,7 +24,7 @@ public class Booking extends BaseEntity{
 		super();
 		setCancelled(false);
 	}
-	
+
 	public Pet getPet() {
 		return pet;
 	}

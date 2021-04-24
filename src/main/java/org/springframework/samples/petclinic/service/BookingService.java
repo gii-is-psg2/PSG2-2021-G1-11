@@ -63,7 +63,7 @@ public class BookingService {
 
 		return !isOverlapping;
 	}
-	
+
 	@Transactional
 	public Boolean renewBooking(Booking booking) throws DataAccessException {
 		Boolean isOverlapping = doesBookingOverlaps(booking);

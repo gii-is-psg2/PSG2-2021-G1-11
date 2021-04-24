@@ -36,20 +36,20 @@ import org.springframework.beans.support.PropertyComparator;
 @Entity
 @Table(name = "causes")
 public class Cause extends BaseEntity {
-	
+
 	@NotBlank
 	private String name;
-	
+
 	@NotBlank
 	private String description;
-	
+
 	@NotNull
 	@Min(0)
 	private Double target;
-	
+
 	@NotBlank
 	private String organization;
-	
+
 	@NotNull
 	private Boolean isClosed;
 
@@ -91,27 +91,26 @@ public class Cause extends BaseEntity {
 
 	public void setIsClosed(final Boolean isClosed) {
 		this.isClosed = isClosed;
-	}	
+	}
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cause")
 	private Set<Donation> donations;
-	
+
 	protected Set<Donation> getDonationsInternal() {
-	    if (this.donations == null) {
-	       this.donations = new HashSet<>();
-	    }
-	    return this.donations;
+		if (this.donations == null) {
+			this.donations = new HashSet<>();
+		}
+		return this.donations;
 	}
 
 	public List<Donation> getDonations() {
-	    final List<Donation> sortedDonations = new ArrayList<>(this.getDonationsInternal());
-	    PropertyComparator.sort(sortedDonations, new MutableSortDefinition("date", false, false));
-	    return Collections.unmodifiableList(sortedDonations);
+		final List<Donation> sortedDonations = new ArrayList<>(this.getDonationsInternal());
+		PropertyComparator.sort(sortedDonations, new MutableSortDefinition("date", false, false));
+		return Collections.unmodifiableList(sortedDonations);
 	}
 
 	public void addDonation(final Donation donation) {
-	    this.getDonationsInternal().add(donation);
-	    donation.setCause(this);
+		this.getDonationsInternal().add(donation);
+		donation.setCause(this);
 	}
 }
-

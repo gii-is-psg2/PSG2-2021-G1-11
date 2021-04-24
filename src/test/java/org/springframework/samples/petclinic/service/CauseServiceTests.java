@@ -40,13 +40,13 @@ class CauseServiceTests {
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
 		this.causeService.saveCause(cause);
-		
+
 		final Cause cause2 = this.causeService.findCauseById(cause.getId());
-		Assertions.assertEquals("Antártida",cause2.getName());
-		Assertions.assertEquals(2000.,cause2.getTarget());
-		Assertions.assertEquals("Queremos salvar a los pingüinos",cause2.getDescription());
-		Assertions.assertEquals(false,cause2.getIsClosed());
-		Assertions.assertEquals("Greenpeace",cause2.getOrganization());	
+		Assertions.assertEquals("Antártida", cause2.getName());
+		Assertions.assertEquals(2000., cause2.getTarget());
+		Assertions.assertEquals("Queremos salvar a los pingüinos", cause2.getDescription());
+		Assertions.assertEquals(false, cause2.getIsClosed());
+		Assertions.assertEquals("Greenpeace", cause2.getOrganization());
 	}
 
 	@Test
@@ -54,7 +54,7 @@ class CauseServiceTests {
 		final Cause cause3 = this.causeService.findCauseById(4);
 		Assert.assertNull(cause3);
 	}
-	
+
 	@Test
 	void shouldGetActualAmountById() {
 		final Cause cause = new Cause();
@@ -64,11 +64,9 @@ class CauseServiceTests {
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
 		this.causeService.saveCause(cause);
-		
+
 		final Double amount = this.causeService.actualAmountById(cause.getId());
-		Assertions.assertEquals(null,amount);
+		Assertions.assertEquals(null, amount);
 	}
-	
-	
 
 }

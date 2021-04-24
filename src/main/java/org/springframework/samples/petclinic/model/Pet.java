@@ -52,7 +52,7 @@ public class Pet extends NamedEntity {
 
 	@Column(name = "in_adoption")
 	private Boolean inAdoption;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "type_id")
 	private PetType type;
@@ -63,10 +63,10 @@ public class Pet extends NamedEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit> visits;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Booking> bookings = new HashSet<Booking>();
-	
+
 	public Pet() {
 		super();
 		setinAdoption(false);
@@ -87,7 +87,7 @@ public class Pet extends NamedEntity {
 	public void setinAdoption(Boolean inAdoption) {
 		this.inAdoption = inAdoption;
 	}
-	
+
 	public PetType getType() {
 		return this.type;
 	}
@@ -133,7 +133,7 @@ public class Pet extends NamedEntity {
 		getVisitsInternal().add(visit);
 		visit.setPet(this);
 	}
-	
+
 	public void removeVisit(Visit visit) {
 		getVisitsInternal().remove(visit);
 	}

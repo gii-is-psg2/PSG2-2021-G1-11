@@ -51,12 +51,13 @@ public class VisitController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	/**
-	 * Called before each and every @GetMapping or @PostMapping annotated method. 2 goals:
-	 * - Make sure we always have fresh data - Since we do not use the session scope, make
-	 * sure that Pet object always has an id (Even though id is not part of the form
-	 * fields)
+	 * Called before each and every @GetMapping or @PostMapping annotated method. 2
+	 * goals: - Make sure we always have fresh data - Since we do not use the
+	 * session scope, make sure that Pet object always has an id (Even though id is
+	 * not part of the form fields)
+	 * 
 	 * @param petId
 	 * @return Pet
 	 */
@@ -68,13 +69,15 @@ public class VisitController {
 		return visit;
 	}
 
-	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
+	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is
+	// called
 	@GetMapping(value = "/owners/*/pets/{petId}/visits/new")
 	public String initNewVisitForm(Visit visit, @PathVariable("petId") int petId, Map<String, Object> model) {
 		return "pets/createOrUpdateVisitForm";
 	}
 
-	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
+	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is
+	// called
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/visits/new")
 	public String processNewVisitForm(@PathVariable Integer petId, @Valid Visit visit, BindingResult result) {
 		if (result.hasErrors()) {
@@ -84,7 +87,7 @@ public class VisitController {
 			return "redirect:/owners/{ownerId}";
 		}
 	}
-	
+
 	@PostMapping("/owners/{ownerId}/pets/{petId}/visits/{visitId}/remove")
 	public String removeVisit(@PathVariable Integer visitId, @PathVariable Integer petId) {
 		Pet pet = petService.findPetById(petId);

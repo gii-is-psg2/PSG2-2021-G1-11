@@ -44,7 +44,7 @@ public class CauseService {
 	}
 
 	@Transactional
-	public Collection<Donation> findDonations(final int causeId)  {
+	public Collection<Donation> findDonations(final int causeId) {
 		return this.donationRepository.findByCauseId(causeId);
 	}
 

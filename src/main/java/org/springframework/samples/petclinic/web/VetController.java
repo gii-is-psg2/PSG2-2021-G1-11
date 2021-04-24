@@ -15,6 +15,14 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -32,14 +40,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
 
 /**
  * @author Juergen Hoeller
@@ -59,12 +59,12 @@ public class VetController {
 		this.vetService = clinicService;
 		this.specialtyService = specialtyService;
 	}
-	
+
 	@ModelAttribute("specialties")
-    public List<Specialty> getSpecialties() {
-        return specialtyService.findAllSpecialties();
-    }
-	
+	public List<Specialty> getSpecialties() {
+		return specialtyService.findAllSpecialties();
+	}
+
 	@GetMapping(value = { "/vets" })
 	public String showVetList(Map<String, Object> model) {
 		// Here we are returning an object of type 'Vets' rather than a collection of

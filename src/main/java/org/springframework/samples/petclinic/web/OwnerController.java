@@ -58,7 +58,8 @@ public class OwnerController {
 
 	@Autowired
 
-	public OwnerController(final OwnerService ownerService, final AdoptionService adoptionApplicationService, final PetService petService) {
+	public OwnerController(final OwnerService ownerService, final AdoptionService adoptionApplicationService,
+			final PetService petService) {
 		this.ownerService = ownerService;
 		this.adoptionApplicationService = adoptionApplicationService;
 		this.petService = petService;
@@ -68,19 +69,20 @@ public class OwnerController {
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@GetMapping(value = "/owners/{ownerId}/pets/{petId}/inAdoption")
-	public String putUpForAdoption(@PathVariable("ownerId") Integer ownerId,@PathVariable("petId") Integer petId ,final Model model, Principal principal) {
+	public String putUpForAdoption(@PathVariable("ownerId") Integer ownerId, @PathVariable("petId") Integer petId,
+			final Model model, Principal principal) {
 		final Pet pet = petService.findPetById(petId);
 		Owner owner = ownerService.getOwnerByUserName(principal.getName());
-		if(owner == null || !(owner.getId().equals(pet.getOwner().getId()))) {
+		if (owner == null || !(owner.getId().equals(pet.getOwner().getId()))) {
 			return "redirect:/owners/myProfile";
 		}
-		
+
 		pet.setinAdoption(true);
-		try{
+		try {
 			petService.savePet(pet);
-		}catch(DuplicatedPetNameException e) {
+		} catch (DuplicatedPetNameException e) {
 		}
 		return "redirect:/owners/myProfile";
 	}
@@ -161,7 +163,7 @@ public class OwnerController {
 			// Close the session if you delete your profile as owner
 			SecurityContextHolder.clearContext();
 		}
-		
+
 		this.ownerService.removeOwnerById(ownerId);
 		return "redirect:/";
 	}
