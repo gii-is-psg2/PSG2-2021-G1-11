@@ -1,5 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -41,6 +44,38 @@ class CauseControllerTests {
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
 		BDDMockito.given(this.causeService.findCauseById(CauseControllerTests.TEST_CAUSE_ID)).willReturn(cause);
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testListCauses() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("causes/causeList"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("map"));
+	}
+
+	@WithMockUser(value = "spring")
+	@Test
+	void testListCausesWithData() throws Exception {
+		final Cause cause = new Cause();
+		cause.setDescription("Queremos salvar a los pingüinos");
+		cause.setName("Antártida");
+		cause.setIsClosed(false);
+		cause.setOrganization("Greenpeace");
+		cause.setTarget(2000.);
+
+		final List<Cause> causeList = new ArrayList<>();
+		causeList.add(cause);
+
+		final List<Double> donationList = new ArrayList<>();
+		donationList.add(20.0);
+
+		BDDMockito.given(this.causeService.findCauses()).willReturn(causeList);
+		BDDMockito.given(this.donationService.findDonationsByCauses(causeList)).willReturn(donationList);
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("causes/causeList"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("map"));
 	}
 
 	@WithMockUser(value = "spring")

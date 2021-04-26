@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -27,6 +28,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -109,6 +111,26 @@ class OwnerControllerTests {
 
 	@WithMockUser(value = "spring")
 	@Test
+	void testPutUpForAdoptionWithException() throws Exception {
+		Pet pet = new Pet();
+		Owner owner = new Owner();
+		owner.setId(TEST_OWNER_ID);
+		pet.setOwner(owner);
+
+		BDDMockito.given(petService.findPetById(TEST_PET_ID)).willReturn(pet);
+		BDDMockito.given(ownerService.getOwnerByUserName(anyString())).willReturn(owner);
+		doThrow(new DuplicatedPetNameException()).when(petService).savePet(pet);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/pets/{petId}/inAdoption", TEST_OWNER_ID,
+						TEST_PET_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/owners/myProfile"));
+		verify(petService, times(1)).savePet(pet);
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
 	void testPutUpForAdoptionWithoutPermission() throws Exception {
 		Pet pet = new Pet();
 		Owner owner = new Owner();
@@ -116,6 +138,27 @@ class OwnerControllerTests {
 		pet.setOwner(owner);
 
 		BDDMockito.given(petService.findPetById(TEST_PET_ID)).willReturn(pet);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/pets/{petId}/inAdoption", TEST_OWNER_ID,
+						TEST_PET_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/owners/myProfile"));
+		verify(petService, times(0)).savePet(pet);
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testPutUpForAdoptionWithoutPermissionNull() throws Exception {
+		Pet pet = new Pet();
+		Owner owner = new Owner();
+		owner.setId(TEST_OWNER_ID);
+		pet.setOwner(owner);
+		Owner notOwner = new Owner();
+		notOwner.setId(99999);
+		
+		BDDMockito.given(petService.findPetById(TEST_PET_ID)).willReturn(pet);
+		BDDMockito.given(ownerService.getOwnerByUserName(anyString())).willReturn(notOwner);
 
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.get("/owners/{ownerId}/pets/{petId}/inAdoption", TEST_OWNER_ID,
@@ -273,6 +316,16 @@ class OwnerControllerTests {
 
 	}
 
+	@WithMockUser(username = "owner1")
+	@Test
+	void testNotRemoveNullOwner() throws Exception {
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/owners/{ownerId}/remove", OwnerControllerTests.TEST_OWNER_ID)
+						.with(SecurityMockMvcRequestPostProcessors.csrf()))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/"));
+	}
+	
 	@WithMockUser(value = "spring")
 	@Test
 	void testObtainMyProfile() throws Exception {
