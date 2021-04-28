@@ -56,8 +56,8 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 19        | :smiley:	    |    :smiley:    |   :smiley:     |       :smiley:           |    :smiley:             |    :smiley:             |       |
 | Day 20        | 		-	|   :smiley:     |     -           |             - |                |         :neutral_face:       |       |
 | Day 21        | :smiley: |   :smiley:     | :neutral_face: |      :neutral_face:            |                |                | 26/04 |
-| Day 22        | 				 |                |  :smiley:      |                |                |                |       |
-| Day 23        | 				 |                |                |                |                |                |       |
+| Day 22        | 	-		 |                |  :smiley:      |                |                |                |       |
+| Day 23        | :smiley: |                |                |                |                |                |       |
 | Day 24        | 				 |                |                |                |                |                |       |
 | Day 25        | 				 |                |                |                |                |                |       |
 | Day 26        | 				 |                |                |                |                |                | 01/05 |
