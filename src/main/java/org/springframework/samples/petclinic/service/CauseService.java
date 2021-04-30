@@ -14,38 +14,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CauseService {
 
-	private final CauseRepository causeRepository;
-	private final DonationRepository donationRepository;
+    private final CauseRepository causeRepository;
+    private final DonationRepository donationRepository;
 
-	@Autowired
-	public CauseService(final CauseRepository causeRepository, final DonationRepository donationRepository) {
-		this.causeRepository = causeRepository;
-		this.donationRepository = donationRepository;
-	}
+    @Autowired
+    public CauseService(final CauseRepository causeRepository, final DonationRepository donationRepository) {
+        this.causeRepository = causeRepository;
+        this.donationRepository = donationRepository;
+    }
 
-	@Transactional
-	public void saveCause(final Cause cause) {
-		this.causeRepository.save(cause);
-	}
+    @Transactional
+    public void saveCause(final Cause cause) {
+        this.causeRepository.save(cause);
+    }
 
-	@Transactional
-	public Cause findCauseById(final int causeId) {
-		return this.causeRepository.findByCauseId(causeId);
-	}
+    @Transactional
+    public Cause findCauseById(final int causeId) {
+        return this.causeRepository.findByCauseId(causeId);
+    }
 
-	@Transactional
-	public Double actualAmountById(final int causeId) {
-		return this.causeRepository.actualAmount(causeId);
-	}
+    @Transactional
+    public Double actualAmountById(final int causeId) {
+        Double amount = this.causeRepository.actualAmount(causeId);
+        if (amount == null) {
+            return 0.;
+        } else {
+            return amount;
+        }
+    }
 
-	@Transactional
-	public Collection<Cause> findCauses() {
-		return this.causeRepository.findAll();
-	}
+    @Transactional
+    public Collection<Cause> findCauses() {
+        return this.causeRepository.findAll();
+    }
 
-	@Transactional
-	public Collection<Donation> findDonations(final int causeId) {
-		return this.donationRepository.findByCauseId(causeId);
-	}
+    @Transactional
+    public Collection<Donation> findDonations(final int causeId) {
+        return this.donationRepository.findByCauseId(causeId);
+    }
 
 }
