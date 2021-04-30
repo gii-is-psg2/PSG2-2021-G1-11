@@ -20,6 +20,9 @@
 					<button class="btn btn-default" type="submit">
 						<fmt:message key="sendApplication" />
 					</button>
+					<a class="btn btn-default">
+						<fmt:message key="goBack" />
+					</a>
 				</div>
 			</div>
         </form:form>

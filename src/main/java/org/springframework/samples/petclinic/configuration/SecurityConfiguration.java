@@ -31,12 +31,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin").antMatchers("/owners/**")
-				.hasAnyAuthority("owner", "admin").antMatchers("/vets/**").authenticated().antMatchers("/adoptions/**")
-				.hasAnyAuthority("owner").antMatchers("/causes/**").authenticated().antMatchers("/pets/**")
-				.authenticated().anyRequest().denyAll().and().formLogin()
+		http.authorizeRequests()
+			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+			.antMatchers("/users/new").permitAll()
+			.antMatchers("/admin/**").hasAnyAuthority("admin")
+			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+			.antMatchers("/vets/**").authenticated()
+			.antMatchers("/adoptions/**").hasAnyAuthority("owner")
+			.antMatchers("/causes/**").authenticated()
+			.antMatchers("/pets/**").authenticated()
+			.anyRequest().denyAll()
+			.and().formLogin()
 				/* .loginPage("/login") */
 				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración

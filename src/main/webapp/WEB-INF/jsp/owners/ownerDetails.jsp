@@ -50,7 +50,7 @@
         </form:form>
         
         <sec:authorize access="hasAuthority('owner')">
-	        <a href="/adoptions/applications" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="pendingAdoptionApplication" />(<c:out value="${adoptionApplicationsNumber}"></c:out>)</a>
+	        <a href="/adoptions/applications" class="btn btn-default" style="margin-right: 10px;"><fmt:message key="pendingAdoptionApplication" /> (<c:out value="${adoptionApplicationsNumber}"></c:out>)</a>
         </sec:authorize>
         
     </div>

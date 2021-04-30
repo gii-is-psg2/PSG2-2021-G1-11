@@ -53,9 +53,14 @@ public class PetService {
 		this.adoptionApplicationRepository = adoptionApplicationRepository;
 	}
 
-	@Transactional
-	public Collection<Pet> findPetsInAdoption() throws DataAccessException {
+	@Transactional(readOnly = true)
+	public List<Pet> findPetsInAdoption() throws DataAccessException {
 		return petRepository.findPetsInAdoption();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Pet> findPetsInAdoptionForAnOwner(Integer ownerId) throws DataAccessException {
+		return petRepository.findPetsInAdoptionForAnOwner(ownerId);
 	}
 
 	@Transactional(readOnly = true)

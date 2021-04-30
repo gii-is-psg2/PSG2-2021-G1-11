@@ -81,8 +81,9 @@ public class AdoptionController {
 	}
 
 	@GetMapping(value = "/pets")
-	public String inAdoptionList(ModelMap model) {
-		model.addAttribute("pets", petService.findPetsInAdoption());
+	public String inAdoptionList(ModelMap model, final Principal principal) {
+		final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
+		model.addAttribute("pets", petService.findPetsInAdoptionForAnOwner(owner.getId()));
 		return "adoptions/listPetsInAdoption";
 	}
 
