@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <petclinic:layout pageName="cause">
 
@@ -40,6 +41,17 @@
             </td>
         </tr>
     </table>
+    
+    <div style="display: flex;">
+    	<spring:url value="/causes/{causeId}/edit" var="editCausesUrl">
+					<spring:param name="causeId" value="${cause.id}"/>
+		</spring:url>
+		<a href="${fn:escapeXml(editCausesUrl)}" class="btn btn-default"><fmt:message key="editCauseMessage"/></a>	
+		
+		 <form:form method="POST" action="${cause.id}/remove">
+            <button type="submit" class="btn btn-default"><fmt:message key="removeCause" /></button>
+        </form:form>	
+    </div>
 
     <br/>
     <h2>
@@ -65,9 +77,9 @@
         </tbody>
     </table>
 
-    <c:if test="${not empty donationState}">
+    <c:if test="${not empty status}">
         <div class="alert alert-info">
-            <p><fmt:message key="${donationState}"/>
+            <p><fmt:message key="${status}"/>
                 <c:if test="${not empty returnAmount}">
                     <c:out value="${returnAmount}"></c:out>
                 </c:if>

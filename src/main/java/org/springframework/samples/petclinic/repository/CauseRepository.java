@@ -35,4 +35,12 @@ public interface CauseRepository extends Repository<Cause, Integer> {
 	@Query("SELECT c FROM Cause c")
 	Collection<Cause> findAll();
 
+	@Query("select count(d) from Cause c join c.donations d where c.id=:causeId")
+	Integer findNumberOfDonationsByCause(int causeId);
+
+	@Query("select c.target from Cause c where c.id=:causeId")
+	Double findBudgetByCause(int causeId);
+
+	void removeById(Integer causeId);
+
 }

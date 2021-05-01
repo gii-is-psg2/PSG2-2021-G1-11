@@ -52,7 +52,7 @@ public class DonationController {
             return VIEWS_DONATIONS_CREATE_FORM;
         }
         Cause cause = causeService.findCauseById(causeId);
-        if (cause.getIsClosed() == true) {
+        if (cause.getIsClosed().equals(true)) {
             result.rejectValue("amount", "causeClosed");
             return VIEWS_DONATIONS_CREATE_FORM;
         } else {
@@ -62,18 +62,18 @@ public class DonationController {
             Double total = actualAmount + donation.getAmount();
             if (cause.getTarget() <= total) {
                 if (!cause.getTarget().equals(total)) {
-                    redirectAttributes.addFlashAttribute("donationState", "amountError");
+                    redirectAttributes.addFlashAttribute("status", "amountError");
                     redirectAttributes.addFlashAttribute("returnAmount", donation.getAmount() - (cause.getTarget() - actualAmount));
                     donation.setAmount(cause.getTarget() - actualAmount);
                 } else {
-                    redirectAttributes.addFlashAttribute("donationState", "causeClosed");
+                    redirectAttributes.addFlashAttribute("status", "causeClosed");
                 }
                 this.donationService.saveDonation(donation);
                 cause.setIsClosed(true);
                 this.causeService.saveCause(cause);
             } else {
                 this.donationService.saveDonation(donation);
-                redirectAttributes.addFlashAttribute("donationState", "validDonation");
+                redirectAttributes.addFlashAttribute("status", "validDonation");
             }
             return "redirect:/causes/{causeId}";
         }

@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,11 +30,13 @@ import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.service.CauseService;
 import org.springframework.samples.petclinic.service.DonationService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CauseController {
@@ -82,17 +85,59 @@ public class CauseController {
     }
 
     @GetMapping("/causes/{causeId}")
-    public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model, @ModelAttribute("donationState") String donationState, @ModelAttribute("returnAmount") String returnAmount) {
-        if (!donationState.equals(null)) {
-            model.put("donationState", donationState);
-            if (!returnAmount.equals(null)) {
-                model.put("returnAmount", returnAmount);
-            }
-        }
+    public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model, @ModelAttribute("status") String status, @ModelAttribute("returnAmount") String returnAmount) {
         Collection<Donation> donations;
         donations = this.donationService.findDonationsByCauseId(causeId);
         model.put("donations", donations);
         model.put("cause", this.causeService.findCauseById(causeId));
         return "causes/causeDetails";
     }
+    
+    @GetMapping(value="/causes/{causeId}/edit")
+    public String initUpdateForm(@PathVariable("causeId") final int causeId, final Model model, Principal principal) {
+    	//final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
+    	//final OwnerCause = this.causeService.findOwnerByCause(causeId);
+    	//if(owner.equals(OwnerCause)) {
+    		final Cause cause = this.causeService.findCauseById(causeId);
+        	model.addAttribute(cause);
+        	return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+    	//}else {
+    	//	return "redirect:/";
+    	//}
+    }
+    
+    @PostMapping(value="/causes/{causeId}/edit")
+    public String processUpdateCauseForm(@Valid final Cause cause, final BindingResult result, 
+    		@PathVariable("causeId") final int causeId) {
+    	if(result.hasErrors()) {
+    		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+    	} else {
+    		boolean causeEditability = causeService.checkCauseEditability(causeId,cause.getTarget());
+    		// the cause can't be edited
+    		if(!causeEditability) {
+    			result.rejectValue("target", "targetError");
+    			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+    		// the cause can be edited
+    		}else {
+    			cause.setId(causeId);
+        		this.causeService.saveCause(cause);
+        		return "redirect:/causes/{causeId}";
+    		}
+    	}
+    }
+    
+    @PostMapping(value="/causes/{causeId}/remove")
+    public String removeCause(@PathVariable("causeId") final Integer causeId, Map<String, Object> model, RedirectAttributes redirectAttributes) {
+    	// check if the cause has donations
+    	boolean causeRemovability = causeService.checkCauseRemovability(causeId);
+    	// si no hay donaciones se puede borrar la causa
+    	if(causeRemovability) {
+        	this.causeService.removeById(causeId);
+        	return "redirect:/";
+    	}else {
+    		redirectAttributes.addFlashAttribute("status", "canNotRemoveCause");
+    		return "redirect:/causes/{causeId}";
+    	}
+    }
+    
 }
