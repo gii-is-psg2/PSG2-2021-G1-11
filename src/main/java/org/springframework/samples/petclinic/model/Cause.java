@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -52,6 +53,9 @@ public class Cause extends BaseEntity {
 
 	@NotNull
 	private Boolean isClosed;
+	
+	@ManyToOne(optional = false)
+	private User founder;
 
 	public String getName() {
 		return this.name;
@@ -113,4 +117,13 @@ public class Cause extends BaseEntity {
 		this.getDonationsInternal().add(donation);
 		donation.setCause(this);
 	}
+
+	public User getFounder() {
+		return founder;
+	}
+
+	public void setFounder(User founder) {
+		this.founder = founder;
+	}
+	
 }

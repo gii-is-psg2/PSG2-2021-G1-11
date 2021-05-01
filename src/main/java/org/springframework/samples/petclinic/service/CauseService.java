@@ -81,8 +81,4 @@ public class CauseService {
 		causeRepository.removeById(causeId);
 	}
 
-	//public Owner findOwnerByCause(int causeId) {
-		//return causeRepository.findOwnerById();
-	//}
-
 }

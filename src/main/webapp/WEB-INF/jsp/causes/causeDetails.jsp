@@ -41,8 +41,8 @@
             </td>
         </tr>
     </table>
-    
-    <div style="display: flex;">
+    <c:if test="${canEditOrRemove}">
+    	<div style="display: flex;">
     	<spring:url value="/causes/{causeId}/edit" var="editCausesUrl">
 					<spring:param name="causeId" value="${cause.id}"/>
 		</spring:url>
@@ -52,6 +52,7 @@
             <button type="submit" class="btn btn-default"><fmt:message key="removeCause" /></button>
         </form:form>	
     </div>
+    </c:if>
 
     <br/>
     <h2>

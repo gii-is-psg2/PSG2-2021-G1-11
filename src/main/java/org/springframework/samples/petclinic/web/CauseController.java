@@ -27,13 +27,14 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.CauseService;
 import org.springframework.samples.petclinic.service.DonationService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -41,103 +42,120 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class CauseController {
 
-    private static final String VIEWS_CAUSE_CREATE_OR_UPDATE_FORM = "causes/createOrUpdateCauseForm";
-    private final CauseService causeService;
-    private final DonationService donationService;
+	private static final String VIEWS_CAUSE_CREATE_OR_UPDATE_FORM = "causes/createOrUpdateCauseForm";
+	private final CauseService causeService;
+	private final DonationService donationService;
+	private final UserService userService;
 
-    @Autowired
-    public CauseController(final CauseService causeService, final DonationService donationService) {
-        this.causeService = causeService;
-        this.donationService = donationService;
-    }
+	@Autowired
+	public CauseController(final CauseService causeService, final DonationService donationService,
+			UserService userService) {
+		this.causeService = causeService;
+		this.donationService = donationService;
+		this.userService = userService;
+	}
 
-    @GetMapping(value = {"/causes"})
-    public String showCauseList(final Map<String, Object> model) {
-        final List<Cause> causes = new ArrayList<>();
-        causes.addAll(this.causeService.findCauses());
+	@GetMapping(value = { "/causes" })
+	public String showCauseList(final Map<String, Object> model) {
+		final List<Cause> causes = new ArrayList<>();
+		causes.addAll(this.causeService.findCauses());
 
-        final List<Double> donations = new ArrayList<>(this.donationService.findDonationsByCauses(causes));
+		final List<Double> donations = new ArrayList<>(this.donationService.findDonationsByCauses(causes));
 
-        final Map<Cause, Double> res = new HashMap<>();
-        for (int i = 0; i < causes.size(); i++) {
-            res.put(causes.get(i), donations.get(i));
-        }
-        model.put("map", res);
-        return "causes/causeList";
-    }
+		final Map<Cause, Double> res = new HashMap<>();
+		for (int i = 0; i < causes.size(); i++) {
+			res.put(causes.get(i), donations.get(i));
+		}
+		model.put("map", res);
+		return "causes/causeList";
+	}
 
-    @GetMapping(value = "/causes/new")
-    public String initCreationForm(final Map<String, Object> model) {
-        final Cause cause = new Cause();
-        cause.setIsClosed(false);
-        model.put("cause", cause);
-        return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-    }
+	@GetMapping(value = "/causes/new")
+	public String initCreationForm(final Map<String, Object> model) {
+		final Cause cause = new Cause();
+		cause.setIsClosed(false);
+		model.put("cause", cause);
+		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+	}
 
-    @PostMapping(value = "/causes/new")
-    public String processCreationForm(@Valid final Cause cause, final BindingResult result) {
-        if (result.hasErrors()) {
-            return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-        } else {
-            this.causeService.saveCause(cause);
-            return "redirect:/causes";
-        }
-    }
+	@PostMapping(value = "/causes/new")
+	public String processCreationForm(@Valid final Cause cause, final BindingResult result, Principal principal) {
+		if (result.hasErrors()) {
+			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+		} else {
+			User user = userService.findUser(principal.getName()).orElse(null);
+			cause.setFounder(user);
+			this.causeService.saveCause(cause);
+			return "redirect:/causes";
+		}
+	}
 
-    @GetMapping("/causes/{causeId}")
-    public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model, @ModelAttribute("status") String status, @ModelAttribute("returnAmount") String returnAmount) {
-        Collection<Donation> donations;
-        donations = this.donationService.findDonationsByCauseId(causeId);
-        model.put("donations", donations);
-        model.put("cause", this.causeService.findCauseById(causeId));
-        return "causes/causeDetails";
-    }
-    
-    @GetMapping(value="/causes/{causeId}/edit")
-    public String initUpdateForm(@PathVariable("causeId") final int causeId, final Model model, Principal principal) {
-    	//final Owner owner = this.ownerService.getOwnerByUserName(principal.getName());
-    	//final OwnerCause = this.causeService.findOwnerByCause(causeId);
-    	//if(owner.equals(OwnerCause)) {
-    		final Cause cause = this.causeService.findCauseById(causeId);
-        	model.addAttribute(cause);
-        	return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-    	//}else {
-    	//	return "redirect:/";
-    	//}
-    }
-    
-    @PostMapping(value="/causes/{causeId}/edit")
-    public String processUpdateCauseForm(@Valid final Cause cause, final BindingResult result, 
-    		@PathVariable("causeId") final int causeId) {
-    	if(result.hasErrors()) {
-    		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-    	} else {
-    		boolean causeEditability = causeService.checkCauseEditability(causeId,cause.getTarget());
-    		// the cause can't be edited
-    		if(!causeEditability) {
-    			result.rejectValue("target", "targetError");
-    			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
-    		// the cause can be edited
-    		}else {
-    			cause.setId(causeId);
-        		this.causeService.saveCause(cause);
-        		return "redirect:/causes/{causeId}";
-    		}
-    	}
-    }
-    
-    @PostMapping(value="/causes/{causeId}/remove")
-    public String removeCause(@PathVariable("causeId") final Integer causeId, Map<String, Object> model, RedirectAttributes redirectAttributes) {
-    	// check if the cause has donations
-    	boolean causeRemovability = causeService.checkCauseRemovability(causeId);
-    	// si no hay donaciones se puede borrar la causa
-    	if(causeRemovability) {
-        	this.causeService.removeById(causeId);
-        	return "redirect:/";
-    	}else {
-    		redirectAttributes.addFlashAttribute("status", "canNotRemoveCause");
-    		return "redirect:/causes/{causeId}";
-    	}
-    }
-    
+	@GetMapping("/causes/{causeId}")
+	public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model, Principal principal) {
+		User user = userService.findUser(principal.getName()).orElse(null);
+		Cause cause = causeService.findCauseById(causeId);
+		Collection<Donation> donations;
+		donations = this.donationService.findDonationsByCauseId(causeId);
+		model.put("donations", donations);
+		model.put("cause", this.causeService.findCauseById(causeId));
+		model.put("canEditOrRemove", cause.getFounder().equals(user));
+		return "causes/causeDetails";
+	}
+
+	@GetMapping(value = "/causes/{causeId}/edit")
+	public String initUpdateForm(@PathVariable("causeId") final int causeId, final Model model, Principal principal) {
+		User user = userService.findUser(principal.getName()).orElse(null);
+		Cause cause = causeService.findCauseById(causeId);
+		if(!cause.getFounder().equals(user)) {
+			return "redirect:/causes/{causeId}";
+		}
+		model.addAttribute(cause);
+		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/causes/{causeId}/edit")
+	public String processUpdateCauseForm(@Valid final Cause cause, final BindingResult result,
+			@PathVariable("causeId") final int causeId, Principal principal) {
+		if (result.hasErrors()) {
+			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+		} else {
+			User user = userService.findUser(principal.getName()).orElse(null);
+			Cause originalCause = causeService.findCauseById(causeId);
+			if(!originalCause.getFounder().equals(user)) {
+				return "redirect:/causes/{causeId}";
+			}
+			boolean causeEditability = causeService.checkCauseEditability(causeId, cause.getTarget());
+			// the cause can't be edited
+			if (!causeEditability) {
+				result.rejectValue("target", "targetError");
+				return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
+				// the cause can be edited
+			} else {
+				cause.setId(causeId);
+				cause.setFounder(user);
+				this.causeService.saveCause(cause);
+				return "redirect:/causes/{causeId}";
+			}
+		}
+	}
+
+	@PostMapping(value = "/causes/{causeId}/remove")
+	public String removeCause(@PathVariable("causeId") final Integer causeId, Map<String, Object> model,
+			RedirectAttributes redirectAttributes, Principal principal) {
+		// check if the cause has donations
+		boolean causeRemovability = causeService.checkCauseRemovability(causeId);
+		User user = userService.findUser(principal.getName()).orElse(null);
+		Cause cause = causeService.findCauseById(causeId);
+		if(!cause.getFounder().equals(user)) {
+			return "redirect:/causes/{causeId}";
+		}
+		if (causeRemovability) {
+			this.causeService.removeById(causeId);
+			return "redirect:/";
+		} else {
+			redirectAttributes.addFlashAttribute("status", "canNotRemoveCause");
+			return "redirect:/causes/{causeId}";
+		}
+	}
+
 }
