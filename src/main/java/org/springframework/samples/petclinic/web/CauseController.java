@@ -47,7 +47,7 @@ public class CauseController {
 	private final DonationService donationService;
 	private final UserService userService;
 	private static final String CAUSE_DETAILS_REDIRECT_URL = "redirect:/causes/{causeId}";
-	
+
 	@Autowired
 	public CauseController(final CauseService causeService, final DonationService donationService,
 			UserService userService) {
@@ -92,14 +92,15 @@ public class CauseController {
 	}
 
 	@GetMapping("/causes/{causeId}")
-	public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model, Principal principal) {
+	public String showCause(@PathVariable("causeId") final int causeId, final Map<String, Object> model,
+			Principal principal) {
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
 		Collection<Donation> donations;
 		donations = this.donationService.findDonationsByCauseId(causeId);
 		model.put("donations", donations);
 		model.put("cause", cause);
-		model.put("canEditOrRemove", cause.getFounder().equals(user));
+		model.put("canEditOrRemove", cause.getFounder().equals(user) && !cause.getIsClosed());
 		return "causes/causeDetails";
 	}
 
@@ -107,7 +108,7 @@ public class CauseController {
 	public String initUpdateForm(@PathVariable("causeId") final int causeId, final Model model, Principal principal) {
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
-		if(!cause.getFounder().equals(user)) {
+		if (!cause.getFounder().equals(user) || cause.getIsClosed()) {
 			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		model.addAttribute(cause);
@@ -122,7 +123,7 @@ public class CauseController {
 		} else {
 			User user = userService.findUser(principal.getName()).orElse(null);
 			Cause originalCause = causeService.findCauseById(causeId);
-			if(!originalCause.getFounder().equals(user)) {
+			if (!originalCause.getFounder().equals(user) || originalCause.getIsClosed()) {
 				return CAUSE_DETAILS_REDIRECT_URL;
 			}
 			boolean causeEditability = causeService.checkCauseEditability(causeId, cause.getTarget());
@@ -147,7 +148,7 @@ public class CauseController {
 		boolean causeRemovability = causeService.checkCauseRemovability(causeId);
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
-		if(!cause.getFounder().equals(user)) {
+		if (!cause.getFounder().equals(user) || cause.getIsClosed()) {
 			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		if (causeRemovability) {
