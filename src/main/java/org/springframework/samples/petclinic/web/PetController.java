@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PetController {
 
 	private static final String VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm";
+	private static final String OWNER_DETAILS_REDIRECT_URL =  "redirect:/owners/{ownerId}";
 
 	private final PetService petService;
 	private final OwnerService ownerService;
@@ -99,7 +100,7 @@ public class PetController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owners/{ownerId}";
+			return OWNER_DETAILS_REDIRECT_URL;
 		}
 	}
 
@@ -135,7 +136,7 @@ public class PetController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owners/{ownerId}";
+			return OWNER_DETAILS_REDIRECT_URL;
 		}
 	}
 
@@ -144,7 +145,7 @@ public class PetController {
 		Pet pet = this.petService.findPetById(petId);
 		pet.getOwner().removePet(pet);
 		petService.removePetById(petId);
-		return "redirect:/owners/{ownerId}";
+		return OWNER_DETAILS_REDIRECT_URL;
 	}
 
 }

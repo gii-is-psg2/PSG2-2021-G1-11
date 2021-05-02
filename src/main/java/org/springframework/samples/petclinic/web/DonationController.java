@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class DonationController {
     private static final String VIEWS_DONATIONS_CREATE_FORM = "donations/createDonationForm";
+    private static final String STATUS = "status";
 
     private final DonationService donationService;
     private final CauseService causeService;
@@ -62,18 +63,18 @@ public class DonationController {
             Double total = actualAmount + donation.getAmount();
             if (cause.getTarget() <= total) {
                 if (!cause.getTarget().equals(total)) {
-                    redirectAttributes.addFlashAttribute("status", "amountError");
+                    redirectAttributes.addFlashAttribute(STATUS, "amountError");
                     redirectAttributes.addFlashAttribute("returnAmount", donation.getAmount() - (cause.getTarget() - actualAmount));
                     donation.setAmount(cause.getTarget() - actualAmount);
                 } else {
-                    redirectAttributes.addFlashAttribute("status", "causeClosed");
+                    redirectAttributes.addFlashAttribute(STATUS, "causeClosed");
                 }
                 this.donationService.saveDonation(donation);
                 cause.setIsClosed(true);
                 this.causeService.saveCause(cause);
             } else {
                 this.donationService.saveDonation(donation);
-                redirectAttributes.addFlashAttribute("status", "validDonation");
+                redirectAttributes.addFlashAttribute(STATUS, "validDonation");
             }
             return "redirect:/causes/{causeId}";
         }

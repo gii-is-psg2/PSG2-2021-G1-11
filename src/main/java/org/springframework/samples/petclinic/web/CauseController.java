@@ -46,7 +46,8 @@ public class CauseController {
 	private final CauseService causeService;
 	private final DonationService donationService;
 	private final UserService userService;
-
+	private static final String CAUSE_DETAILS_REDIRECT_URL = "redirect:/causes/{causeId}";
+	
 	@Autowired
 	public CauseController(final CauseService causeService, final DonationService donationService,
 			UserService userService) {
@@ -107,7 +108,7 @@ public class CauseController {
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
 		if(!cause.getFounder().equals(user)) {
-			return "redirect:/causes/{causeId}";
+			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		model.addAttribute(cause);
 		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
@@ -122,7 +123,7 @@ public class CauseController {
 			User user = userService.findUser(principal.getName()).orElse(null);
 			Cause originalCause = causeService.findCauseById(causeId);
 			if(!originalCause.getFounder().equals(user)) {
-				return "redirect:/causes/{causeId}";
+				return CAUSE_DETAILS_REDIRECT_URL;
 			}
 			boolean causeEditability = causeService.checkCauseEditability(causeId, cause.getTarget());
 			// the cause can't be edited
@@ -134,7 +135,7 @@ public class CauseController {
 				cause.setId(causeId);
 				cause.setFounder(user);
 				this.causeService.saveCause(cause);
-				return "redirect:/causes/{causeId}";
+				return CAUSE_DETAILS_REDIRECT_URL;
 			}
 		}
 	}
@@ -147,14 +148,14 @@ public class CauseController {
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
 		if(!cause.getFounder().equals(user)) {
-			return "redirect:/causes/{causeId}";
+			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		if (causeRemovability) {
 			this.causeService.removeById(causeId);
 			return "redirect:/";
 		} else {
 			redirectAttributes.addFlashAttribute("status", "canNotRemoveCause");
-			return "redirect:/causes/{causeId}";
+			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 	}
 

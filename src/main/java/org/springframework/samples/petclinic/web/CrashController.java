@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import org.springframework.samples.petclinic.util.InvalidControllerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -30,8 +31,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CrashController {
 
 	@GetMapping(value = "/oups")
-	public String triggerException() {
-		throw new RuntimeException(
+	public String triggerException() throws InvalidControllerException {
+		throw new InvalidControllerException(
 				"Expected: controller used to showcase what " + "happens when an exception is thrown");
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookingService {
 
 	private BookingRepository bookingRepository;
+	private static final String DATE_FORMAT = "yyyy/MM/dd";
 
 	@Autowired
 	public BookingService(BookingRepository bookingRepository) {
@@ -33,14 +34,14 @@ public class BookingService {
 	private Boolean doesBookingOverlaps(Booking booking) throws DataAccessException {
 		boolean isOverlapping = false;
 
-		LocalDate startDate = LocalDate.parse(booking.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		LocalDate finishDate = LocalDate.parse(booking.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+		LocalDate startDate = LocalDate.parse(booking.getStartDate(), DateTimeFormatter.ofPattern(DATE_FORMAT));
+		LocalDate finishDate = LocalDate.parse(booking.getFinishDate(), DateTimeFormatter.ofPattern(DATE_FORMAT));
 
 		List<Booking> bookings = bookingRepository.findAllByCancelledFalse();
 
 		for (Booking b : bookings) {
-			LocalDate bstartDate = LocalDate.parse(b.getStartDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-			LocalDate bfinishDate = LocalDate.parse(b.getFinishDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+			LocalDate bstartDate = LocalDate.parse(b.getStartDate(), DateTimeFormatter.ofPattern(DATE_FORMAT));
+			LocalDate bfinishDate = LocalDate.parse(b.getFinishDate(), DateTimeFormatter.ofPattern(DATE_FORMAT));
 
 			// Overlapping cases
 			if (isBeforeOrEqual(startDate, bfinishDate) && isAfterOrEqual(finishDate, bstartDate)) {
@@ -54,7 +55,7 @@ public class BookingService {
 
 	@Transactional
 	public Boolean saveBooking(Booking booking) throws DataAccessException {
-		Boolean isOverlapping = (booking.isCancelled()) ? false : doesBookingOverlaps(booking);
+		boolean isOverlapping = !booking.isCancelled().booleanValue() && doesBookingOverlaps(booking);
 
 		// Booking can be created
 		if (!isOverlapping) {
@@ -66,7 +67,7 @@ public class BookingService {
 
 	@Transactional
 	public Boolean renewBooking(Booking booking) throws DataAccessException {
-		Boolean isOverlapping = doesBookingOverlaps(booking);
+		boolean isOverlapping = doesBookingOverlaps(booking);
 
 		// Booking can be created
 		if (!isOverlapping) {

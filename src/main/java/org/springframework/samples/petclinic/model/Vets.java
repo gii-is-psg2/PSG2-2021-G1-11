@@ -31,14 +31,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Vets {
 
-	private List<Vet> vets;
+	private List<Vet> vetList;
 
 	@XmlElement
 	public List<Vet> getVetList() {
-		if (vets == null) {
-			vets = new ArrayList<>();
+		if (vetList == null) {
+			vetList = new ArrayList<>();
 		}
-		return vets;
+		return vetList;
 	}
 
 }

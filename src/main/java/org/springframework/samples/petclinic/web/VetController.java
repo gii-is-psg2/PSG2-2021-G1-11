@@ -53,6 +53,7 @@ public class VetController {
 	private final VetService vetService;
 	private final SpecialtyService specialtyService;
 	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createOrUpdateVetForm";
+	private static final String VET_REDIRECT_URL = "redirect:/vets";
 
 	@Autowired
 	public VetController(VetService clinicService, SpecialtyService specialtyService) {
@@ -80,7 +81,7 @@ public class VetController {
 	@PostMapping(value = { "/vets/{vetId}/remove" })
 	public String removeVet(@PathVariable Integer vetId) {
 		vetService.removeVetById(vetId);
-		return "redirect:/vets";
+		return VET_REDIRECT_URL;
 	}
 
 	@GetMapping(value = { "/vets.xml" })
@@ -116,14 +117,14 @@ public class VetController {
 			} catch (DataAccessException ex) {
 				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/vets";
+			return VET_REDIRECT_URL;
 		}
 	}
 
 	@GetMapping(value = "/vets/{vetId}/edit")
 	public String initUpdateForm(@PathVariable("vetId") int vetId, ModelMap model) {
 		Vet vet = this.vetService.findVetById(vetId);
-		vet.setSpecialtiesLS(vet.getSpecialties().stream().map(x -> x.getName()).collect(Collectors.toList()));
+		vet.setSpecialtiesLS(vet.getSpecialties().stream().map(Specialty::getName).collect(Collectors.toList()));
 		model.put("vet", vet);
 		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 	}
@@ -144,7 +145,7 @@ public class VetController {
 			} catch (DataAccessException ex) {
 				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/vets";
+			return VET_REDIRECT_URL;
 		}
 	}
 

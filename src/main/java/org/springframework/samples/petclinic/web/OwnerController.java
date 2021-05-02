@@ -83,6 +83,7 @@ public class OwnerController {
 		try {
 			petService.savePet(pet);
 		} catch (DuplicatedPetNameException e) {
+			// Intentionally blank
 		}
 		return "redirect:/owners/myProfile";
 	}

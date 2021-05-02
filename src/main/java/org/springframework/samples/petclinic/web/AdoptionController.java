@@ -34,6 +34,9 @@ public class AdoptionController {
 	private final AdoptionService adoptionApplicationService;
 	private final OwnerService ownerService;
 	private final PetService petService;
+	
+	private static final String CREATE_ADOPTION_VIEW = "adoptions/createAdoptionApplication";
+	private static final String DESCRIPTION = "description";
 
 	@Autowired
 	public AdoptionController(final AdoptionService adoptionApplicationService, final OwnerService ownerService,
@@ -97,32 +100,32 @@ public class AdoptionController {
 		}
 
 		model.put("adoptionApplication", adoptionApplication);
-		return "adoptions/createAdoptionApplication";
+		return CREATE_ADOPTION_VIEW;
 	}
 
 	@PostMapping(value = "/pets/{petId}/apply")
 	public String postNewAdoptionApplication(@Valid final AdoptionApplication adoptionApplication,
 			final BindingResult result, @PathVariable("petId") final int petId, final Principal principal) {
 		if (result.hasErrors()) {
-			return "adoptions/createAdoptionApplication";
+			return CREATE_ADOPTION_VIEW;
 		}
 
 		final Owner applicant = this.ownerService.getOwnerByUserName(principal.getName());
 		adoptionApplication.setApplicant(applicant);
 		final Pet adoptedPet = this.petService.findPetById(petId);
 		if (adoptedPet == null) {
-			result.rejectValue("description", "petDoesntExist");
-			return "adoptions/createAdoptionApplication";
+			result.rejectValue(DESCRIPTION, "petDoesntExist");
+			return CREATE_ADOPTION_VIEW;
 		} else if (!adoptedPet.getinAdoption().booleanValue()) {
-			result.rejectValue("description", "notAdoptablePet");
-			return "adoptions/createAdoptionApplication";
+			result.rejectValue(DESCRIPTION, "notAdoptablePet");
+			return CREATE_ADOPTION_VIEW;
 		} else if (this.adoptionApplicationService.findByApplicantAndRequestedPet(adoptionApplication.getApplicant(),
 				adoptedPet) != null) {
-			result.rejectValue("description", "alreadyApplied");
-			return "adoptions/createAdoptionApplication";
+			result.rejectValue(DESCRIPTION, "alreadyApplied");
+			return CREATE_ADOPTION_VIEW;
 		} else if (adoptedPet.getOwner().equals(applicant)) {
-			result.rejectValue("description", "alreadyOwned");
-			return "adoptions/createAdoptionApplication";
+			result.rejectValue(DESCRIPTION, "alreadyOwned");
+			return CREATE_ADOPTION_VIEW;
 		}
 
 		adoptionApplication.setRequestedPet(adoptedPet);

@@ -23,6 +23,7 @@ public class BookingController {
 	private PetService petService;
 
 	private static final String VIEW_CREATE_BOOKING_FORM = "pets/createBookingForm";
+	private static final String OWNER_DETAILS_REDIRECT_URL = "redirect:/owners/{ownerId}";
 
 	@Autowired
 	public BookingController(BookingService bookingService, PetService petService) {
@@ -57,7 +58,7 @@ public class BookingController {
 			boolean existBooking = bookingService.saveBooking(booking);
 			// booking created
 			if (existBooking) {
-				return "redirect:/owners/{ownerId}";
+				return OWNER_DETAILS_REDIRECT_URL;
 
 				// booking not created because of errors
 			} else {
@@ -70,13 +71,11 @@ public class BookingController {
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/cancel")
 	public String cancelBooking(@PathVariable Integer bookingId, @PathVariable Integer petId) {
 		Booking booking = bookingService.findBookingById(bookingId);
-		if (booking == null) {
-			return "redirect:/owners/{ownerId}";
+		if (booking != null) {
+			booking.setCancelled(true);
+			bookingService.saveBooking(booking);
 		}
-
-		booking.setCancelled(true);
-		bookingService.saveBooking(booking);
-		return "redirect:/owners/{ownerId}";
+		return OWNER_DETAILS_REDIRECT_URL;
 	}
 
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/renew")
@@ -84,17 +83,17 @@ public class BookingController {
 			@PathVariable Integer bookingId) {
 		Booking booking = bookingService.findBookingById(bookingId);
 		if (booking == null) {
-			return "redirect:/owners/{ownerId}";
+			return OWNER_DETAILS_REDIRECT_URL;
 		}
 
-		if (!bookingService.renewBooking(booking)) {
+		if (!bookingService.renewBooking(booking).booleanValue()) {
 			Pet pet = petService.findPetById(petId);
 			pet.removeBooking(booking);
 			bookingService.removeBookingById(bookingId);
 			return "pets/renewBookingFailed";
 		}
 
-		return "redirect:/owners/{ownerId}";
+		return OWNER_DETAILS_REDIRECT_URL;
 	}
 
 	@PostMapping("/owners/{ownerId}/pets/{petId}/booking/{bookingId}/remove")
@@ -103,7 +102,7 @@ public class BookingController {
 		Booking booking = bookingService.findBookingById(bookingId);
 		pet.removeBooking(booking);
 		bookingService.removeBookingById(bookingId);
-		return "redirect:/owners/{ownerId}";
+		return OWNER_DETAILS_REDIRECT_URL;
 	}
 
 }
