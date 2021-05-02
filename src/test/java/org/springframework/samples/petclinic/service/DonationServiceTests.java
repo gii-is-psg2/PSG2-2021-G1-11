@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
+import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -22,6 +24,9 @@ public class DonationServiceTests {
 	@Autowired
 	CauseService causeService;
 	
+	@Autowired
+	UserRepository userRepository;
+	
 	@Test
 	void findDonationsByCausesTest() {
 		final Double totalAmount = 20.0;
@@ -32,6 +37,10 @@ public class DonationServiceTests {
 		cause.setIsClosed(false);
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
 		this.causeService.saveCause(cause);
 		
 		final List<Cause> causeList = new ArrayList<>();

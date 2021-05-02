@@ -23,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Cause;
+import org.springframework.samples.petclinic.model.Donation;
+import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.DonationRepository;
+import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -30,6 +34,12 @@ class CauseServiceTests {
 
 	@Autowired
 	protected CauseService causeService;
+	
+	@Autowired
+	protected DonationRepository donationRepository;
+	
+	@Autowired
+	protected UserRepository userRepository;
 
 	@Test
 	void shouldFindCauseById() {
@@ -39,6 +49,10 @@ class CauseServiceTests {
 		cause.setIsClosed(false);
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
 		this.causeService.saveCause(cause);
 
 		final Cause cause2 = this.causeService.findCauseById(cause.getId());
@@ -56,6 +70,24 @@ class CauseServiceTests {
 	}
 
 	@Test
+	void shouldGetEmptyAmountById() {
+		final Cause cause = new Cause();
+		cause.setDescription("Queremos salvar a los pingüinos");
+		cause.setName("Antártida");
+		cause.setIsClosed(false);
+		cause.setOrganization("Greenpeace");
+		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
+		this.causeService.saveCause(cause);
+
+		final Double amount = this.causeService.actualAmountById(cause.getId());
+		Assertions.assertEquals(0.0, amount);
+	}
+	
+	@Test
 	void shouldGetActualAmountById() {
 		final Cause cause = new Cause();
 		cause.setDescription("Queremos salvar a los pingüinos");
@@ -63,10 +95,83 @@ class CauseServiceTests {
 		cause.setIsClosed(false);
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
 		this.causeService.saveCause(cause);
+		
+		Donation donation = new Donation();
+		donation.setCause(cause);
+		donation.setAmount(1000.0);
+		this.donationRepository.save(donation);
 
 		final Double amount = this.causeService.actualAmountById(cause.getId());
-		Assertions.assertEquals(null, amount);
+		Assertions.assertEquals(donation.getAmount(), amount);
+	}
+	
+	@Test
+	void editNoDonationCause() {
+		final Cause cause = new Cause();
+		cause.setDescription("Queremos salvar a los pingüinos");
+		cause.setName("Antártida");
+		cause.setIsClosed(false);
+		cause.setOrganization("Greenpeace");
+		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
+		this.causeService.saveCause(cause);
+		
+		Boolean editability = this.causeService.checkCauseEditability(cause.getId(), 20000.);
+		Assertions.assertTrue(editability);
+	}
+	
+	@Test
+	void editHigherBudgetCause() {
+		final Cause cause = new Cause();
+		cause.setDescription("Queremos salvar a los pingüinos");
+		cause.setName("Antártida");
+		cause.setIsClosed(false);
+		cause.setOrganization("Greenpeace");
+		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
+		this.causeService.saveCause(cause);
+		
+		Donation donation = new Donation();
+		donation.setCause(cause);
+		donation.setAmount(1000.0);
+		this.donationRepository.save(donation);
+		
+		Boolean editability = this.causeService.checkCauseEditability(cause.getId(), 20000.);
+		Assertions.assertTrue(editability);
+	}
+	
+	@Test
+	void editLowerBudgetCause() {
+		final Cause cause = new Cause();
+		cause.setDescription("Queremos salvar a los pingüinos");
+		cause.setName("Antártida");
+		cause.setIsClosed(false);
+		cause.setOrganization("Greenpeace");
+		cause.setTarget(2000.);
+		User user = new User();
+		user.setUsername("guillex7");
+		userRepository.save(user);
+		cause.setFounder(user);
+		this.causeService.saveCause(cause);
+		
+		Donation donation = new Donation();
+		donation.setCause(cause);
+		donation.setAmount(1000.0);
+		this.donationRepository.save(donation);
+		
+		Boolean editability = this.causeService.checkCauseEditability(cause.getId(), 100.);
+		Assertions.assertFalse(editability);
 	}
 
 }

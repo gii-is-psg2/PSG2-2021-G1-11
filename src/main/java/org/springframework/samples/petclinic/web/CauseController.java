@@ -97,7 +97,7 @@ public class CauseController {
 		Collection<Donation> donations;
 		donations = this.donationService.findDonationsByCauseId(causeId);
 		model.put("donations", donations);
-		model.put("cause", this.causeService.findCauseById(causeId));
+		model.put("cause", cause);
 		model.put("canEditOrRemove", cause.getFounder().equals(user));
 		return "causes/causeDetails";
 	}

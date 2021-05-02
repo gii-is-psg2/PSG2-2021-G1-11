@@ -55,16 +55,7 @@ public class CauseService {
 
 	@Transactional
 	public Boolean checkCauseEditability(int causeId, Double newBudget) {
-		boolean causeEditability = true;
-		Integer numOfDonationsByCause = findNumberOfDonationsByCause(causeId);
-		// there are donations
-		if (numOfDonationsByCause > 0) {
-			Double budget = causeRepository.findBudgetByCause(causeId); // get budget by cause
-			if (newBudget < budget) { // the target budget can't be edited
-				causeEditability = false;
-			}
-		}
-		return causeEditability;
+		return findNumberOfDonationsByCause(causeId) <= 0 || newBudget >= causeRepository.findBudgetByCause(causeId);
 	}
 	
 	public Integer findNumberOfDonationsByCause(Integer causeId) {

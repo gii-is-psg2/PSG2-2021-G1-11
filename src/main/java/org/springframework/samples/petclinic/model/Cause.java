@@ -125,5 +125,10 @@ public class Cause extends BaseEntity {
 	public void setFounder(User founder) {
 		this.founder = founder;
 	}
+
+	public Cause() {
+		super();
+		setIsClosed(false);
+	}
 	
 }
