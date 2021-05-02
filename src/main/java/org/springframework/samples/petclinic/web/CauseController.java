@@ -100,7 +100,7 @@ public class CauseController {
 		donations = this.donationService.findDonationsByCauseId(causeId);
 		model.put("donations", donations);
 		model.put("cause", cause);
-		model.put("canEditOrRemove", cause.getFounder().equals(user) && !cause.getIsClosed());
+		model.put("canEditOrRemove", cause.getFounder().equals(user) && !cause.getIsClosed().booleanValue());
 		return "causes/causeDetails";
 	}
 
@@ -108,7 +108,7 @@ public class CauseController {
 	public String initUpdateForm(@PathVariable("causeId") final int causeId, final Model model, Principal principal) {
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
-		if (!cause.getFounder().equals(user) || cause.getIsClosed()) {
+		if (!cause.getFounder().equals(user) || cause.getIsClosed().booleanValue()) {
 			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		model.addAttribute(cause);
@@ -148,7 +148,7 @@ public class CauseController {
 		boolean causeRemovability = causeService.checkCauseRemovability(causeId);
 		User user = userService.findUser(principal.getName()).orElse(null);
 		Cause cause = causeService.findCauseById(causeId);
-		if (!cause.getFounder().equals(user) || cause.getIsClosed()) {
+		if (!cause.getFounder().equals(user) || cause.getIsClosed().booleanValue()) {
 			return CAUSE_DETAILS_REDIRECT_URL;
 		}
 		if (causeRemovability) {
