@@ -61,6 +61,6 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 24        | 				 |                |                |     :smiley: |                |                |       |
 | Day 25        | :smiley: | :smiley:       |                |       :smiley:         |                |             :smiley:    |       |
 | Day 26        | :smiley: |     :smiley:   |:smiley:        |                |        :smiley:        |               :smiley:  | 01/05 |
-| Day 27        | 				 |                |                |                |           :smiley:     |                |       |
+| Day 27        | 				 | :smiley:       |                |                |           :smiley:     |                |       |
 | Day 28        | 				 |                |                |                |                |                |       |
 | Day 29        | 				 |                |                |                |                |                | 04/05 |
