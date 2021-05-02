@@ -31,7 +31,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(value = BookingController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class BookingControllerTests {
+class BookingControllerTests {
 	private static final String VIEW_CREATE_BOOKING_FORM = "pets/createBookingForm";
 	private static final int PET_ID = 1;
 	private static final int OWNER_ID = 1;

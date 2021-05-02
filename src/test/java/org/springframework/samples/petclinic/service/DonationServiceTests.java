@@ -16,7 +16,7 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class DonationServiceTests {
+class DonationServiceTests {
 	
 	@Autowired
 	DonationService donationService;

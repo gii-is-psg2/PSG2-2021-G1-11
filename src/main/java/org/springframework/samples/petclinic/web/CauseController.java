@@ -123,7 +123,7 @@ public class CauseController {
 		} else {
 			User user = userService.findUser(principal.getName()).orElse(null);
 			Cause originalCause = causeService.findCauseById(causeId);
-			if (!originalCause.getFounder().equals(user) || originalCause.getIsClosed()) {
+			if (!originalCause.getFounder().equals(user) || originalCause.getIsClosed().booleanValue()) {
 				return CAUSE_DETAILS_REDIRECT_URL;
 			}
 			boolean causeEditability = causeService.checkCauseEditability(causeId, cause.getTarget());

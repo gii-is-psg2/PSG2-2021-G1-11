@@ -18,7 +18,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  *         Validation)
  */
 class ValidatorTests {
-
 	private Validator createValidator() {
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
 		localValidatorFactoryBean.afterPropertiesSet();
@@ -27,7 +26,6 @@ class ValidatorTests {
 
 	@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
-
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		Person person = new Person();
 		person.setFirstName("");
@@ -38,8 +36,6 @@ class ValidatorTests {
 
 		assertThat(constraintViolations.size()).isEqualTo(1);
 		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
 		assertThat(violation.getMessage()).isEqualTo("must not be empty");
 	}
-
 }

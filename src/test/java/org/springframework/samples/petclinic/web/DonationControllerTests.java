@@ -27,7 +27,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = DonationController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class DonationControllerTests {
+class DonationControllerTests {
 	private static final String VIEWS_DONATIONS_CREATE_FORM = "donations/createDonationForm";
 	private static final int CAUSE_ID = 1;
 	private static Cause causaSpy;

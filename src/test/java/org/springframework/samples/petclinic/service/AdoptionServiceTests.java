@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
@@ -23,8 +25,9 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNam
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
 
+@RunWith(MockitoJUnitRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class AdoptionServiceTests {
+class AdoptionServiceTests {
 
 	private static Pet pet;
 	private static List<AdoptionApplication> adoptionApplications;

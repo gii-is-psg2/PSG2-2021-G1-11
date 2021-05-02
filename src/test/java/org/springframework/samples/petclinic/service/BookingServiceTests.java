@@ -14,16 +14,19 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.samples.petclinic.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
+@RunWith(MockitoJUnitRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class BookingServiceTests {
+class BookingServiceTests {
 
 	private static List<Booking> bookings;
 

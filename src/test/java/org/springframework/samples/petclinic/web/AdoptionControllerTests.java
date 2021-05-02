@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(value = AdoptionController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class AdoptionControllerTests {
+class AdoptionControllerTests {
 
 	private static final String VIEW_CREATE_ADOPTION_APPLICATION = "adoptions/createAdoptionApplication";
 	private static final int PET_ADOPTABLE_ID = 1;
