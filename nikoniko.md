@@ -41,26 +41,25 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 4         | 	    -		|       -        |       -        |       -        |       -        |       -        |       |
 | Day 5         |       -		|       -        |       -        |       -        |       -        |       -        |       |
 | Day 6         | 	:smiley:	|   :smiley:     |    :smiley:    |    :smiley:    |    :smiley:    |    :smiley:    | 11/04 |
-| Day 7         | -			|       -        |     -           |          -      |                |                |       |
-| Day 8         | -			|       -        |     -           |           -     |                |                |       |
-| Day 9         | - 				|       -        |     -          |         -       |                |                |       |
-| Day 10        |	-			| :neutral_face: |     -          |              -  |                |      :smiley:  |       |
+| Day 7         | -			|       -        |     -           |          -      |        -       |         -      |       |
+| Day 8         | -			|       -        |     -           |           -     |        -       |         -      |       |
+| Day 9         | - 				|       -        |     -          |         -       |      -         |       -        |       |
+| Day 10        |	-			| :neutral_face: |     -          |              -  |       -        |      :smiley:  |       |
 | Day 11        | :smiley:	    |   :smiley:     |  :smiley:      |    :worried:   |    :smiley:    |   :smiley:     | 16/04 |
-| Day 12        | -				|                |  :neutral_face: |            -    |                |                |       |
-| Day 13        | 	-			|                |  :smiley:       |             -   |                |                |       |
-| Day 14        | :smiley:      | :neutral_face: |  :smiley:       |    :neutral_face:            |        :smiley:|                |       |
-| Day 15        | :smiley:      |  :smiley:      |  :smiley:       |        -        |                |                |       |
-| Day 16        | 		-		|                |      -          |          -      |                |                | 21/04 |
-| Day 17        | 		-		|                |       -        |  :smiley:           |  :smiley:      |                |       |
+| Day 12        | -				|       -        |  :neutral_face: |            -    |        -       |        -       |       |
+| Day 13        | 	-			|       -        |  :smiley:       |             -   |        -       |        -       |       |
+| Day 14        | :smiley:      | :neutral_face: |  :smiley:       |    :neutral_face:            |        :smiley:|      -         |       |
+| Day 15        | :smiley:      |  :smiley:      |  :smiley:       |        -        |        -       |      -         |       |
+| Day 16        | 		-		|       -        |      -          |          -      |         -      |         -      | 21/04 |
+| Day 17        | 		-		|       -        |       -        |  :smiley:           |  :smiley:      |         -      |       |
 | Day 18        | :smiley:	    |    :smiley:    |   :smiley:     |       :smiley:           |     :neutral_face:     |          :smiley:       |       |
 | Day 19        | :smiley:	    |    :smiley:    |   :smiley:     |       :smiley:           |    :smiley:             |    :smiley:             |       |
-| Day 20        | 		-	|   :smiley:     |     -           |             - |                |         :neutral_face:       |       |
-| Day 21        | :smiley: |   :smiley:     | :neutral_face: |      :neutral_face:            |                |                | 26/04 |
-| Day 22        | 	-		 |                |  :smiley:      |        -        |                |                |       |
-| Day 23        | :smiley: |                | :smiley:      |  :smiley:     |                |                |       |
-| Day 24        | 				 |                |      -          |     :smiley: |                |                |       |
-| Day 25        | :smiley: | :smiley:       |    -            |       :smiley:         |                |             :smiley:    |       |
+| Day 20        | 		-	|   :smiley:     |     -           |             - |         -      |         :neutral_face:       |       |
+| Day 21        | :smiley: |   :smiley:     | :neutral_face: |      :neutral_face:            |        -       |       -        | 26/04 |
+| Day 22        | 	-		 |        -       |  :smiley:      |        -        |       -        |       -        |       |
+| Day 23        | :smiley: |      -         | :smiley:      |  :smiley:     |       -        |       -        |       |
+| Day 24        | 	-		 |        -       |      -          |     :smiley: |        -        |        -       |       |
+| Day 25        | :smiley: | :smiley:       |    -            |       :smiley:         |       -        |             :smiley:    |       |
 | Day 26        | :smiley: |     :smiley:   |:smiley:        |         -      |        :smiley:        |               :smiley:  | 01/05 |
 | Day 27        | :smiley:|       :smiley:          | :smiley:       |    :smiley:        |           :smiley:     |            :smiley:     |       |
-| Day 28        | 				 |     :smiley:   |   :smiley:      |        :smiley:         |          :smiley:      |         :smiley:        |       |
-| Day 29        | 				 |                |                |                |                |                | 04/05 |
+| Day 28        | 	:smiley:	 |     :smiley:   |   :smiley:      |        :smiley:         |          :smiley:      |         :smiley:        |  03/05  |
