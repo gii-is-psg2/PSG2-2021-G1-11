@@ -72,8 +72,8 @@ In the retrospective meeting, the team has a discussion about those results.
 | ------------- | ------------- | -------------  | -------------  | -------------  | -------------  | -------------  |  ------ |
 | Day 1         |    -          |    -           |      -         |     -          |      -         |        -       | 04/05   |
 | Day 2         |    -          |    -           |      -         |     -          |      -         |        -       |         |
-| Day 3         |               |   :smiley:     |  :smiley:      |                |                |                |         |
-| Day 4         |               |   :smiley:     |  :smiley:      |                |                |                |         |
+| Day 3         |   :smiley:    |   :smiley:     |  :smiley:      |                |                |                |         |
+| Day 4         |   :smiley:    |   :smiley:     |  :smiley:      |                |                |                |         |
 | Day 5         |               |                |                |                |                |                |         |
 | Day 6         |               |                |                |                |                |                | 09/05   |
 | Day 7         |               |                |                |                |                |                |         |
