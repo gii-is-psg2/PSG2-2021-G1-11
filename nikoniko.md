@@ -70,15 +70,15 @@ In the retrospective meeting, the team has a discussion about those results.
 
 | Day           | Guillermo     | Pedro          | Maribel        | Adrián         | Candela        | Alberto        |  Date   |
 | ------------- | ------------- | -------------  | -------------  | -------------  | -------------  | -------------  |  ------ |
-| Day 1         |               |                |                |                |                |                | 04/05   |
-| Day 2         |               |                |                |                |                |                |   |
-| Day 3         |               |                |                |                |                |                |   |
-| Day 4         |               |                |                |                |                |                |   |
-| Day 5         |               |                |                |                |                |                |     |
+| Day 1         |    -          |    -           |      -         |     -          |      -         |        -       | 04/05   |
+| Day 2         |    -          |    -           |      -         |     -          |      -         |        -       |         |
+| Day 3         |               |                |  :smiley:      |                |                |                |         |
+| Day 4         |               |                |  :smiley:      |                |                |                |         |
+| Day 5         |               |                |                |                |                |                |         |
 | Day 6         |               |                |                |                |                |                | 09/05   |
-| Day 7         |               |                |                |                |                |                |   |
-| Day 8         |               |                |                |                |                |                |   |
-| Day 9         |               |                |                |                |                |                |   |
+| Day 7         |               |                |                |                |                |                |         |
+| Day 8         |               |                |                |                |                |                |         |
+| Day 9         |               |                |                |                |                |                |         |
 | Day 10        |               |                |                |                |                |                |   |
 | Day 11        |               |                |                |                |                |                |  14/05   |
 | Day 12         |               |                |                |                |                |                |   |
