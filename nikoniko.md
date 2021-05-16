@@ -82,7 +82,7 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 10        |   :smiley:    |       -        |      -         |          -      |                |       :smiley:       |   |
 | Day 11        |   :smiley:    |   :smiley:      |  :smiley:      |      :smiley:            |                |                |  14/05   |
 | Day 12         |   :smiley:   |                |   :smiley:      |                |                |                |   |
-| Day 13         |               |  :smiley:      |                |                |                |                |   |
+| Day 13         |               |  :smiley:      |  :smiley:      |                |                |                |   |
 | Day 14         |               |                |                |                |                |                |   |
 | Day 15         |               |                |                |                |                |                |   |
 | Day 16         |               |                |                |                |                |                |  19/05   |
