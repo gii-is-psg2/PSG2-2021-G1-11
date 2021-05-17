@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	DataSource dataSource;
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
@@ -42,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/causes/**").authenticated()
 			.antMatchers("/pets/**").authenticated()
 			.antMatchers("/manage/**").permitAll()
+			.antMatchers("/support/**").permitAll()
 			.anyRequest().denyAll()
 			.and().formLogin()
 				/* .loginPage("/login") */
@@ -55,11 +56,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(dataSource)
+	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(this.dataSource)
 				.usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
 				.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?")
-				.passwordEncoder(passwordEncoder());
+				.passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean

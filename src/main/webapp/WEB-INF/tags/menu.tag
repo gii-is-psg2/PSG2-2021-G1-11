@@ -63,6 +63,12 @@
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                     <span><fmt:message key="causes"/></span>
                 </petclinic:menuItem>
+                
+                <petclinic:menuItem active="${name eq 'support'}" url="/support/contact"
+					title="support">
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+					<span><fmt:message key="support"/></span>
+				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
