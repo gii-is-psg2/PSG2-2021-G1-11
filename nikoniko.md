@@ -77,15 +77,15 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 5         |   :smiley:    |   :smiley:     |  :smiley:      |       :smiley: |     :smiley:           |    :smiley:    |         |
 | Day 6         |   :smiley:    | :neutral_face: |  :smiley:      |           -    |       -        |        -       | 09/05   |
 | Day 7         |   :smiley:    | :smiley:       |  :smiley:      |       :smiley: |      :smiley:     |    :smiley:    |         |
-| Day 8         |      -        |      -         |      -         |        -        |                |         -      |         |
-| Day 9         |      -        | :smiley:       |      -         |       -         |                |       :smiley: |         |
-| Day 10        |   :smiley:    |       -        |      -         |          -      |                |       :smiley:       |   |
-| Day 11        |   :smiley:    |   :smiley:      |  :smiley:      |      :smiley:  |  :smiley:      |   :smiley:     |  14/05   |
-| Day 12         |   :smiley:   |                |   :smiley:      |                |                |                |   |
-| Day 13         |               |  :smiley:      |  :smiley:      |                |                |                |   |
-| Day 14         |   :smiley:    |                |     -          | :neutral_face: |     :neutral_face: |                |   |
-| Day 15         |   :smiley:    |   :smiley:     |  :smiley:      |                |                |                |   |
-| Day 16         |   :smiley:    |   :smiley:     |                |                |                |                |  19/05   |
+| Day 8         |      -        |      -         |      -         |        -        |      -         |         -      |         |
+| Day 9         |      -        | :smiley:       |      -         |       -         |      -         |       :smiley: |         |
+| Day 10        |   :smiley:    |       -        |      -         |          -      |       -        |       :smiley:       |   |
+| Day 11        |   :smiley:    |   :smiley:     |  :smiley:      |      :smiley:  |  :smiley:      |   :smiley:     |  14/05   |
+| Day 12         |   :smiley:   |      -         |   :smiley:      |       -        |      -         |      -         |   |
+| Day 13         |      -        |  :smiley:      |  :smiley:      |       -        |      -         |      -         |   |
+| Day 14         |   :smiley:    |     -          |     -          | :neutral_face: | :neutral_face: |      -         |   |
+| Day 15         |   :smiley:    |   :smiley:     |  :smiley:      |      -         |      -         |      -         |   |
+| Day 16         |   :smiley:    |   :smiley:     |  :smiley:      |      -         |      -         |      -         |  19/05   |
 | Day 17         |               |                |                |                |                |                |   |
 | Day 18         |               |                |                |                |                |                |   |
 | Day 19         |               |                |                |                |                |                |   |
