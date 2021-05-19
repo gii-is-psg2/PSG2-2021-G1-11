@@ -50,6 +50,7 @@
     	
     	for (let i = 0; i < specialties.length; i++) {
     		if (specialties[i] === specialty) {
+    			alert("<fmt:message key='specialtyAlreadyExists'/>")
     			return;
     		}
     	}
