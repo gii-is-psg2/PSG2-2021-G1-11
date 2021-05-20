@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.xml.HasXPath.hasXPath;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
@@ -13,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Optional;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +26,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.Specialty;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.service.SpecialtyService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -38,6 +44,9 @@ import org.springframework.test.web.servlet.MockMvc;
 class VetControllerTests {
 	private static Integer TEST_VET_ID = 1;
 
+	@MockBean
+	private UserService userService;
+	
 	@MockBean
 	private VetService clinicService;
 
@@ -62,6 +71,13 @@ class VetControllerTests {
 		radiology.setId(1);
 		radiology.setName("radiology");
 		helen.addSpecialty(radiology);
+		
+		User mockAdmin = new User();
+		Authorities mockAdminAuthority = new Authorities();
+		mockAdminAuthority.setAuthority("admin");
+		mockAdmin.getAuthorities().add(mockAdminAuthority);
+		
+		given(this.userService.findUser(any(String.class))).willReturn(Optional.of(mockAdmin));
 		given(this.clinicService.findVets()).willReturn(Lists.newArrayList(james, helen));
 		given(this.clinicService.findVetById(TEST_VET_ID)).willReturn(james);
 	}

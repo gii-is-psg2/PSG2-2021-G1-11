@@ -97,7 +97,7 @@ class OwnerServiceTests {
 		owner.setLastName("Schultz");
 		owner.setAddress("4, Evans Street");
 		owner.setCity("Wollongong");
-		owner.setTelephone("4444444444");
+		owner.setTelephone("612345678");
 		User user = new User();
 		user.setUsername("Sam");
 		user.setPassword("supersecretpassword");

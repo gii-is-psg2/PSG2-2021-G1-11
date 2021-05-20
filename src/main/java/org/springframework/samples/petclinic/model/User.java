@@ -1,6 +1,9 @@
 
 package org.springframework.samples.petclinic.model;
 
+
+
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,44 +16,44 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Table(name = "users")
 public class User {
-	@NotEmpty
-	@Id
-	String	username;
-	
-	@NotEmpty
-	String	password;
+    @NotEmpty
+    @Id
+    String    username;
 
-	boolean	enabled;
+    @NotEmpty
+    String    password;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Authorities>	authorities;
+    boolean    enabled;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Authorities>    authorities = new HashSet<>();
 
 
-	public String getUsername() {
-		return this.username;
-	}
+    public String getUsername() {
+        return this.username;
+    }
 
-	public void setUsername(final String username) {
-		this.username = username;
-	}
+    public void setUsername(final String username) {
+        this.username = username;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public void setPassword(final String password) {
-		this.password = password;
-	}
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 
-	public Set<Authorities> getAuthorities() {
-		return this.authorities;
-	}
+    public Set<Authorities> getAuthorities() {
+        return this.authorities;
+    }
 
-	public boolean getEnabled() {
-		return this.enabled;
-	}
+    public boolean getEnabled() {
+        return this.enabled;
+    }
 
-	public void setEnabled(final boolean value) {
-		this.enabled = value;
-	}
+    public void setEnabled(final boolean value) {
+        this.enabled = value;
+    }
 }
