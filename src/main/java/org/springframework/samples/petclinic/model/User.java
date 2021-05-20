@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.model;
 
 import java.util.Set;
@@ -7,45 +8,49 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "users")
 public class User {
+	@NotEmpty
 	@Id
-	String username;
+	String	username;
+	
+	@NotEmpty
+	String	password;
 
-	String password;
-
-	boolean enabled;
+	boolean	enabled;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Authorities> authorities;
+	private Set<Authorities>	authorities;
+
 
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
 
-	public void setUsername(String username) {
+	public void setUsername(final String username) {
 		this.username = username;
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
 	public Set<Authorities> getAuthorities() {
-		return authorities;
+		return this.authorities;
 	}
 
 	public boolean getEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
-	public void setEnabled(boolean value) {
+	public void setEnabled(final boolean value) {
 		this.enabled = value;
 	}
 }
