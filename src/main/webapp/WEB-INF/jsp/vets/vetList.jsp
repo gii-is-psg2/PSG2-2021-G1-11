@@ -48,12 +48,5 @@
         </tbody>
     </table>
 
-    <table class="table-buttons">
-        <tr>
-            <td>
-                <a href="<spring:url value="/vets.xml" htmlEscape="true" />"><fmt:message key="xml"/></a>
-            </td>            
-        </tr>
-    </table>
 </petclinic:layout>
 
