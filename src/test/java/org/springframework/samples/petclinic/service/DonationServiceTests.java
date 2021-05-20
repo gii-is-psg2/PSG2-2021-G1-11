@@ -33,12 +33,13 @@ class DonationServiceTests {
 		
 		final Cause cause = new Cause();
 		cause.setDescription("Queremos salvar a marrambla2");
-		cause.setName("Antártida");
+		cause.setName("AntÃ¡rtida");
 		cause.setIsClosed(false);
 		cause.setOrganization("Greenpeace");
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
