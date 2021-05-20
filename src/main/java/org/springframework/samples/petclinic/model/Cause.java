@@ -45,7 +45,7 @@ public class Cause extends BaseEntity {
 	private String description;
 
 	@NotNull
-	@Min(0)
+    @Min(value = 1)
 	private Double target;
 
 	@NotBlank
@@ -53,7 +53,7 @@ public class Cause extends BaseEntity {
 
 	@NotNull
 	private Boolean isClosed;
-	
+
 	@ManyToOne(optional = false)
 	private User founder;
 
@@ -130,5 +130,5 @@ public class Cause extends BaseEntity {
 		super();
 		setIsClosed(false);
 	}
-	
+
 }
