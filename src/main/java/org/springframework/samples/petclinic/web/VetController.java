@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Specialty;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.service.SpecialtyService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,14 +52,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class VetController {
-
+	private final UserService userService;
 	private final VetService vetService;
 	private final SpecialtyService specialtyService;
 	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createOrUpdateVetForm";
 	private static final String VET_REDIRECT_URL = "redirect:/vets";
 
 	@Autowired
-	public VetController(VetService clinicService, SpecialtyService specialtyService) {
+	public VetController(UserService userService, VetService clinicService, SpecialtyService specialtyService) {
+		this.userService = userService;
 		this.vetService = clinicService;
 		this.specialtyService = specialtyService;
 	}
@@ -67,11 +71,13 @@ public class VetController {
 	}
 
 	@GetMapping(value = { "/vets" })
-	public String showVetList(Map<String, Object> model) {
+	public String showVetList(Map<String, Object> model, Principal principal) {
 		// Here we are returning an object of type 'Vets' rather than a collection of
-		// Vet
-		// objects
-		// so it is simpler for Object-Xml mapping
+		// objects so it is simpler for Object-Xml mapping
+		User user = userService.findUser(principal.getName()).orElse(null);
+		model.put("canRemoveVets",
+				user != null && user.getAuthorities().stream().anyMatch(x -> x.getAuthority().contentEquals("admin")));
+
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetService.findVets());
 		model.put("vets", vets);
@@ -79,8 +85,11 @@ public class VetController {
 	}
 
 	@PostMapping(value = { "/vets/{vetId}/remove" })
-	public String removeVet(@PathVariable Integer vetId) {
-		vetService.removeVetById(vetId);
+	public String removeVet(@PathVariable Integer vetId, Principal principal) {
+		User user = userService.findUser(principal.getName()).orElse(null);
+		if (user != null && user.getAuthorities().stream().anyMatch(x -> x.getAuthority().contentEquals("admin"))) {
+			vetService.removeVetById(vetId);
+		}
 		return VET_REDIRECT_URL;
 	}
 
@@ -111,9 +120,7 @@ public class VetController {
 			Set<Specialty> specialtySet = saveSpecialties(vet.getSpecialtiesLS());
 			vet.setSpecialties(specialtySet);
 			try {
-
 				this.vetService.saveVet(vet);
-
 			} catch (DataAccessException ex) {
 				return VIEWS_VET_CREATE_OR_UPDATE_FORM;
 			}
