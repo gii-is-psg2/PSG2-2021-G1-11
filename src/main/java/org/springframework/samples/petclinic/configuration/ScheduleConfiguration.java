@@ -15,6 +15,7 @@ public class ScheduleConfiguration {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private String maintenanceMessage;
+	private String timeZone;
 	
 	public Boolean isEnabled() {
 		return enabled;
@@ -62,5 +63,13 @@ public class ScheduleConfiguration {
 
 	public void setMaintenanceMessage(String maintenanceMessage) {
 		this.maintenanceMessage = maintenanceMessage;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 }

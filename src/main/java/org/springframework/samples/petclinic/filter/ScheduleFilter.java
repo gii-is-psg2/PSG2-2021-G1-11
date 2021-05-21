@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.filter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,7 +25,7 @@ public class ScheduleFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		LocalTime now = LocalTime.now();
+		LocalTime now = LocalTime.now(ZoneOffset.of(configuration.getTimeZone()));
 		if (configuration.isEnabled() &&
 			(!configuration.isActiveDay(LocalDate.now()) || now.isBefore(configuration.getStartTime()) || now.isAfter(configuration.getEndTime()))) {
 			response.resetBuffer();
@@ -34,6 +35,4 @@ public class ScheduleFilter implements Filter {
 			chain.doFilter(request, response);
 		}
 	}
-	
-
 }
