@@ -89,7 +89,7 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 17         |   :smiley:    |  :smiley:      |  :smiley:      |         :smiley:       |       :smiley: |    :smiley:    |   |
 | Day 18         |   :smiley:    |  :smiley:      |  :smiley:      |      :smiley:  |                |                |   |
 | Day 19         |               |                |     -          |      -         |                |                |   |
-| Day 20         |               | :smiley:       |  :smiley:      |       -        |                |                |     |
+| Day 20         |               | :smiley:       |  :smiley:      |       :smiley: |                |                |     |
 | Day 21         |               |                |                |                |                |                | 24/05   |
 | Day 22         |               |                |                |                |                |                |   |
 | Day 23         |               |                |                |                |                |                |   |
