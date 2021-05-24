@@ -6,7 +6,7 @@
 <petclinic:layout pageName="error">
 	<div class="row">
 		<div class="col-md-12">
-			<spring:url value="/resources/images/gatotriste.jpg" var="petsImage"/>
+			<spring:url value="/resources/images/perro-triste.jpg" var="petsImage"/>
     		<img src="${petsImage}" class="center-block" />
 		</div>
 	</div>

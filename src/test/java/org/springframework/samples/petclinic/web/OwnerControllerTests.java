@@ -173,7 +173,7 @@ class OwnerControllerTests {
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/owners/new").param("firstName", "Joe")
 				.param("lastName", "Bloggs").with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("address", "123 Caramel Street").param("city", "London").param("telephone", "01316761638"))
+				.param("address", "123 Caramel Street").param("city", "London").param("telephone", "612345678"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
@@ -256,7 +256,7 @@ class OwnerControllerTests {
 				.perform(MockMvcRequestBuilders.post("/owners/{ownerId}/edit", OwnerControllerTests.TEST_OWNER_ID)
 						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Joe")
 						.param("lastName", "Bloggs").param("address", "123 Caramel Street").param("city", "London")
-						.param("telephone", "01616291589"))
+						.param("telephone", "612345678"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/owners/{ownerId}"));
 	}

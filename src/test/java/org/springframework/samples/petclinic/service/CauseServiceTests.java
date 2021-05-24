@@ -51,6 +51,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
@@ -79,6 +80,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
@@ -97,6 +99,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
@@ -120,6 +123,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
@@ -138,6 +142,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
@@ -161,6 +166,7 @@ class CauseServiceTests {
 		cause.setTarget(2000.);
 		User user = new User();
 		user.setUsername("guillex7");
+		user.setPassword("pwd");
 		userRepository.save(user);
 		cause.setFounder(user);
 		this.causeService.saveCause(cause);
