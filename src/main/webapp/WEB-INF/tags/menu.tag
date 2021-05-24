@@ -41,14 +41,6 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span><fmt:message key="vet"/></span>
 				</petclinic:menuItem>
-				
-				<sec:authorize access="hasAuthority('owner')">
-                    <petclinic:menuItem active="${name eq 'profile'}" url="/owners/myProfile"
-                        title="my profile">
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        <span><fmt:message key="profile"/></span>
-                    </petclinic:menuItem>
-                </sec:authorize>
                 
                 <sec:authorize access="hasAuthority('owner')">
                     <petclinic:menuItem active="${name eq 'adoptions'}" url="/adoptions/pets"
@@ -90,6 +82,9 @@
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</a>
 						<ul class="dropdown-menu">
+						<sec:authorize access="hasAuthority('owner')">
+							<li><a href='<spring:url value="/owners/myProfile"/>'><fmt:message key="profile" /></a></li>
+                		</sec:authorize>
 							<li>
 								<div class="navbar-login">
 									<div class="row">
