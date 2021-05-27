@@ -93,7 +93,7 @@ In the retrospective meeting, the team has a discussion about those results.
 | Day 21        |   :smiley:    |                |  :smiley:      |    :smiley:    |                | :smiley:       | 24/05   |
 | Day 22        |               |                |                |                |                |                |         |
 | Day 23        |               |                |                |                |                |                |         |
-| Day 24        |               |                |                |                |                |                |         |
+| Day 24        |               |                |                |                |                |     :smiley:   |         |
 | Day 25        |               |                |                |                |                |                |         |
 | Day 26        |               |                |                |                |                |                | 29/05   |
 | Day 27        |               |                |                |                |                |                |         |
